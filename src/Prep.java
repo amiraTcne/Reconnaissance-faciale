@@ -10,8 +10,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
-
+/**
+ * @author Pernet Gabriel
+ * @version 0.5
+ * The purpose of this class is to prepare the dataset to be used by the rest of the program.
+ * There is a folder named dataset that contains multiple images in different subdirectories.
+ * The main function of this class will fill the dataReady folder so that it mirrors the dataset folder but alter the images in the process.
+ * All the images in the dataReady folder will have dimensions of 100x100 and be in grayscale.
+ */
 public class Prep{
+    /**
+     * This method processes a <code>File</code> : <code>imgFile</code>.
+     * If <code>imgFile</code> is a directory, the method creates the corresponding sub-directory in the dataReady folder (if it doesn't already exists).
+     * It then calls itself for each <code>File</code> in <code>imgFile</code>.
+     * If <code>imgFile</code> is an image, the method :
+     *      1. converts the image in 100x100 format
+     *      2. creates a clone of the image in grayscale
+     *      3. saves the grayscale image in the dataReady folder so that its path mirrors the one of the original image in dataset
+     * @param imgFile   a <code>File</code> that is either an image or a directory.
+     *                  If it is a directory, it either contains images or other directories.
+     */
     public static void iteration(File imgFile){
         if (imgFile.isFile()){
             BufferedImage img;
@@ -56,8 +74,8 @@ public class Prep{
         }
     }
     public static void main(String[] args){
-        String dir = "dataset";
-        File[] files =  (new File(dir)).listFiles();
+        String dir = "dataset"; // this is the path of the directory that contains the images
+        File[] files =  (new File(dir)).listFiles(); // 
         for(File imgFile : files){
             iteration(imgFile);
         }
