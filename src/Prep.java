@@ -31,17 +31,21 @@ public class Prep{
      *                  If it is a directory, it either contains images or other directories.
      */
     public static void iteration(File imgFile){
+        // if imgFile is an image (because all non directory Files are images)
         if (imgFile.isFile()){
             BufferedImage img;
             try{
                 img = ImageIO.read(imgFile);
+                // Resizes the original image to 100x100 pixels
                 Image temp = img.getScaledInstance(100,100,Image.SCALE_DEFAULT);
+                // Creates a new BufferedImage mirroring the resized version of the original
                 BufferedImage newImg = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
                 Graphics2D g = newImg.createGraphics();
                 g.drawImage(temp,0,0,null);
                 g.dispose();
-                int w = newImg.getWidth();
-                int h = newImg.getHeight();
+                int w = newImg.getWidth(); //width
+                int h = newImg.getHeight(); //height
+                // Every pixel id replaced by its grayscale equivalent
                 for(int i=0;i<w;i++){
                     for(int j=0;j<h;j++){
                         Color c = new Color(newImg.getRGB(i,j));
@@ -49,6 +53,7 @@ public class Prep{
                         newImg.setRGB(i,j,(new Color(gray,gray,gray)).getRGB());
                     }
                 }
+                // save the new processed image
                 if((imgFile.toPath()).getNameCount()>1){
                     ImageIO.write(newImg,"jpg",new File("dataReady/"+(imgFile.toPath()).subpath(1,(imgFile.toPath()).getNameCount())));
                 }else{
@@ -57,17 +62,21 @@ public class Prep{
             }catch (IOException e) {
                 e.printStackTrace();
             }
+        // if imgFile is a directory (because it is not an image)
         }else{
+            // We want to process all files in the directory so here, we list them all
             File[] files = (new File((imgFile.getPath()))).listFiles();
+            // creates directories if needed so that dataReady mirrors dataset
             try{
-            if((imgFile.toPath()).getNameCount()>1){
-                Files.createDirectories(Paths.get("dataReady/"+(imgFile.toPath()).subpath(1,(imgFile.toPath()).getNameCount())));
-            }else{
-                Files.createDirectories(Paths.get("dataReady/"+(imgFile.toPath()).getFileName()));
-            }
+                if((imgFile.toPath()).getNameCount()>1){
+                    Files.createDirectories(Paths.get("dataReady/"+(imgFile.toPath()).subpath(1,(imgFile.toPath()).getNameCount())));
+                }else{
+                    Files.createDirectories(Paths.get("dataReady/"+(imgFile.toPath()).getFileName()));
+                }
             }catch (IOException e) {
                 e.printStackTrace();
             }
+            // calls itself recursively on each file in the directory
             for(File imgFile2 : files){
                 iteration(imgFile2);
             }
@@ -75,7 +84,9 @@ public class Prep{
     }
     public static void main(String[] args){
         String dir = "dataset"; // this is the path of the directory that contains the images
-        File[] files =  (new File(dir)).listFiles(); // 
+        // We want to process everything contained in dataset so we list it all here
+        File[] files =  (new File(dir)).listFiles();
+        // We call iteration() on every file/directory in dataset, iteration handles the rest
         for(File imgFile : files){
             iteration(imgFile);
         }
