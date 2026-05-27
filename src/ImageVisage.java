@@ -68,7 +68,7 @@ public class ImageVisage{
                     imgMat.set(j,i,gray);
                 }
             }
-            // imgVect = imgMat.cheminInverse(); // A CHANGER, PAS FONCTIONNEL, NECESSITE NOUVELLE METHODE
+            imgVect = new Vecteur(imgMat);
             return imgVect;
         }catch (IOException e) {
             e.printStackTrace();
