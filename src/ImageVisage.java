@@ -48,7 +48,7 @@ public class ImageVisage{
         File imgFile = new File(this.getPath());
         BufferedImage img;
         Vecteur imgVect;
-        Matrice imgMat = new Matrice(100,100);
+        Matrix imgMat = new Matrix(100,100);
         try{
             img = ImageIO.read(imgFile);
             Image temp = img.getScaledInstance(100,100,Image.SCALE_DEFAULT);
@@ -62,10 +62,10 @@ public class ImageVisage{
                 for(int j=0;j<h;j++){
                     Color c = new Color(procImg.getRGB(j,i));
                     int gray = (int)(0.299*c.getRed() + 0.587*c.getGreen() + 0.114*c.getBlue());
-                    imgMat.setValeur(j,i,gray);
+                    imgMat.set(j,i,gray);
                 }
             }
-            imgVect = imgMat.cheminInverse();
+            // imgVect = imgMat.cheminInverse(); // A CHANGER, PAS FONCTIONNEL, NECESSITE NOUVELLE METHODE
             return imgVect;
         }catch (IOException e) {
             e.printStackTrace();
