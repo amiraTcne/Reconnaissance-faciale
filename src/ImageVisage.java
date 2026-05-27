@@ -77,11 +77,11 @@ public class ImageVisage{
      * This function purpose is to fetch a processed version of the image it is used on.
      * This is used on images already present in the dataset.
      * @version 0.1
-     * @return a 100x100 <code>Matrice</code> representing an image, that image being the 100x100 grayscale version of <code>this</code>.
+     * @return a 100x100 <code>Matrix</code> representing an image, that image being the 100x100 grayscale version of <code>this</code>.
      */
-    public Matrice processed(){
+    public Matrix processed(){
         String pathPro = "dataReady"+this.getPath().substring(this.getPath().indexOf("/"));
-        Matrice imgMat = new Matrice(100,100);
+        Matrix imgMat = new Matrix(100,100);
         File imgFile = new File(pathPro);
         BufferedImage img;
         try{
@@ -91,7 +91,7 @@ public class ImageVisage{
             for(int i=0;i<w;i++){
                 for(int j=0;j<h;j++){
                     Color c = new Color(img.getRGB(j,i));
-                    imgMat.setValeur(j,i,c.getRed());
+                    imgMat.set(j,i,c.getRed());
                 }
             }
             return imgMat;
