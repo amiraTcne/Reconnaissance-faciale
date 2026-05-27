@@ -42,9 +42,11 @@ public class ImageVisage{
     }
     /**
      * This function returns a vectorial representaion of a 100x100 grayscale version of the image it is used on.
-     * This is used on images that are not already in the dataset and that we wish to compare to the ones present in the dataset.
+     * This is used on images that are not already in the dataset and that we wish to compare to the ones
+     * present in the dataset.
      * @version 0.1
-     * @return a <code>Vecteur</code> with 10000 values in its p attribute representing <code>this</code> (an image) in 100x100 grayscale format, 
+     * @return a <code>Vecteur</code> with 10000 values in its p attribute representing the image
+     * linked to <code>this</code> in 100x100 grayscale format, 
      */
     public Vecteur process(){
         File imgFile = new File(this.getPath());
@@ -74,10 +76,12 @@ public class ImageVisage{
         }
     }
     /**
-     * This function purpose is to fetch a processed version of the image it is used on.
+     * This function purpose is to fetch a processed version of the image it is used on without changing
+     * the path attribute, as we still need to be able to acces the original image to display it.
      * This is used on images already present in the dataset.
      * @version 0.1
-     * @return a 100x100 <code>Matrix</code> representing an image, that image being the 100x100 grayscale version of <code>this</code>.
+     * @return a 100x100 <code>Matrix</code> representing an image, that image being the
+     * 100x100 grayscale version of <code>this</code>.
      */
     public Matrix processed(){
         String pathPro = "dataReady"+this.getPath().substring(this.getPath().indexOf("/"));
