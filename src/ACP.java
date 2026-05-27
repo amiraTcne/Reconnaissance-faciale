@@ -1,4 +1,4 @@
-package projet;
+package facialRecognition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,8 +32,8 @@ public class ACP extends JPanel{
 		this.n=matriceInitiale.getRowDimension();
 		this.m=matriceInitiale.getColumnDimension();
 		visageMoyen();
-		soustraire();
-		multiplication();
+		centrer();
+		reduireDimension();
 		this.seuil = 80;
 	}
 	
@@ -48,7 +48,7 @@ public class ACP extends JPanel{
 		}
 	}
 	
-	private void soustraire() {
+	private void centrer() {
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<m; j++) {
 				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i));
@@ -56,7 +56,7 @@ public class ACP extends JPanel{
 		}
 	}
 	
-	private void multiplication() { //AT x A 
+	private void reduireDimension() { //AT x A 
 		Matrix matriceTranspose = matriceEtude.transpose();
 		matriceReduite = matriceTranspose.times(matriceEtude);
 //		for (int i=0; i<matriceEtude.size(); i++) {
@@ -70,7 +70,7 @@ public class ACP extends JPanel{
 //		}
 	}
 	
-	private static double[] valeurPropres(Matrix M) {
+	private static double[] valeursPropres(Matrix M) {
 		EigenvalueDecomposition eig = M.eig();
 		double[] valeurs = eig.getRealEigenvalues();
 		return valeurs;
@@ -106,9 +106,9 @@ public class ACP extends JPanel{
 			{4, 2}, 
 			{1, 3}
 		});
-		System.out.println(Arrays.toString(valeurPropres(M)));
+		System.out.println(Arrays.toString(valeursPropres(M)));
 		
-		double[] vp = valeurPropres(M);
+		double[] vp = valeursPropres(M);
 
         System.out.println(Arrays.toString(vp));
 
