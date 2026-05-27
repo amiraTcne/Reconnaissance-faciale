@@ -50,7 +50,7 @@ public class Vecteur {
     public int getTaille() { return p.length; }
     
     /** Setter pour changer une seule valeur de notre vecteur */
-    public void setValueP(int indice, int valeur) {
+    public void setValueP(int indice, double valeur) {
     	p[indice]=valeur;
     }
     /** Getter pour obtenir une des valeurs du vecteur*/
