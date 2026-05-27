@@ -51,13 +51,16 @@ public class ImageVisage{
         Matrix imgMat = new Matrix(100,100);
         try{
             img = ImageIO.read(imgFile);
+            // creates a 100x100 pixels version of the original image
             Image temp = img.getScaledInstance(100,100,Image.SCALE_DEFAULT);
+            // Creates a new BufferedImage mirroring the resized version of the original
             BufferedImage procImg = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
             Graphics2D g = procImg.createGraphics();
             g.drawImage(temp,0,0,null);
             g.dispose();
-            int w = procImg.getWidth();
-            int h = procImg.getHeight();
+            int w = procImg.getWidth(); // width
+            int h = procImg.getHeight(); // height
+            // set the values of the <code>Matrix</code> to the grayscale values of the corresponding pixels
             for(int i=0;i<w;i++){
                 for(int j=0;j<h;j++){
                     Color c = new Color(procImg.getRGB(j,i));
@@ -79,14 +82,16 @@ public class ImageVisage{
      * 100x100 grayscale version of <code>this</code>.
      */
     public Matrix processed(){
+        // takes the path of <code>this</code> and replaces dataset by dataReady (the image fetched will be the processed version)
         String pathPro = "dataReady"+this.getPath().substring(this.getPath().indexOf("/"));
         Matrix imgMat = new Matrix(100,100);
         File imgFile = new File(pathPro);
         BufferedImage img;
         try{
             img = ImageIO.read(imgFile);
-            int w = img.getWidth();
-            int h = img.getHeight();
+            int w = img.getWidth(); // width
+            int h = img.getHeight(); // height
+            // set the values of the <code>Matrix</code> to the values of the pixels of the image
             for(int i=0;i<w;i++){
                 for(int j=0;j<h;j++){
                     Color c = new Color(img.getRGB(j,i));

@@ -36,7 +36,7 @@ public class Prep{
             BufferedImage img;
             try{
                 img = ImageIO.read(imgFile);
-                // Resizes the original image to 100x100 pixels
+                // creates a 100x100 pixels version of the original image
                 Image temp = img.getScaledInstance(100,100,Image.SCALE_DEFAULT);
                 // Creates a new BufferedImage mirroring the resized version of the original
                 BufferedImage newImg = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
@@ -45,7 +45,7 @@ public class Prep{
                 g.dispose();
                 int w = newImg.getWidth(); //width
                 int h = newImg.getHeight(); //height
-                // Every pixel id replaced by its grayscale equivalent
+                // Every pixel is replaced by its grayscale equivalent
                 for(int i=0;i<w;i++){
                     for(int j=0;j<h;j++){
                         Color c = new Color(newImg.getRGB(i,j));
