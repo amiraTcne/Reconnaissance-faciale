@@ -1,4 +1,4 @@
-package facialRecognition;
+package projet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,13 +80,13 @@ public class ACP extends JPanel{
 	@Override //redefini une méthode de la classe parent 
 	 protected void paintComponent(Graphics g) {
 
-	        super.paintComponent(g);
+	        super.paintComponent(g); //permet de partir d'un dessin vide
 
 	        // axes
 	        g.drawLine(50, 250, 350, 250); //axe horizontal (x), 
 	        //départ:(50, 250) arrivée: (350, 250), 50 pour ne pas coller 
 	        //au bord et 250 pour ne coller au sommet
-	        g.drawLine(50, 250, 50, 50); //axe vertical (y)
+	        g.drawLine(50, 550, 50, 50); //axe vertical (y)
 
 	        // points
 	        for (int i = 0; i < valeurs.length; i++) {
@@ -101,24 +101,46 @@ public class ACP extends JPanel{
 	        }
 	    }
 	
+	private static Vecteur[] creationBase(Matrix M) {
+		EigenvalueDecomposition eig = M.eig();
+		Matrix vecteurPropre = eig.getV();
+		int n=M.getRowDimension();
+		
+		int nbComposantes = 2;
+		Vecteur [] base = new Vecteur[nbComposantes];
+		for (int i=0; i<nbComposantes; i++) {
+			Vecteur V = new Vecteur(n);
+			for (int j=0; j<n; j++) {
+				V.setValueP(j, vecteurPropre.get(j, i));
+			}
+			base[i]=V;
+		}
+		
+		return base;
+	}
+	
 	public static void main(String[] args) {
 		Matrix M = new Matrix(new double[][] {
-			{4, 2}, 
-			{1, 3}
+			{4, 2, 6, 7}, 
+			{1, 3, 3, 1},
+			{2, 2, 4, 7},
+			{4, 7, 1, 1}
 		});
 		System.out.println(Arrays.toString(valeursPropres(M)));
+		System.out.println(Arrays.toString(creationBase(M)));
 		
 		double[] vp = valeursPropres(M);
 
         System.out.println(Arrays.toString(vp));
 
+        
         JFrame f = new JFrame("Valeurs propres"); //créer une fenêtre graphique appelée "Valeurs Propres"
 
         ACP panneau = new ACP(vp); //Créer un panneau de dessin
 
         f.add(panneau); //ajoute le panneau dans la fenêtre
 
-        f.setSize(400,300); //taille de la fenêtre
+        f.setSize(1000,700); //taille de la fenêtre
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
 
