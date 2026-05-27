@@ -38,8 +38,8 @@ public class Personne {
 		return false;
 	}
 	public static void deposerImage(String chemin) {
-		Image im1;
-		im1.chemin=chemin; 
+		ImageVisage im1;
+		im1.path=chemin; 
 		im1.id= 01;
 	}
 }
