@@ -31,4 +31,13 @@ public class Vecteur {
     
     /** Getter pour obtenir la taille de notre vecteur */
     public int getTaille() { return p.length; }
+    
+    /** Setter pour changer une seule valeur de notre vecteur */
+    public void setValueP(int indice, int valeur) {
+    	p[indice]=valeur;
+    }
+    /** Getter pour obtenir une des valeurs du vecteur*/
+    public int getValue(int indice) {
+    	return p[indice];
+    }
 }
