@@ -72,7 +72,7 @@ public class ImageVisage{
         }
     }
     /**
-     * This function purpose is to fetch a processed version of the image it is used on without changing
+     * This function's purpose is to fetch a processed version of the image it is used on without changing
      * the path attribute, as we still need to be able to acces the original image to display it.
      * This is used on images already present in the dataset.
      * @return a 100x100 <code>Matrix</code> representing an image, that image being the
