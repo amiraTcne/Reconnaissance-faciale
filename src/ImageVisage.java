@@ -8,12 +8,18 @@ import java.awt.Color;
 import Jama.Matrix; 
 
 /**
+ * This object is used to store a path leading to an image and the position of the image in the matrix used for recognition.
+ * The path is the path to the original image and not the processed one, as we want to be able to access the original image
+ * quickly when we need to display it during the comparisons. We have no need to store the path of the modified images since,
+ * for the ones present in the dataset, we just need to access them once to do all the necessary calculations and they are then
+ * stored in their vectorial form, and, for the ones the user provides, we don't need to keep the processed version
+ * (so it is never saved, just used).
  * @author Pernet Gabriel
- * @version 0.1
+ * @version 0.2
  */
 public class ImageVisage{
-    public int id;
-    public String path;
+    public int id; // this is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images
+    public String path; // this is the path, which allows us to retrieve the original image at any point
     /**
      * Constructor for Imagevisage.
      * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.

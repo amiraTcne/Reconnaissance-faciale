@@ -11,12 +11,12 @@ import java.nio.file.Paths;
 
 
 /**
- * @author Pernet Gabriel
- * @version 0.5
  * The purpose of this class is to prepare the dataset to be used by the rest of the program.
  * There is a folder named dataset that contains multiple images in different subdirectories.
  * The main function of this class will fill the dataReady folder so that it mirrors the dataset folder but alter the images in the process.
  * All the images in the dataReady folder will have dimensions of 100x100 and be in grayscale.
+ * @author Pernet Gabriel
+ * @version 1.0
  */
 public class Prep{
     /**
