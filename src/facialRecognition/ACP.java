@@ -101,7 +101,7 @@ public class ACP extends JPanel{
 	        }
 	    }
 	
-	private static Vecteur[] creationBase(Matrix M) {
+	private static Vecteur[] creerBase(Matrix M) {
 		EigenvalueDecomposition eig = M.eig();
 		Matrix vecteurPropre = eig.getV();
 		int n=M.getRowDimension();
@@ -127,7 +127,7 @@ public class ACP extends JPanel{
 			{4, 7, 1, 1}
 		});
 		System.out.println(Arrays.toString(valeursPropres(M)));
-		System.out.println(Arrays.toString(creationBase(M)));
+		System.out.println(Arrays.toString(creerBase(M)));
 		
 		double[] vp = valeursPropres(M);
 
