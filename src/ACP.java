@@ -1,6 +1,9 @@
 package facialRecognition;
 
+import java.util.Arrays;
 import java.util.ArrayList;
+
+import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
 
 public class ACP {
@@ -23,6 +26,7 @@ public class ACP {
 		visageMoyen();
 		soustraire();
 		multiplication();
+		valeursPropres(matriceReduite);
 		this.seuil = 80;
 	}
 	
@@ -60,13 +64,19 @@ public class ACP {
 //				m[i][j] = somme;
 //			}
 //		}
-//		return m;
 	}
 	
-	private void valeurPropres() {
-		
+	private static double[] valeursPropres(Matrix M) {
+		EigenvalueDecomposition eig = M.eig();
+		double[] valeurs = eig.getRealEigenvalues();
+		return valeurs;
 	}
+	
+	
 	public static void main(String[] args) {
+		
+		Matrix M = new Matrix(2,2,1);
+		System.out.println(Arrays.toString(valeursPropres(M)));
 		
 	}
 }
