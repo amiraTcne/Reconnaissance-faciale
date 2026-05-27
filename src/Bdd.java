@@ -1,5 +1,5 @@
 package laBdd;
 
 public class Bdd {
-	Map <Personne, ArrayList<Image>> imagesBdd = new HashMap<>();
+	Map <Personne, ArrayList<ImageVisage>> imagesBdd = new HashMap<>();
 }
