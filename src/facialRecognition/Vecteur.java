@@ -1,3 +1,7 @@
+package facialRecognition;
+
+import Jama.Matrix;
+
 /** Classe vecteur*/
 public class Vecteur {
     private double[] p; 
@@ -13,11 +17,11 @@ public class Vecteur {
     }
     
     /** Méthode faites pour passer d'un vecteur à la forme matricielle de l'image */
-    public Matrice cheminInverse(int nbLignes, int nbColonnes) {
-        Matrice result = new Matrice(nbLignes, nbColonnes);
+    public static Matrix cheminInverse(Matrix v, int nbLignes, int nbColonnes) {
+        Matrix result = new Matrix(nbLignes, nbColonnes);
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                result.setValeur(i, j, this.p[i * nbColonnes + j]);
+                result.set(i, j, v.get(i * nbColonnes + j, 0));
             }
         }
         return result;
