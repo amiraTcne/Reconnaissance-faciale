@@ -18,7 +18,6 @@ public class ImageVisage{
      * Constructor for Imagevisage.
      * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.
      * @param path the path of the file containing the image.
-     * @version 1.0
      */
     public ImageVisage(int id, String path){
         this.id = id;
@@ -26,7 +25,6 @@ public class ImageVisage{
     }
     /**
      * Proper way to obtain the value of this.id
-     * @version 1.0
      * @return value of id attribute
      */
     public int getId(){
@@ -34,7 +32,6 @@ public class ImageVisage{
     }
     /**
      * Proper way to obtain the value of this.path
-     * @version 1.0
      * @return value of path attribute
      */
     public String getPath(){
@@ -44,7 +41,6 @@ public class ImageVisage{
      * This function returns a vectorial representaion of a 100x100 grayscale version of the image it is used on.
      * This is used on images that are not already in the dataset and that we wish to compare to the ones
      * present in the dataset.
-     * @version 0.1
      * @return a <code>Vecteur</code> with 10000 values in its p attribute representing the image
      * linked to <code>this</code> in 100x100 grayscale format, 
      */
@@ -76,10 +72,9 @@ public class ImageVisage{
         }
     }
     /**
-     * This function purpose is to fetch a processed version of the image it is used on without changing
+     * This function's purpose is to fetch a processed version of the image it is used on without changing
      * the path attribute, as we still need to be able to acces the original image to display it.
      * This is used on images already present in the dataset.
-     * @version 0.1
      * @return a 100x100 <code>Matrix</code> representing an image, that image being the
      * 100x100 grayscale version of <code>this</code>.
      */
