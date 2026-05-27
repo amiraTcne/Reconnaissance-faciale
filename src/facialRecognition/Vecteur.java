@@ -54,7 +54,7 @@ public class Vecteur {
     	p[indice]=valeur;
     }
     /** Getter pour obtenir une des valeurs du vecteur*/
-    public int getValue(int indice) {
+    public double getValue(int indice) {
     	return p[indice];
     }
 
