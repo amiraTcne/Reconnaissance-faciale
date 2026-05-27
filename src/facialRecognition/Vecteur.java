@@ -5,7 +5,20 @@ import Jama.Matrix;
 /** Classe vecteur*/
 public class Vecteur {
     private double[] p; 
-    
+    /** 
+     * Constructeur qui passe une matrice JAMA en Vecteur (ligne par ligne).
+     * @param m la matrice à aplatir
+     */
+    public Vecteur(Matrix m) {
+        int nbLignes = m.getRowDimension();
+        int nbColonnes = m.getColumnDimension();
+        this.p = new double[nbLignes * nbColonnes];
+        for (int i = 0; i < nbLignes; i++) {
+            for (int j = 0; j < nbColonnes; j++) {
+                this.p[i * nbColonnes + j] = m.get(i, j);
+            }
+        }
+    }
     /** Constructeur pour créer un vecteur avec des valeurs */
     public Vecteur(double[] p) {
         this.p = p;
@@ -44,4 +57,5 @@ public class Vecteur {
     public int getValue(int indice) {
     	return p[indice];
     }
+
 }
