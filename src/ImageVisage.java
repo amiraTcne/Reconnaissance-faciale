@@ -6,16 +6,38 @@
 public class ImageVisage{
     public int id;
     public String path;
+    /**
+     * Constructor for Imagevisage.
+     * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.
+     * @param path the path of the file containing the image.
+     * @version 1.0
+     */
     public ImageVisage(int id, String path){
         this.id = id;
         this.path = path;
     }
+    /**
+     * Proper way to obtain the value of this.id
+     * @version 1.0
+     * @return value of id attribute
+     */
     public int getId(){
         return this.id;
     }
+    /**
+     * Proper way to obtain the value of this.path
+     * @version 1.0
+     * @return value of path attribute
+     */
     public String getPath(){
         return this.path;
     }
+    /**
+     * This function returns a vectorial representaion of a 100x100 grayscale version of the image it is used on.
+     * This is used on images that are not already in the dataset and that we wish to compare to the ones present in the dataset.
+     * @version 0.1
+     * @return a <code>Vecteur</code> with 10000 values in its p attribute representing <code>this</code> (an image) in 100x100 grayscale format, 
+     */
     public Vecteur process(){
         File imgFile = new File(this.getPath());
         BufferedImage img;
@@ -43,6 +65,12 @@ public class ImageVisage{
             e.printStackTrace();
         }
     }
+    /**
+     * This function purpose is to fetch a processed version of the image it is used on.
+     * This is used on images already present in the dataset.
+     * @version 0.1
+     * @return a 100x100 <code>Matrice</code> representing an image, that image being the 100x100 grayscale version of <code>this</code>.
+     */
     public Matrice processed(){
         String pathPro = "dataReady"+this.getPath().substring(this.getPath().indexOf("/"));
         Matrice imgMat = new Matrice(100,100);
