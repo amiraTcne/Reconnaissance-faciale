@@ -80,22 +80,22 @@ public class ACP extends JPanel{
 	
 	
 	@Override //redefini une méthode de la classe parent 
-	 protected void paintComponent(Graphics g) { /**utilise swing et awt pour créer et affiche le graphique*/
+	  protected void paintComponent(Graphics g) { /**utilise swing et awt pour créer et affiche le graphique*/
 
 	        super.paintComponent(g); //permet de partir d'un dessin vide
 
 	        // axes
-	        g.drawLine(50, 250, 350, 250); //axe horizontal (x), 
+	        g.drawLine(50, 560, 5000, 560); //axe horizontal (x), 
 	        //départ:(50, 250) arrivée: (350, 250), 50 pour ne pas coller 
 	        //au bord et 250 pour ne coller au sommet
-	        g.drawLine(50, 550, 50, 50); //axe vertical (y)
+	        g.drawLine(50, 1500, 50, 50); //axe vertical (y)
 
 	        // points
 	        for (int i = 0; i < valeurs.length; i++) {
 
 	            int x = 50 + i * 50;//points espacés de 50px
 
-	            int y = 250 - (int)(valeurs[i] * 20);//car java augmente les y vers le bas et on veut vers le haut 
+	            int y = 560 - (int)(valeurs[i] * 20);//car java augmente les y vers le bas et on veut vers le haut 
 
 	            g.fillOval(x - 3, y - 3, 6, 6); //dessine un point (X, Y, largeur, hauteur), 
 	            //-3 car jave place à partir du coin en haut à gauche, on à un cercle de 6 de 
