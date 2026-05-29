@@ -110,7 +110,7 @@ public class ACP extends JPanel{
 		return base;
 	}
 
-	private Vecteur prendreVecteur(int i, Matrix M) { /**prend un vecteur d'une matrice*/
+	private Vecteur prendreVecteur(int indice, Matrix M) { /**prend un vecteur d'une matrice*/
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
 		for (int j=0; j<n; j++) {
