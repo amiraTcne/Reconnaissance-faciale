@@ -3,6 +3,8 @@ package projet;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java.lang.Math;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -56,12 +58,21 @@ public class ACP extends JPanel{
 		}
 	}
 	
-	private void reduireDimension() { //AT x A 
+	private void reduireDimension() { /**AT * A*/
 		Matrix matriceTranspose = matriceEtude.transpose(); /**Uitilise la méthode transposé de Jama*/
 		matriceReduite = matriceTranspose.times(matriceEtude); /**utilise la méthode times (multiplication) de Jama*/
+//		for (int i=0; i<matriceEtude.size(); i++) {
+//			for (int j=0; j<matriceEtude.size(); j++) {
+//				int somme=0;
+//				for (int k=0; k<matriceEtude[0].size(); k++) {
+//					somme = somme + matriceEtude[i][k]*matriceTranspose[k][j];
+//				}
+//				matriceReduite[i][j] = somme;
+//			}
+//		}
 	}
 	
-	private static double[] valeursPropres(Matrix M) { /**Utilise la méthode de Jama pour trouver les valeurs propres*/
+	private static double[] valeursPropres(Matrix M) {/**Utilise la méthode de Jama pour trouver les valeurs propres*/
 		EigenvalueDecomposition eig = M.eig();
 		double[] valeurs = eig.getRealEigenvalues();
 		return valeurs;
@@ -92,7 +103,7 @@ public class ACP extends JPanel{
 	        }
 	    }
 	
-	private static Vecteur[] creerBase(Matrix M) {
+	private static Vecteur[] creationBase(Matrix M) {
 		EigenvalueDecomposition eig = M.eig();
 		Matrix vecteurPropre = eig.getV(); /**prend les vecteurs propres avec la méthode de Jama*/
 		int n=M.getRowDimension();
@@ -109,8 +120,8 @@ public class ACP extends JPanel{
 		
 		return base;
 	}
-
-	private Vecteur prendreVecteur(int indice, Matrix M) { /**prend un vecteur d'une matrice*/
+	
+	private Vecteur prendreVecteur(int i, Matrix M) { /**prend un vecteur d'une matrice*/
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
 		for (int j=0; j<n; j++) {
@@ -121,100 +132,18 @@ public class ACP extends JPanel{
 	
 	private Vecteur projection(Vecteur[] base, Vecteur V) {
 		n = V.getTaille();
-		Vecteur proj = new Vecteur(n, 1); /**Créer un vecteur nul de taille n*/
+		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
 		for (int i=0; i<base.length; i++) {
 			double a=0;
 			for (int j=0; j<n; j++) {
-				a+=base[i].getValue(j) * V.getValue(j); /**Produit scalaire*/
+				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
 			}
 			for (int j=0; j<n; j++) {
-				double b = proj.getValue(j) + a*base[i].getValue(j); 
+				double b = proj.getValue(j) + a*base[i].getValue(j);
 				proj.setValueP(j,  b);
 			}
 		}
 		return proj;
-	}
-
-	public Retour[] tableauComparaison(Matrix M, ImageVisage im, Vecteur[] base) {
-		m = M.getColumnDimension();
-		Retour[] tableau = new Retour[m];
-		//Création du tableau avec pour chque image l'indice et le pourcentage de ressemblance
-		for (int i=0; i<m; i++) {
-			Retour r = new Retour();
-			Vecteur V = prendreVecteur(i, M);
-			float p = comparer(im, V, base);
-			r.setPourcentage(p);
-			r.setIndice(i);
-			tableau[i]=r;
-		}
-		
-		//tri fusion  du tableau par rapport au pourcentage
-		triFusion(tableau);
-		
-		return tableau;
-	}
-	
-	private void triFusion(Retour[] tab) {
-	    if (tab.length <= 1) return;
-
-	    int milieu = tab.length / 2;
-
-	    Retour[] gauche = new Retour[milieu];
-	    Retour[] droite = new Retour[tab.length - milieu];
-
-	    for (int i = 0; i < milieu; i++) {
-	        gauche[i] = tab[i];
-	    }
-
-	    for (int i = milieu; i < tab.length; i++) {
-	        droite[i - milieu] = tab[i];
-	    }
-
-	    triFusion(gauche);
-	    triFusion(droite);
-
-	    fusion(tab, gauche, droite);
-	}
-	
-	private void fusion(Retour[] tab, Retour[] gauche, Retour[] droite) {
-
-	    int i = 0;
-	    int j = 0;
-	    int k = 0;
-
-	    while (i < gauche.length && j < droite.length) {
-
-	        // ordre décroissant (plus grand pourcentage d'abord)
-	        if (gauche[i].getPourcentage() >= droite[j].getPourcentage()) {
-	            tab[k] = gauche[i];
-	            i++;
-	        } else {
-	            tab[k] = droite[j];
-	            j++;
-	        }
-
-	        k++;
-	    }
-
-	    while (i < gauche.length) {
-	        tab[k] = gauche[i];
-	        i++;
-	        k++;
-	    }
-
-	    while (j < droite.length) {
-	        tab[k] = droite[j];
-	        j++;
-	        k++;
-	    }
-	}
-	
-	public Vecteur identifier(Retour[] tableau, Matrix M) {
-		if (tableau[0].getPourcentage()>=0.8) {
-			Vecteur V = prendreVecteur(tableau[0].getIndice(), M);
-			return (V);
-		}
-		return null;
 	}
 	
 	private float comparer(ImageVisage im, Vecteur projeter, Vecteur[] base) {
@@ -224,19 +153,16 @@ public class ACP extends JPanel{
 		vecteurIm = projection(base, vecteurIm); /**projete l'image que l'on veut comparer*/
 		Vecteur compare = new Vecteur(n);
 		for (int i=0; i<m; i++) {
-			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); /**compare chaque pixel pour avoir la ressemblance en pourcentage*/
+			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
 			compare.setValueP(i, b);
 		}
-
-		//pourcentage global en faisant la moyenne des pourcentages
 		for (int i=0; i<m; i++){
-			pourcentage += compare.getValue(i); 
+			pourcentage += compare.getValue(i);
 		}
-		pourcentage = pourcentage / m;
-		
+		pourcentage = pourcentage / m; /**pourcentage global en faisant la moyenne des pourcentages*/
 		return pourcentage;
 	}
-
+	
 	public Retour[] tableauComparaison(Matrix M, ImageVisage im, Vecteur[] base) {
 		m = M.getColumnDimension();
 		Retour[] tableau = new Retour[m];
@@ -327,7 +253,7 @@ public class ACP extends JPanel{
 			{4, 7, 1, 1}
 		});
 		System.out.println(Arrays.toString(valeursPropres(M)));
-		System.out.println(Arrays.toString(creerBase(M)));
+		System.out.println(Arrays.toString(creationBase(M)));
 		
 		double[] vp = valeursPropres(M);
 
