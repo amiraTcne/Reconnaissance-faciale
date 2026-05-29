@@ -61,15 +61,6 @@ public class ACP extends JPanel{
 	private void reduireDimension() { /**AT * A*/
 		Matrix matriceTranspose = matriceEtude.transpose(); /**Uitilise la méthode transposé de Jama*/
 		matriceReduite = matriceTranspose.times(matriceEtude); /**utilise la méthode times (multiplication) de Jama*/
-//		for (int i=0; i<matriceEtude.size(); i++) {
-//			for (int j=0; j<matriceEtude.size(); j++) {
-//				int somme=0;
-//				for (int k=0; k<matriceEtude[0].size(); k++) {
-//					somme = somme + matriceEtude[i][k]*matriceTranspose[k][j];
-//				}
-//				matriceReduite[i][j] = somme;
-//			}
-//		}
 	}
 	
 	private static double[] valeursPropres(Matrix M) {/**Utilise la méthode de Jama pour trouver les valeurs propres*/
