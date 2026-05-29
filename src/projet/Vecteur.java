@@ -36,6 +36,17 @@ public class Vecteur {
     		p[i]=0;
     	}
     }
+
+    /**Redéfinition de la méthode toSTring()*/
+    @Override
+	public String toString() {
+		String s = new String();
+		for (int i=0; i<this.getTaille()-1; i++) {
+			s=s+String.valueOf(this.getValue(i))+",";
+		}
+		s+=String.valueOf(this.getValue(this.getTaille()-1));
+		return "["+s+"]";
+	}    
     
     /** Méthode faites pour passer d'un vecteur à la forme matricielle de l'image */
     public static Matrix cheminInverse(int nbLignes, int nbColonnes) {
