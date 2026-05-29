@@ -1,4 +1,4 @@
-package facialRecognition;
+package projet;
 
 import Jama.Matrix;
 
