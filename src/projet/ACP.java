@@ -42,35 +42,26 @@ public class ACP extends JPanel{
 		for (int i=0; i<n; i++) {
 			int moyenne=0;
 			for (int j=0; j<m; j++) {
-				moyenne =(int) (moyenne + matriceInitiale.get(i, j));
+				moyenne =(int) (moyenne + matriceInitiale.get(i, j)); /**moyenne de chaque pixel*/
 			}
-			visageM.setValueP(i, moyenne);
+			visageM.setValueP(i, moyenne); /**ajoute la valeur dans le vecteur du visage moyen*/
 		}
 	}
 	
 	private void centrer() {
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<m; j++) {
-				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i));
+				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i)); /**soustrait le visage moyen à chaque visage pour ne garder que les différences*/
 			}
 		}
 	}
 	
 	private void reduireDimension() { //AT x A 
-		Matrix matriceTranspose = matriceEtude.transpose();
-		matriceReduite = matriceTranspose.times(matriceEtude);
-//		for (int i=0; i<matriceEtude.size(); i++) {
-//			for (int j=0; j<matriceEtude.size(); j++) {
-//				int somme=0;
-//				for (int k=0; k<matriceEtude[0].size(); k++) {
-//					somme = somme + matriceEtude[i][k]*matriceTranspose[k][j];
-//				}
-//				matriceReduite[i][j] = somme;
-//			}
-//		}
+		Matrix matriceTranspose = matriceEtude.transpose(); /**Uitilise la méthode transposé de Jama*/
+		matriceReduite = matriceTranspose.times(matriceEtude); /**utilise la méthode times (multiplication) de Jama*/
 	}
 	
-	private static double[] valeursPropres(Matrix M) {
+	private static double[] valeursPropres(Matrix M) { /**Utilise la méthode de Jama pour trouver les valeurs propres*/
 		EigenvalueDecomposition eig = M.eig();
 		double[] valeurs = eig.getRealEigenvalues();
 		return valeurs;
@@ -78,7 +69,7 @@ public class ACP extends JPanel{
 	
 	
 	@Override //redefini une méthode de la classe parent 
-	 protected void paintComponent(Graphics g) {
+	 protected void paintComponent(Graphics g) { /**utilise swing et awt pour créer et affiche le graphique*/
 
 	        super.paintComponent(g); //permet de partir d'un dessin vide
 
@@ -103,12 +94,12 @@ public class ACP extends JPanel{
 	
 	private static Vecteur[] creerBase(Matrix M) {
 		EigenvalueDecomposition eig = M.eig();
-		Matrix vecteurPropre = eig.getV();
+		Matrix vecteurPropre = eig.getV(); /**prend les vecteurs propres avec la méthode de Jama*/
 		int n=M.getRowDimension();
 		
-		int nbComposantes = 2;
+		int nbComposantes = 2; /**nombre de composantes principales que l'on garde*/
 		Vecteur [] base = new Vecteur[nbComposantes];
-		for (int i=0; i<nbComposantes; i++) {
+		for (int i=0; i<nbComposantes; i++) { /**transforme la matrice de vecteur propres en un tableau de Vecteur*/
 			Vecteur V = new Vecteur(n);
 			for (int j=0; j<n; j++) {
 				V.setValueP(j, vecteurPropre.get(j, i));
@@ -119,7 +110,7 @@ public class ACP extends JPanel{
 		return base;
 	}
 
-	private Vecteur prendreVecteur(int i, Matrix M) {
+	private Vecteur prendreVecteur(int i, Matrix M) { /**prend un vecteur d'une matrice*/
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
 		for (int j=0; j<n; j++) {
@@ -130,14 +121,14 @@ public class ACP extends JPanel{
 	
 	private Vecteur projection(Vecteur[] base, Vecteur V) {
 		n = V.getTaille();
-		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+		Vecteur proj = new Vecteur(n, 1); /**Créer un vecteur nul de taille n*/
 		for (int i=0; i<base.length; i++) {
 			double a=0;
 			for (int j=0; j<n; j++) {
-				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
+				a+=base[i].getValue(j) * V.getValue(j); /**Produit scalaire*/
 			}
 			for (int j=0; j<n; j++) {
-				double b = proj.getValue(j) + a*base[i].getValue(j);
+				double b = proj.getValue(j) + a*base[i].getValue(j); 
 				proj.setValueP(j,  b);
 			}
 		}
@@ -147,17 +138,20 @@ public class ACP extends JPanel{
 	private float comparer(ImageVisage im, Vecteur projeter, Vecteur[] base) {
 		float pourcentage=0;
 		m= projeter.getTaille();
-		Vecteur vecteurIm = im.process();
-		vecteurIm = projection(base, vecteurIm);
+		Vecteur vecteurIm = im.process(); /**traite l'image que l'on veut comparer*/
+		vecteurIm = projection(base, vecteurIm); /**projete l'image que l'on veut comparer*/
 		Vecteur compare = new Vecteur(n);
 		for (int i=0; i<m; i++) {
-			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en 
+			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); /**compare chaque pixel pour avoir la ressemblance en pourcentage*/
 			compare.setValueP(i, b);
 		}
+
+		/**pourcentage global en faisant la moyenne des pourcentages*/
 		for (int i=0; i<m; i++){
-			pourcentage += compare.getValue(i);
+			pourcentage += compare.getValue(i); 
 		}
 		pourcentage = pourcentage / m;
+		
 		return pourcentage;
 	}
 	
