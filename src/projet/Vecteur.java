@@ -49,7 +49,7 @@ public class Vecteur {
 	}    
     
     /** Méthode faites pour passer d'un vecteur à la forme matricielle de l'image */
-    public static Matrix cheminInverse(int nbLignes, int nbColonnes) {
+    public Matrix cheminInverse(int nbLignes, int nbColonnes) {
         Matrix result = new Matrix(nbLignes, nbColonnes);
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
