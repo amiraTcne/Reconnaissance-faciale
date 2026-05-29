@@ -1,4 +1,4 @@
-package bdd;
+package laBdd;
 
 public class Personne {
 	String nom;
