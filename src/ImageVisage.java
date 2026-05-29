@@ -21,7 +21,7 @@ public class ImageVisage{
     public int id; // this is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images
     public String path; // this is the path, which allows us to retrieve the original image at any point
     /**
-     * Constructor for Imagevisage.
+     * Constructor for ImageVisage.
      * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.
      * @param path the path of the file containing the image.
      */
@@ -42,6 +42,18 @@ public class ImageVisage{
      */
     public String getPath(){
         return this.path;
+    }
+    /**
+     * This is the method equals for the ImageVisage object
+     * @return true if o is an instance of ImageVisage and o.path == this.path, false in all other cases
+     */
+    public boolean equals(Object o){
+        if(o instanceof ImageVisage){
+            if((o.path).equals(this.path)){
+                return true;
+            }
+        }
+        return false;
     }
     /**
      * This function returns a vectorial representaion of a 100x100 grayscale version of the image it is used on.
