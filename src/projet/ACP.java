@@ -146,7 +146,7 @@ public class ACP extends JPanel{
 			compare.setValueP(i, b);
 		}
 
-		/**pourcentage global en faisant la moyenne des pourcentages*/
+		//pourcentage global en faisant la moyenne des pourcentages
 		for (int i=0; i<m; i++){
 			pourcentage += compare.getValue(i); 
 		}
