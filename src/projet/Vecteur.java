@@ -2,12 +2,19 @@ package projet;
 
 import Jama.Matrix;
 
-/** Classe vecteur*/
+/**
+ * Represents a mathematical vector, internally stored as a 1D array of doubles.
+ * Used in the eigenfaces algorithm to represent flattened images
+ * (a 100x100 image becomes a vector of size 10000) and intermediate computation results.
+ * @author Ouerghi Hedy
+ * @version 0.5
+ */
 public class Vecteur {
-    private double[] p; 
-    /** 
-     * Constructeur qui passe une matrice JAMA en Vecteur (ligne par ligne).
-     * @param m la matrice à aplatir
+    private double[] p;
+
+    /**
+     * Constructor that flattens a JAMA matrix into a Vecteur (row by row).
+     * @param m the matrix to flatten
      */
     public Vecteur(Matrix m) {
         int nbLignes = m.getRowDimension();
@@ -19,36 +26,47 @@ public class Vecteur {
             }
         }
     }
-    /** Constructeur pour créer un vecteur avec des valeurs */
+
+    /** Constructor that creates a Vecteur from a given array of values. */
     public Vecteur(double[] p) {
         this.p = p;
     }
-    
-    /** Constructeur pour créer un vecteur  de taille n vide */
+
+    /** Constructor that creates an empty Vecteur of size n (all zeros by default). */
     public Vecteur(int n) {
         this.p = new double[n];
     }
 
-    /**Constructeur pour créer une vecteur de taille n nul*/
+    /**
+     * Constructor that creates a Vecteur of size n filled with zeros.
+     * Note: equivalent to Vecteur(int n) since Java initializes double[] to 0 by default.
+     * The second parameter is currently unused.
+     */
     public Vecteur(int n, int a) {
-    	this.p = new double[n];
-    	for (int i=0; i<n; i++) {
-    		p[i]=0;
-    	}
+        this.p = new double[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = 0;
+        }
     }
 
-    /**Redéfinition de la méthode toSTring()*/
+    /** Returns the Vecteur as a comma-separated list of values enclosed in brackets. */
     @Override
-	public String toString() {
-		String s = new String();
-		for (int i=0; i<this.getTaille()-1; i++) {
-			s=s+String.valueOf(this.getValue(i))+",";
-		}
-		s+=String.valueOf(this.getValue(this.getTaille()-1));
-		return "["+s+"]";
-	}    
-    
-    /** Méthode faites pour passer d'un vecteur à la forme matricielle de l'image */
+    public String toString() {
+        String s = new String();
+        for (int i = 0; i < this.getTaille() - 1; i++) {
+            s = s + String.valueOf(this.getValue(i)) + ",";
+        }
+        s += String.valueOf(this.getValue(this.getTaille() - 1));
+        return "[" + s + "]";
+    }
+
+    /**
+     * Reshapes this Vecteur back into a 2D JAMA matrix (row by row).
+     * Used to convert a flattened vector back into its image matrix form.
+     * @param nbLignes   number of rows in the resulting matrix
+     * @param nbColonnes number of columns in the resulting matrix
+     * @return a Matrix of size nbLignes x nbColonnes containing the values of this Vecteur
+     */
     public Matrix cheminInverse(int nbLignes, int nbColonnes) {
         Matrix result = new Matrix(nbLignes, nbColonnes);
         for (int i = 0; i < nbLignes; i++) {
@@ -58,23 +76,31 @@ public class Vecteur {
         }
         return result;
     }
-    
-    /** Getter pour obtenir notre vecteur */
+
+    /** Getter for the internal array of values. */
     public double[] getP() { return p; }
-    
-    /** Setter pour changer les valeurs de notre vecteur */
+
+    /** Setter for the internal array of values. */
     public void setP(double[] p) { this.p = p; }
-    
-    /** Getter pour obtenir la taille de notre vecteur */
+
+    /** Returns the size (length) of this Vecteur. */
     public int getTaille() { return p.length; }
-    
-    /** Setter pour changer une seule valeur de notre vecteur */
+
+    /**
+     * Sets a single value at a given index.
+     * @param indice index of the value to set
+     * @param valeur the new value
+     */
     public void setValueP(int indice, double valeur) {
-    	p[indice]=valeur;
-    }
-    /** Getter pour obtenir une des valeurs du vecteur*/
-    public double getValue(int indice) {
-    	return p[indice];
+        p[indice] = valeur;
     }
 
+    /**
+     * Returns the value stored at a given index.
+     * @param indice index of the value to retrieve
+     * @return the value stored at the given index
+     */
+    public double getValue(int indice) {
+        return p[indice];
+    }
 }
