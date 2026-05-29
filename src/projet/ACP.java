@@ -34,7 +34,7 @@ public class ACP extends JPanel{
 		visageMoyen();
 		centrer();
 		reduireDimension();
-		this.seuil = 80;
+		this.seuil = (float) 0.8;
 	}
 	
 	
@@ -235,6 +235,88 @@ public class ACP extends JPanel{
 		pourcentage = pourcentage / m;
 		
 		return pourcentage;
+	}
+
+	public Retour[] tableauComparaison(Matrix M, ImageVisage im, Vecteur[] base) {
+		m = M.getColumnDimension();
+		Retour[] tableau = new Retour[m];
+		//Création du tableau avec pour chque image l'indice et le pourcentage de ressemblance
+		for (int i=0; i<m; i++) {
+			Retour r = new Retour();
+			Vecteur V = prendreVecteur(i, M);
+			float p = comparer(im, V, base);
+			r.setPourcentage(p);
+			r.setIndice(i);
+			tableau[i]=r;
+		}
+		
+		//tri fusion  du tableau par rapport au pourcentage
+		triFusion(tableau);
+		
+		return tableau;
+	}
+	
+	private void triFusion(Retour[] tab) {
+	    if (tab.length <= 1) return;
+
+	    int milieu = tab.length / 2;
+
+	    Retour[] gauche = new Retour[milieu];
+	    Retour[] droite = new Retour[tab.length - milieu];
+
+	    for (int i = 0; i < milieu; i++) {
+	        gauche[i] = tab[i];
+	    }
+
+	    for (int i = milieu; i < tab.length; i++) {
+	        droite[i - milieu] = tab[i];
+	    }
+
+	    triFusion(gauche);
+	    triFusion(droite);
+
+	    fusion(tab, gauche, droite);
+	}
+	
+	private void fusion(Retour[] tab, Retour[] gauche, Retour[] droite) {
+
+	    int i = 0;
+	    int j = 0;
+	    int k = 0;
+
+	    while (i < gauche.length && j < droite.length) {
+
+	        // ordre décroissant (plus grand pourcentage d'abord)
+	        if (gauche[i].getPourcentage() >= droite[j].getPourcentage()) {
+	            tab[k] = gauche[i];
+	            i++;
+	        } else {
+	            tab[k] = droite[j];
+	            j++;
+	        }
+
+	        k++;
+	    }
+
+	    while (i < gauche.length) {
+	        tab[k] = gauche[i];
+	        i++;
+	        k++;
+	    }
+
+	    while (j < droite.length) {
+	        tab[k] = droite[j];
+	        j++;
+	        k++;
+	    }
+	}
+	
+	public Vecteur identifier(Retour[] tableau, Matrix M) {
+		if (tableau[0].getPourcentage()>=seuil) {
+			Vecteur V = prendreVecteur(tableau[0].getIndice(), M);
+			return (V);
+		}
+		return null;
 	}
 	
 	public static void main(String[] args) {
