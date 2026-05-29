@@ -42,7 +42,7 @@ public class Vecteur {
         Matrix result = new Matrix(nbLignes, nbColonnes);
         for (int i = 0; i < nbLignes; i++) {
             for (int j = 0; j < nbColonnes; j++) {
-                result.set(i, j, this.getValue(i * nbColonnes + j, 0));
+                result.set(i, j, this.getValue(i * nbColonnes + j));
             }
         }
         return result;
