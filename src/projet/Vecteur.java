@@ -28,6 +28,14 @@ public class Vecteur {
     public Vecteur(int n) {
         this.p = new double[n];
     }
+
+    /**Constructeur pour créer une vecteur de taille n nul*/
+    public Vecteur(int n, int a) {
+    	this.p = new double[n];
+    	for (int i=0; i<n; i++) {
+    		p[i]=0;
+    	}
+    }
     
     /** Méthode faites pour passer d'un vecteur à la forme matricielle de l'image */
     public static Matrix cheminInverse(int nbLignes, int nbColonnes) {
