@@ -118,6 +118,48 @@ public class ACP extends JPanel{
 		
 		return base;
 	}
+
+	private Vecteur prendreVecteur(int i, Matrix M) {
+		n= M.getRowDimension();
+		Vecteur V = new Vecteur(n);
+		for (int j=0; j<n; j++) {
+			V.setValueP(j, M.get(j, i));
+		}
+		return V;
+	}
+	
+	private Vecteur projection(Vecteur[] base, Vecteur V) {
+		n = V.getTaille();
+		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+		for (int i=0; i<base.length; i++) {
+			double a=0;
+			for (int j=0; j<n; j++) {
+				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
+			}
+			for (int j=0; j<n; j++) {
+				double b = proj.getValue(j) + a*base[i].getValue(j);
+				proj.setValueP(j,  b);
+			}
+		}
+		return proj;
+	}
+	
+	private float comparer(ImageVisage im, Vecteur projeter, Vecteur[] base) {
+		float pourcentage=0;
+		m= projeter.getTaille();
+		Vecteur vecteurIm = im.process();
+		vecteurIm = projection(base, vecteurIm);
+		Vecteur compare = new Vecteur(n);
+		for (int i=0; i<m; i++) {
+			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en 
+			compare.setValueP(i, b);
+		}
+		for (int i=0; i<m; i++){
+			pourcentage += compare.getValue(i);
+		}
+		pourcentage = pourcentage / m;
+		return pourcentage;
+	}
 	
 	public static void main(String[] args) {
 		Matrix M = new Matrix(new double[][] {
