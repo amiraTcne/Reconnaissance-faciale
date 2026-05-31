@@ -37,23 +37,23 @@ public class ACP extends JPanel{
 	private Matrix matriceProjection;
 	/**Allows the method "comparer()" to return the image id and its percentage match with a new image*/
 	private Retour r = new Retour();
-	/***/
-	private double[] valeurs;
+
+	//private double[] valeurs;
 	
 	//constructors
 	
-	public ACP(double[] valeurs) {
-		this.valeurs = valeurs;
-	}
+//	public ACP(double[] valeurs) {
+//		this.valeurs = valeurs;
+//	}
 	
-	public ACP(Matrix matriceInitiale, int n, int m) {
+	public ACP(Matrix matriceInitiale) {
 		this.matriceInitiale = matriceInitiale;
 		this.n=matriceInitiale.getRowDimension();
 		this.m=matriceInitiale.getColumnDimension();
 		this.visageM = new Vecteur(n);
 		this.matriceEtude = new Matrix(n,m);
-		this.matriceReduite = new Matrix(n,m);
-		this.matriceProjection = new Matrix(n,m);
+		this.matriceReduite = new Matrix(m,m);
+		this.matriceProjection = new Matrix(m,m);
 		visageMoyen();
 		centrer();
 		reduireDimension();
@@ -85,10 +85,9 @@ public class ACP extends JPanel{
 		matriceReduite = matriceTranspose.times(matriceEtude); //utilise la méthode times (multiplication) de Jama
 	}
 	
-	private static double[] valeursPropres(Matrix M) { //Utilise la méthode de Jama pour trouver les valeurs propres
-		EigenvalueDecomposition eig = M.eig();
-		double[] valeurs = eig.getRealEigenvalues();
-		return valeurs;
+	private double[] valeursPropres() { //Utilise la méthode de Jama pour trouver les valeurs propres
+		EigenvalueDecomposition eig = matriceReduite.eig();
+		return eig.getRealEigenvalues();
 	}
 	
 	
