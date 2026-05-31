@@ -28,13 +28,13 @@ public class ACP extends JPanel{
 	/**The matrix whose columns correspond to our original images*/
 	private Matrix matriceInitiale = new Matrix(n,m);
 	/**The "average face" vector, calculated by averaging each pixel across all our images*/
-	private Vecteur visageM = new Vecteur(n);
+	private Vecteur visageM;
 	/**The original matrix from which the vector "VisageM" has been subtracted from each column*/
-	private Matrix matriceEtude = new Matrix(n,m);
+	private Matrix matriceEtude;
 	/**"matriceEtude" transposed multiplied by "matriceEtude"*/
-	private Matrix matriceReduite = new Matrix(n,m);
+	private Matrix matriceReduite;
 	/**"matriceReduite" whose columns have been projected in "base"*/
-	private Matrix matriceProjection = new Matrix(n,m);
+	private Matrix matriceProjection;
 	/**Allows the method "comparer()" to return the image id and its percentage match with a new image*/
 	private Retour r = new Retour();
 	/***/
@@ -50,6 +50,10 @@ public class ACP extends JPanel{
 		this.matriceInitiale = matriceInitiale;
 		this.n=matriceInitiale.getRowDimension();
 		this.m=matriceInitiale.getColumnDimension();
+		this.visageM = new Vecteur(n);
+		this.matriceEtude = new Matrix(n,m);
+		this.matriceReduite = new Matrix(n,m);
+		this.matriceProjection = new Matrix(n,m);
 		visageMoyen();
 		centrer();
 		reduireDimension();
@@ -77,11 +81,11 @@ public class ACP extends JPanel{
 	}
 	
 	private void reduireDimension() { //AT * A
-		Matrix matriceTranspose = matriceEtude.transpose(); //Uitilise la méthode transposé de Jama
+		Matrix matriceTranspose = matriceEtude.transpose(); //Utilise la méthode transposé de Jama
 		matriceReduite = matriceTranspose.times(matriceEtude); //utilise la méthode times (multiplication) de Jama
 	}
 	
-	private static double[] valeursPropres(Matrix M) {//Utilise la méthode de Jama pour trouver les valeurs propres
+	private static double[] valeursPropres(Matrix M) { //Utilise la méthode de Jama pour trouver les valeurs propres
 		EigenvalueDecomposition eig = M.eig();
 		double[] valeurs = eig.getRealEigenvalues();
 		return valeurs;
