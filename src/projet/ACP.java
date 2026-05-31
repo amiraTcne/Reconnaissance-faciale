@@ -11,19 +11,36 @@ import java.awt.*;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 
+/**
+ * ACP class of the facial recognition project
+ * @author Liah, Amira
+ * @version 1.0
+ */
 public class ACP extends JPanel{
+	/** The basis of eigenvectors. */
 	private ArrayList <Vecteur> base = new ArrayList <Vecteur>();
+	/** The threshold above which an image is considered to correspond to a person. */
 	private float seuil;
+	/** The number of pixels we have in each image.*/
 	private int n;
+	/** The number of images we have*/
 	private int m;
+	/**The matrix whose columns correspond to our original images*/
 	private Matrix matriceInitiale = new Matrix(n,m);
+	/**The "average face" vector, calculated by averaging each pixel across all our images*/
 	private Vecteur visageM = new Vecteur(n);
+	/**The original matrix from which the vector "VisageM" has been subtracted from each column*/
 	private Matrix matriceEtude = new Matrix(n,m);
+	/**"matriceEtude" transposed multiplied by "matriceEtude"*/
 	private Matrix matriceReduite = new Matrix(n,m);
+	/**"matriceReduite" whose columns have been projected in "base"*/
 	private Matrix matriceProjection = new Matrix(n,m);
+	/**Allows the method "comparer()" to return the image id and its percentage match with a new image*/
 	private Retour r = new Retour();
-	
+	/***/
 	private double[] valeurs;
+	
+	//constructors
 	
 	public ACP(double[] valeurs) {
 		this.valeurs = valeurs;
@@ -40,30 +57,31 @@ public class ACP extends JPanel{
 	}
 	
 	
+	
 	private void visageMoyen() {
 		for (int i=0; i<n; i++) {
 			int moyenne=0;
 			for (int j=0; j<m; j++) {
-				moyenne =(int) (moyenne + matriceInitiale.get(i, j)); /**moyenne de chaque pixel*/
+				moyenne =(int) (moyenne + matriceInitiale.get(i, j)); //moyenne de chaque pixel
 			}
-			visageM.setValueP(i, moyenne); /**ajoute la valeur dans le vecteur du visage moyen*/
+			visageM.setValueP(i, moyenne); //ajoute la valeur dans le vecteur du visage moyen
 		}
 	}
 	
 	private void centrer() {
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<m; j++) {
-				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i)); /**soustrait le visage moyen à chaque visage pour ne garder que les différences*/
+				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i)); //soustrait le visage moyen à chaque visage pour ne garder que les différences
 			}
 		}
 	}
 	
-	private void reduireDimension() { /**AT * A*/
-		Matrix matriceTranspose = matriceEtude.transpose(); /**Uitilise la méthode transposé de Jama*/
-		matriceReduite = matriceTranspose.times(matriceEtude); /**utilise la méthode times (multiplication) de Jama*/
+	private void reduireDimension() { //AT * A
+		Matrix matriceTranspose = matriceEtude.transpose(); //Uitilise la méthode transposé de Jama
+		matriceReduite = matriceTranspose.times(matriceEtude); //utilise la méthode times (multiplication) de Jama
 	}
 	
-	private static double[] valeursPropres(Matrix M) {/**Utilise la méthode de Jama pour trouver les valeurs propres*/
+	private static double[] valeursPropres(Matrix M) {//Utilise la méthode de Jama pour trouver les valeurs propres
 		EigenvalueDecomposition eig = M.eig();
 		double[] valeurs = eig.getRealEigenvalues();
 		return valeurs;
@@ -71,7 +89,7 @@ public class ACP extends JPanel{
 	
 	
 	@Override //redefini une méthode de la classe parent 
-	  protected void paintComponent(Graphics g) { /**utilise swing et awt pour créer et affiche le graphique*/
+	  protected void paintComponent(Graphics g) { //utilise swing et awt pour créer et affiche le graphique
 
 	        super.paintComponent(g); //permet de partir d'un dessin vide
 
@@ -96,12 +114,12 @@ public class ACP extends JPanel{
 	
 	private static Vecteur[] creationBase(Matrix M) {
 		EigenvalueDecomposition eig = M.eig();
-		Matrix vecteurPropre = eig.getV(); /**prend les vecteurs propres avec la méthode de Jama*/
+		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int n=M.getRowDimension();
 		
-		int nbComposantes = 2; /**nombre de composantes principales que l'on garde*/
+		int nbComposantes = 2; //nombre de composantes principales que l'on garde
 		Vecteur [] base = new Vecteur[nbComposantes];
-		for (int i=0; i<nbComposantes; i++) { /**transforme la matrice de vecteur propres en un tableau de Vecteur*/
+		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
 			Vecteur V = new Vecteur(n);
 			for (int j=0; j<n; j++) {
 				V.setValueP(j, vecteurPropre.get(j, i));
@@ -112,7 +130,7 @@ public class ACP extends JPanel{
 		return base;
 	}
 	
-	private Vecteur prendreVecteur(int i, Matrix M) { /**prend un vecteur d'une matrice*/
+	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur d'une matrice
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
 		for (int j=0; j<n; j++) {
@@ -140,8 +158,8 @@ public class ACP extends JPanel{
 	private float comparer(ImageVisage im, Vecteur projeter, Vecteur[] base) {
 		float pourcentage=0;
 		m= projeter.getTaille();
-		Vecteur vecteurIm = im.process(); /**traite l'image que l'on veut comparer*/
-		vecteurIm = projection(base, vecteurIm); /**projete l'image que l'on veut comparer*/
+		Vecteur vecteurIm = im.process(); //traite l'image que l'on veut comparer
+		vecteurIm = projection(base, vecteurIm); //projete l'image que l'on veut comparer
 		Vecteur compare = new Vecteur(n);
 		for (int i=0; i<m; i++) {
 			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
@@ -150,7 +168,7 @@ public class ACP extends JPanel{
 		for (int i=0; i<m; i++){
 			pourcentage += compare.getValue(i);
 		}
-		pourcentage = pourcentage / m; /**pourcentage global en faisant la moyenne des pourcentages*/
+		pourcentage = pourcentage / m; //pourcentage global en faisant la moyenne des pourcentages
 		return pourcentage;
 	}
 	
