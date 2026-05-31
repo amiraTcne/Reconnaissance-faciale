@@ -1,4 +1,4 @@
-package projet;
+package facialRecognition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import Jama.EigenvalueDecomposition;
  */
 public class ACP extends JPanel{
 	/** The basis of eigenvectors. */
-	private ArrayList <Vecteur> base = new ArrayList <Vecteur>();
+	private Vecteur[] base;
 	/** The threshold above which an image is considered to correspond to a person. */
 	private float seuil;
 	/** The number of pixels we have in each image.*/
@@ -57,6 +57,7 @@ public class ACP extends JPanel{
 		visageMoyen();
 		centrer();
 		reduireDimension();
+		creationBase();
 		this.seuil = (float) 0.8;
 	}
 	
@@ -115,22 +116,19 @@ public class ACP extends JPanel{
 	        }
 	    }
 	
-	private static Vecteur[] creationBase(Matrix M) {
-		EigenvalueDecomposition eig = M.eig();
+	private void creerBase() {
+		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
-		int n=M.getRowDimension();
-		
-		int nbComposantes = 2; //nombre de composantes principales que l'on garde
-		Vecteur [] base = new Vecteur[nbComposantes];
+		int n = matriceReduite.getRowDimension();
+		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
+		this.base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
 			Vecteur V = new Vecteur(n);
 			for (int j=0; j<n; j++) {
 				V.setValueP(j, vecteurPropre.get(j, i));
 			}
-			base[i]=V;
+			this.base[i]=V;
 		}
-		
-		return base;
 	}
 	
 	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur d'une matrice
