@@ -33,14 +33,10 @@ public class ACP {
 	private Matrix matriceProjection;
 	/**Allows the method "comparer()" to return the image id and its percentage match with a new image*/
 	private Retour r = new Retour();
-
-	//private double[] valeurs;
+	
 	
 	//constructors
 	
-//	public ACP(double[] valeurs) {
-//		this.valeurs = valeurs;
-//	}
 	/** 
 	 * Constructor creating an instance of ACP.
 	 * @param matriceInitial The initial matrix whose columns correspond to the original images
@@ -124,10 +120,23 @@ public class ACP {
 		return valeursTriees;
 	}
 	
-//	private Matrix vecteursPropres() {
-//		EigenvalueDecomposition eig = matriceReduite.eig();
-//		return eig.getV();
-//	}
+	//utile pour savoir quels sont les indices des vecteurs propres que nous devons garder
+	//trie les indices par ordre décroissant des valeurs propres
+	public int[] indicesValeursPropresTriees() {
+		double[] valeurs = valeursPropres();
+		//indices contient les indices originaux, de 0 à m-1, avec m le nb de vap
+		Integer[] indices = new Integer[valeurs.length];
+	    for (int i = 0; i < valeurs.length; i++) {
+	        indices[i] = i;
+	    }
+	    //
+	    Arrays.sort(indices, (i, j) -> Double.compare(valeurs[j], valeurs[i]));
+	    int[] indicesTries = new int[valeurs.length];
+	    for (int i = 0; i < indices.length; i++) {
+	    	indicesTries[i] = indices[i];
+	    }
+	    return indicesTries;
+	}
 	
 	/** 
 	 * 
@@ -137,17 +146,22 @@ public class ACP {
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
 		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
+		//pour avoir l'indice des vecteurs propres trié selon la valeur des valeurs propres associées
+		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
-		//ATTENTION il faut trier les vep en fonction du tri des vap associées
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
-			Matrix V = new Matrix(m,1);
+			Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
-				V.set(j,0,vecteurPropre.get(j, i));
+				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
 			//pour avoir les eigenfaces, on prend un vecteur propre
 			//de matriceReduite et on le multiplie à gauche par matriceEtude
 			//but : remonter à l'espace d'origine 
-			base[i] = new Vecteur(matriceEtude.times(V));		}
+			//normaliser pour rendre toutes les eigenfaces comparables
+			//,que la longueur des eigenfaces n'ait pas d'impact : 
+			//c'est la direction du vecteur qui compte.
+			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
+		}
 	}
 	
 	/** 
