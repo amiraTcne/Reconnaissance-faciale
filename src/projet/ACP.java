@@ -1,6 +1,5 @@
 package projet;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import java.lang.Math;
@@ -11,7 +10,7 @@ import Jama.EigenvalueDecomposition;
 /**
  * ACP class of the facial recognition project
  * @author Liah, Amira
- * @version 1.0
+ * @version 1.2
  */
 public class ACP {
 	/** The basis of eigenvectors. */
@@ -22,7 +21,7 @@ public class ACP {
 	private int n;
 	/** The number of images we have*/
 	private int m;
-	/**The matrix whose columns correspond to our original images*/
+	/**The matrix whose columns correspond to our original images and whose rows correspond to the pixels*/
 	private Matrix matriceInitiale = new Matrix(n,m);
 	/**The "average face" vector, calculated by averaging each pixel across all our images*/
 	private Vecteur visageM;
@@ -42,7 +41,10 @@ public class ACP {
 //	public ACP(double[] valeurs) {
 //		this.valeurs = valeurs;
 //	}
-	
+	/** 
+	 * Constructor creating an instance of ACP.
+	 * @param matriceInitial The initial matrix whose columns correspond to the original images
+	 */
 	public ACP(Matrix matriceInitiale) {
 		this.matriceInitiale = matriceInitiale;
 		this.n=matriceInitiale.getRowDimension();
@@ -50,16 +52,21 @@ public class ACP {
 		this.visageM = new Vecteur(n);
 		this.matriceEtude = new Matrix(n,m);
 		this.matriceReduite = new Matrix(m,m);
-		this.matriceProjection = new Matrix(m,m);
 		visageMoyen();
 		centrer();
 		reduireDimension();
+		
 		creerBase();
+		projeterMatrice();
 		this.seuil = (float) 0.8;
 	}
 	
 	
-	
+	/** 
+	 * Calculates the average face using matriceInitial
+	 * We don't divide by the number of images because 
+	 * a scalar does not change a vector.
+	 */
 	private void visageMoyen() {
 		for (int i=0; i<n; i++) {
 			int moyenne=0;
@@ -70,6 +77,10 @@ public class ACP {
 		}
 	}
 	
+	/** 
+	 * Subtracts the mean face from each column of matriceInitial.
+	 * This gives us the matrix we will be working with : matriceEtude.
+	 */
 	private void centrer() {
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<m; j++) {
@@ -78,17 +89,29 @@ public class ACP {
 		}
 	}
 	
+	/** 
+	 * Calculates matriceEtude transposed multiplied by matriceEtude. 
+	 * The goal is to reduce the dimension in order to find the eigenvalues of matriceEtude using as few calculations as possible
+	 */
 	private void reduireDimension() { //AT * A
 		Matrix matriceTranspose = matriceEtude.transpose(); //Utilise la méthode transposé de Jama
 		matriceReduite = matriceTranspose.times(matriceEtude); //utilise la méthode times (multiplication) de Jama
 	}
 	
+	/** 
+	 * Calculates the eigenvalues of matriceReduite
+	 * The goal is to reduce the dimension in order to find the eigenvalues using as few calculations as possible
+	 */
 	private double[] valeursPropres() { //Utilise la méthode de Jama pour trouver les valeurs propres
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		return eig.getRealEigenvalues();
 	}
 	
-	public double[] valeursProprestriees() {
+	/** 
+	 * Sorts the eigenvalues of matriceReduit in order 
+	 * to place them in descending order in a graph
+	 */
+	public double[] valeursPropresTriees() {
 		double[] valeurs = valeursPropres();
 		//trie dans l'ordre croissant les vap
 		Arrays.sort(valeurs);
@@ -101,22 +124,37 @@ public class ACP {
 		return valeursTriees;
 	}
 	
+//	private Matrix vecteursPropres() {
+//		EigenvalueDecomposition eig = matriceReduite.eig();
+//		return eig.getV();
+//	}
 	
+	/** 
+	 * 
+	 */
 	private void creerBase() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
-		int n = matriceReduite.getRowDimension();
+		int m = matriceReduite.getRowDimension();
 		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
-		this.base = new Vecteur[nbComposantes];
+		base = new Vecteur[nbComposantes];
+		//ATTENTION il faut trier les vep en fonction du tri des vap associées
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
-			Vecteur V = new Vecteur(n);
-			for (int j=0; j<n; j++) {
-				V.setValueP(j, vecteurPropre.get(j, i));
+			Matrix V = new Matrix(m,1);
+			for (int j=0; j<m; j++) {
+				V.set(j,0,vecteurPropre.get(j, i));
 			}
-			this.base[i]=V;
-		}
+			//pour avoir les eigenfaces, on prend un vecteur propre
+			//de matriceReduite et on le multiplie à gauche par matriceEtude
+			//but : remonter à l'espace d'origine 
+			base[i] = new Vecteur(matriceEtude.times(V));		}
 	}
 	
+	/** 
+	 * Returns a column vector of a matrix.
+	 * @param i The index of the column.
+	 * @param M The matrix from which we want to extract the vector.
+	 */
 	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
@@ -129,7 +167,7 @@ public class ACP {
 	/**
 	 * 
 	 */
-	private Vecteur projeter(Vecteur[] base, Vecteur V) {
+	private Vecteur projeter(Vecteur V) {
 		n = V.getTaille();
 		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
 		for (int i=0; i<base.length; i++) {
@@ -145,31 +183,41 @@ public class ACP {
 		return proj;
 	}
 	
-	private float comparer(ImageVisage im, Vecteur projeter, Vecteur[] base) {
+	private void projeterMatrice() {
+		matriceProjection = new Matrix(this.base.length, m);
+		for (int j=0;j<m;j++) {
+			Vecteur V = new Vecteur(base.length);
+			V=projeter(prendreVecteur(j, matriceEtude));
+			for (int i=0;i<base.length;i++) {
+				matriceProjection.set(i,j,V.getValue(i));
+			}
+		}
+	}
+	
+	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
 		float pourcentage=0;
-		m= projeter.getTaille();
-		Vecteur vecteurIm = im.process(); //traite l'image que l'on veut comparer
-		vecteurIm = projeter(base, vecteurIm); //projete l'image que l'on veut comparer
-		Vecteur compare = new Vecteur(n);
-		for (int i=0; i<m; i++) {
-			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
+		int nb = imDeReferenceProjetee.getTaille();
+		Vecteur vecteurIm = nouvelleIm.process(); //traite l'image que l'on veut comparer
+		vecteurIm = projeter(vecteurIm); //projete l'image que l'on veut comparer
+		Vecteur compare = new Vecteur(nb);
+		for (int i=0; i<nb; i++) {
+			double b= Math.abs(1-(imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i)/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
 			compare.setValueP(i, b);
 		}
-		for (int i=0; i<m; i++){
+		for (int i=0; i<nb; i++){
 			pourcentage += compare.getValue(i);
 		}
-		pourcentage = pourcentage / m; //pourcentage global en faisant la moyenne des pourcentages
+		pourcentage = pourcentage / nb; //pourcentage global en faisant la moyenne des pourcentages
 		return pourcentage;
 	}
 	
-	public Retour[] tableauComparaison(Matrix M, ImageVisage im, Vecteur[] base) {
-		m = M.getColumnDimension();
+	public Retour[] tableauComparaison(ImageVisage nouvelleIm) {
 		Retour[] tableau = new Retour[m];
 		//Création du tableau avec pour chque image l'indice et le pourcentage de ressemblance
 		for (int i=0; i<m; i++) {
 			Retour r = new Retour();
-			Vecteur V = prendreVecteur(i, M);
-			float p = comparer(im, V, base);
+			Vecteur V = prendreVecteur(i, matriceProjection);
+			float p = comparer(nouvelleIm, V);
 			r.setPourcentage(p);
 			r.setIndice(i);
 			tableau[i]=r;
