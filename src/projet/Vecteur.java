@@ -76,6 +76,23 @@ public class Vecteur {
         }
         return result;
     }
+    
+    /**
+     * Normalizes a vector.
+     * @return The normalized vector.
+     */
+    public Vecteur normaliser() {
+    	double s =0;
+    	for (int i=0;i<p.length;i++) {
+    		s+=p[i]*p[i];
+    	}
+    	double normeEuclidienne = Math.sqrt(s);
+    	Vecteur vn = new Vecteur(p.length);
+    	for (int i=0;i<p.length;i++) {
+    		vn.setValueP(i, (p[i]/normeEuclidienne));;
+    	}
+    	return vn;
+    }
 
     /** Getter for the internal array of values. */
     public double[] getP() { return p; }
