@@ -39,7 +39,7 @@ public class ACP {
 	
 	/** 
 	 * Constructor creating an instance of ACP.
-	 * @param matriceInitial The initial matrix whose columns correspond to the original images
+	 * @param matriceInitial The initial matrix whose columns correspond to the original images.
 	 */
 	public ACP(Matrix matriceInitiale) {
 		this.matriceInitiale = matriceInitiale;
@@ -51,7 +51,6 @@ public class ACP {
 		visageMoyen();
 		centrer();
 		reduireDimension();
-		
 		creerBase();
 		projeterMatrice();
 		this.seuil = (float) 0.8;
@@ -59,9 +58,8 @@ public class ACP {
 	
 	
 	/** 
-	 * Calculates the average face using matriceInitial
-	 * We don't divide by the number of images because 
-	 * a scalar does not change a vector.
+	 * Calculates the average face using matriceInitial.
+	 * We don't divide by the number of images because a scalar does not change a vector.
 	 */
 	private void visageMoyen() {
 		for (int i=0; i<n; i++) {
@@ -87,7 +85,7 @@ public class ACP {
 	
 	/** 
 	 * Calculates matriceEtude transposed multiplied by matriceEtude. 
-	 * The goal is to reduce the dimension in order to find the eigenvalues of matriceEtude using as few calculations as possible
+	 * The goal is to reduce the dimension in order to find the eigenvalues of matriceEtude using as few calculations as possible.
 	 */
 	private void reduireDimension() { //AT * A
 		Matrix matriceTranspose = matriceEtude.transpose(); //Utilise la méthode transposé de Jama
@@ -95,8 +93,8 @@ public class ACP {
 	}
 	
 	/** 
-	 * Calculates the eigenvalues of matriceReduite
-	 * The goal is to reduce the dimension in order to find the eigenvalues using as few calculations as possible
+	 * Calculates the eigenvalues of matriceReduite.
+	 * @return The eigenvalues of matriceReduite.
 	 */
 	private double[] valeursPropres() { //Utilise la méthode de Jama pour trouver les valeurs propres
 		EigenvalueDecomposition eig = matriceReduite.eig();
@@ -104,8 +102,8 @@ public class ACP {
 	}
 	
 	/** 
-	 * Sorts the eigenvalues of matriceReduit in order 
-	 * to place them in descending order in a graph
+	 * Sorts the eigenvalues of matriceReduit in order to place them in descending order in a graph.
+	 * @return Sorted eigenvalues of martriceReduite.
 	 */
 	public double[] valeursPropresTriees() {
 		double[] valeurs = valeursPropres();
@@ -120,6 +118,10 @@ public class ACP {
 		return valeursTriees;
 	}
 	
+	/**
+	 * Sorts 
+	 * @return
+	 */
 	//utile pour savoir quels sont les indices des vecteurs propres que nous devons garder
 	//trie les indices par ordre décroissant des valeurs propres
 	public int[] indicesValeursPropresTriees() {
@@ -146,9 +148,9 @@ public class ACP {
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
 		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
-		//pour avoir l'indice des vecteurs propres trié selon la valeur des valeurs propres associées
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
+		//ATTENTION il faut aussi trier les vep en fonction du tri des vap associées
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
 			Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
@@ -157,8 +159,7 @@ public class ACP {
 			//pour avoir les eigenfaces, on prend un vecteur propre
 			//de matriceReduite et on le multiplie à gauche par matriceEtude
 			//but : remonter à l'espace d'origine 
-			//normaliser pour rendre toutes les eigenfaces comparables
-			//,que la longueur des eigenfaces n'ait pas d'impact : 
+			//normaliser pour rendre toutes les eigenfaces comparables, pour que la longueur des eigenfaces n'ait pas d'impact : 
 			//c'est la direction du vecteur qui compte.
 			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
@@ -178,8 +179,11 @@ public class ACP {
 		return V;
 	}
 	
+	
 	/**
-	 * 
+	 * Projects a vector into base, the eigenfaces basis.
+	 * @param V The vector you want to project
+	 * @return The projected vector
 	 */
 	private Vecteur projeter(Vecteur V) {
 		n = V.getTaille();
@@ -197,6 +201,10 @@ public class ACP {
 		return proj;
 	}
 	
+	
+	/**
+	 * creates matriceProjection
+	 */
 	private void projeterMatrice() {
 		matriceProjection = new Matrix(this.base.length, m);
 		for (int j=0;j<m;j++) {
@@ -208,6 +216,13 @@ public class ACP {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param nouvelleIm
+	 * @param imDeReferenceProjetee
+	 * @return
+	 */
 	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
 		float pourcentage=0;
 		int nb = imDeReferenceProjetee.getTaille();
@@ -225,6 +240,12 @@ public class ACP {
 		return pourcentage;
 	}
 	
+	
+	/**
+	 * 
+	 * @param nouvelleIm
+	 * @return
+	 */
 	public Retour[] tableauComparaison(ImageVisage nouvelleIm) {
 		Retour[] tableau = new Retour[m];
 		//Création du tableau avec pour chque image l'indice et le pourcentage de ressemblance
@@ -243,6 +264,10 @@ public class ACP {
 		return tableau;
 	}
 	
+	/**
+	 * 
+	 * @param tab
+	 */
 	private void triFusion(Retour[] tab) {
 	    if (tab.length <= 1) return;
 	    int milieu = tab.length / 2;
@@ -259,6 +284,12 @@ public class ACP {
 	    fusion(tab, gauche, droite);
 	}
 	
+	/**
+	 * 
+	 * @param tab
+	 * @param gauche
+	 * @param droite
+	 */
 	private void fusion(Retour[] tab, Retour[] gauche, Retour[] droite) {
 	    int i = 0;
 	    int j = 0;
@@ -286,7 +317,12 @@ public class ACP {
 	    }
 	}
 	
-	
+	/**
+	 * 
+	 * @param tableau
+	 * @param M
+	 * @return
+	 */
 	public Vecteur identifier(Retour[] tableau, Matrix M) {
 		if (tableau[0].getPourcentage()>=seuil) {
 			Vecteur V = prendreVecteur(tableau[0].getIndice(), M);
