@@ -1,4 +1,4 @@
-package facialRecognition;
+package projet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,7 +117,7 @@ public class ACP {
 		}
 	}
 	
-	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur d'une matrice
+	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
 		n= M.getRowDimension();
 		Vecteur V = new Vecteur(n);
 		for (int j=0; j<n; j++) {
@@ -126,7 +126,10 @@ public class ACP {
 		return V;
 	}
 	
-	private Vecteur projection(Vecteur[] base, Vecteur V) {
+	/**
+	 * 
+	 */
+	private Vecteur projeter(Vecteur[] base, Vecteur V) {
 		n = V.getTaille();
 		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
 		for (int i=0; i<base.length; i++) {
@@ -146,7 +149,7 @@ public class ACP {
 		float pourcentage=0;
 		m= projeter.getTaille();
 		Vecteur vecteurIm = im.process(); //traite l'image que l'on veut comparer
-		vecteurIm = projection(base, vecteurIm); //projete l'image que l'on veut comparer
+		vecteurIm = projeter(base, vecteurIm); //projete l'image que l'on veut comparer
 		Vecteur compare = new Vecteur(n);
 		for (int i=0; i<m; i++) {
 			double b= Math.abs(1-(projeter.getValue(i) - vecteurIm.getValue(i)/projeter.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
@@ -180,34 +183,25 @@ public class ACP {
 	
 	private void triFusion(Retour[] tab) {
 	    if (tab.length <= 1) return;
-
 	    int milieu = tab.length / 2;
-
 	    Retour[] gauche = new Retour[milieu];
 	    Retour[] droite = new Retour[tab.length - milieu];
-
 	    for (int i = 0; i < milieu; i++) {
 	        gauche[i] = tab[i];
 	    }
-
 	    for (int i = milieu; i < tab.length; i++) {
 	        droite[i - milieu] = tab[i];
 	    }
-
 	    triFusion(gauche);
 	    triFusion(droite);
-
 	    fusion(tab, gauche, droite);
 	}
 	
 	private void fusion(Retour[] tab, Retour[] gauche, Retour[] droite) {
-
 	    int i = 0;
 	    int j = 0;
 	    int k = 0;
-
 	    while (i < gauche.length && j < droite.length) {
-
 	        // ordre décroissant (plus grand pourcentage d'abord)
 	        if (gauche[i].getPourcentage() >= droite[j].getPourcentage()) {
 	            tab[k] = gauche[i];
@@ -216,22 +210,20 @@ public class ACP {
 	            tab[k] = droite[j];
 	            j++;
 	        }
-
 	        k++;
 	    }
-
 	    while (i < gauche.length) {
 	        tab[k] = gauche[i];
 	        i++;
 	        k++;
 	    }
-
 	    while (j < droite.length) {
 	        tab[k] = droite[j];
 	        j++;
 	        k++;
 	    }
 	}
+	
 	
 	public Vecteur identifier(Retour[] tableau, Matrix M) {
 		if (tableau[0].getPourcentage()>=seuil) {
@@ -241,6 +233,8 @@ public class ACP {
 		return null;
 	}
 	
+	
+	//main function
 	public static void main(String[] args) {
 		Matrix M = new Matrix(new double[][] {
 			{4, 2, 6, 7}, 
