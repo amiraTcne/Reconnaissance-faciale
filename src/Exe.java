@@ -29,13 +29,6 @@ public class Exe{
         int hauteur = 100;
 
         //Vecteur vecteur = acp.visageM;
-        
-        Vecteur vecteur = new Vecteur(largeur*hauteur);
-        
-        for(int i=0;i<vecteur.getTaille();i++){
-            vecteur.setValueP(i, i % 256);
-        }
-        
         vecteur = im.process();
 
         BufferedImage img =
