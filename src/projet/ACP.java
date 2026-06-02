@@ -230,21 +230,17 @@ public class ACP {
 	 * @return The projected vector
 	 */
 	private Vecteur projeter(Vecteur V) {
-		int taille = V.getTaille();
-		Vecteur proj = new Vecteur(base[0].getTaille(), 1); //Créer un vecteur nul de taille n
-		for (int i=0; i<base.length; i++) {
-			double a=0;
-			for (int j=0; j<taille; j++) {
-				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
-			}
-			for (int j=0; j<taille; j++) {
-				double b = proj.getValue(j) + a*base[i].getValue(j);
-				proj.setValueP(j,  b);
-			}
-		}
-		return proj;
+	    int taille = V.getTaille();
+	    Vecteur proj = new Vecteur(base.length); //base.length, pas base[0].getTaille()
+	    for (int i = 0; i < base.length; i++) {
+	        double a = 0;
+	        for (int j = 0; j < taille; j++) {
+	            a += base[i].getValue(j) * V.getValue(j);
+	        }
+	        proj.setValueP(i, a); //coordonnée scalaire seulement
+	    }
+	    return proj;
 	}
-	
 	
 	/**
 	 * creates matriceProjection
@@ -268,26 +264,30 @@ public class ACP {
 	 * @return
 	 */
 	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
-		float pourcentage=0;
-		int nb = imDeReferenceProjetee.getTaille();
-		Vecteur vecteurIm = nouvelleIm.process(); //traite l'image que l'on veut comparer
-		for (int i=0; i<nb; i++) {
-			double red = vecteurIm.getValue(i)-visageM.getValue(i);
-			vecteurIm.setValueP(i, red);
-		}
-		vecteurIm = projeter(vecteurIm); //projete l'image que l'on veut comparer
-		Vecteur compare = new Vecteur(nb);
-		for (int i=0; i<nb; i++) {
-			double b= Math.abs(1-((imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i))/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
-			compare.setValueP(i, b);
-		}
-		for (int i=0; i<nb; i++){
-			pourcentage += compare.getValue(i);
-		}
-		pourcentage = pourcentage / nb; //pourcentage global en faisant la moyenne des pourcentages
-		return pourcentage;
+	    Vecteur vecteurIm = nouvelleIm.process();
+	    
+	    // Centrer AVANT de projeter
+	    for (int i = 0; i < n; i++) {
+	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
+	    }
+	    
+	    vecteurIm = projeter(vecteurIm); // maintenant taille base.length
+	    
+	    // Distance euclidienne (évite la division par zéro)
+	    double distance = 0;
+	    for (int i = 0; i < base.length; i++) {
+	        double diff = imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i);
+	        distance += diff * diff;
+	    }
+	    return (float) Math.sqrt(distance);
 	}
 	
+	
+	private float pourcentage(float distance) {
+		float max = 15000;
+		float p = 100 * (1-distance/max);
+		return p;
+	}
 	
 	/**
 	 * 
@@ -300,7 +300,8 @@ public class ACP {
 		for (int i=0; i<m; i++) {
 			Retour r = new Retour();
 			Vecteur V = prendreVecteur(i, matriceProjection);
-			float p = comparer(nouvelleIm, V);
+			float distance = comparer(nouvelleIm, V);
+			float p = pourcentage(distance);
 			r.setPourcentage(p);
 			r.setIndice(i);
 			tableau[i]=r;
