@@ -7,7 +7,7 @@ import java.lang.Math;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 
-import imgs.ImageVisage;
+import facialRecognition.ImageVisage;
 
 
 /**
@@ -157,14 +157,14 @@ public class ACP {
 			Vecteur v = new Vecteur(m);
 			//Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
-				v.set(j,0,vecteurPropre.get(j, ordre[i]));
+				v.setValueP(j,vecteurPropre.get(j, ordre[i]));
 			}
 			//pour avoir les eigenfaces, on prend un vecteur propre
 			//de matriceReduite et on le multiplie à gauche par matriceEtude
 			//but : remonter à l'espace d'origine 
 			//normaliser pour rendre toutes les eigenfaces comparables, pour que la longueur des eigenfaces n'ait pas d'impact : 
 			//c'est la direction du vecteur qui compte.
-			base[i] = V;
+			base[i] = v;
 			//base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
 	}
