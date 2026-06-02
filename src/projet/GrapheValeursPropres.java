@@ -19,17 +19,17 @@ public class GrapheValeursPropres extends JPanel{
 	        double[] valeurs = acp.valeursPropresTriees();
 	        
 	        // axes
-	        g.drawLine(50, 560, 5000, 560); //axe horizontal (x), 
+	        g.drawLine(50, 1100, 5000, 1100); //axe horizontal (x), 
 	        //départ:(50, 250) arrivée: (350, 250), 50 pour ne pas coller 
 	        //au bord et 250 pour ne coller au sommet
-	        g.drawLine(50, 1500, 50, 50); //axe vertical (y)
+	        g.drawLine(50, 1100, 50, 50); //axe vertical (y)
 
 	        // points
 	        for (int i = 0; i < valeurs.length; i++) {
 
-	            int x = 50 + i * 50;//points espacés de 50px
+	            int x = 30 + i * 30;//points espacés de 50px
 
-	            int y = 560 - (int)(valeurs[i] *20);//car java augmente les y vers le bas et on veut vers le haut , le *20 permet de mettre le graphique à l'échelle de l'écran
+	            int y = 1150 - (int)(valeurs[i] /87000);//car java augmente les y vers le bas et on veut vers le haut
 
 	            g.fillOval(x - 3, y - 3, 6, 6); //dessine un point (X, Y, largeur, hauteur), 
 	            //-3 car jave place à partir du coin en haut à gauche, on à un cercle de 6 de 
