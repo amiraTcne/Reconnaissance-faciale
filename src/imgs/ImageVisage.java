@@ -1,3 +1,5 @@
+package imgs;
+
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -6,6 +8,7 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import Jama.Matrix; 
+import projet.Vecteur;
 
 /**
  * This object is used to store a path leading to an image and the position of the image in the matrix used for recognition.
@@ -49,7 +52,7 @@ public class ImageVisage{
      */
     public boolean equals(Object o){
         if(o instanceof ImageVisage){
-            if((o.path).equals(this.path)){
+            if((((ImageVisage) o).path).equals(this.path)){
                 return true;
             }
         }
@@ -86,11 +89,11 @@ public class ImageVisage{
                     imgMat.set(j,i,gray);
                 }
             }
-            imgVect = new Vecteur(imgMat);
-            return imgVect;
         }catch (IOException e) {
             e.printStackTrace();
         }
+        imgVect = new Vecteur(imgMat);
+        return imgVect;
     }
     /**
      * This function's purpose is to fetch a processed version of the image it is used on without changing
@@ -116,9 +119,9 @@ public class ImageVisage{
                     imgMat.set(j,i,c.getRed());
                 }
             }
-            return imgMat;
         }catch (IOException e) {
             e.printStackTrace();
         }
+        return imgMat;
     }
 }

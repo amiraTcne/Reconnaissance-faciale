@@ -1,5 +1,7 @@
 package laBdd;
 
+import imgs.ImageVisage;
+
 public class Personne {
 	String nom;
 	String prenom;
@@ -28,18 +30,21 @@ public class Personne {
 		return this.prenom;
 	}
 	@Override 
+	public int hashCode(){
+		return ((this.getNom()).hashCode());
+	}
 	public boolean equals(Object obj) {
 		if(obj instanceof Personne) {
-			Personne p = (Personne ) obj;
-			if(this.getNom()==p.getPrenom()) {
+			Personne p = (Personne) obj;
+			if((this.getNom()).equals(p.getNom())) {
 				return true;
 			}
 		}
 		return false;
 	}
 	public static void deposerImage(String chemin) {
-		Images im1 = null;
+		ImageVisage im1 = null;
 		im1.path=chemin; 
-		im1.id= 01;
+		im1.id=0;
 	}
 }

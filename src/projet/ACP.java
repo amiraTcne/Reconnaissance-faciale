@@ -7,6 +7,9 @@ import java.lang.Math;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 
+import imgs.ImageVisage;
+
+
 /**
  * ACP class of the facial recognition project
  * @author Liah, Amira
