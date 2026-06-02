@@ -31,12 +31,12 @@ public class Personne {
 	}
 	@Override 
 	public int hashCode(){
-		return ((this.getNom()).hashCode());
+		return ((this.getNom()).hashCode() + (this.getPrenom()).hashCode());
 	}
 	public boolean equals(Object obj) {
 		if(obj instanceof Personne) {
 			Personne p = (Personne) obj;
-			if((this.getNom()).equals(p.getNom())) {
+			if((this.getNom()).equals(p.getNom()) && (this.getPrenom()).equals(p.getPrenom())) {
 				return true;
 			}
 		}

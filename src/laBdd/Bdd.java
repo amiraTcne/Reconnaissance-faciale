@@ -23,6 +23,9 @@ public class Bdd {
 		int id = 1;
 		File[] files = (new File(dir)).listFiles();
 		// browses through the directory that contains all the images, f being an image <code>File</code>
+		if (files != null) {
+        	java.util.Arrays.sort(files, (f1, f2) -> f1.getName().compareTo(f2.getName()));
+    	}
 		for(File f : files) {
 			// Creates a <code>Personne</code> for f
 			Personne p = new Personne(f.getName());
