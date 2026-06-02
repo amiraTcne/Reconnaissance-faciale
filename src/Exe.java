@@ -2,9 +2,20 @@ import laBdd.*;
 import projet.*;
 import imgs.*;
 
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+import java.awt.*;
+
 public class Exe{
     public static void main(String[] args){
-        Bdd test = new Bdd();
+        BDD test = new BDD();
         for(Personne p : test.imagesBdd.keySet()) {
             System.out.println(p.getPrenom());
 			for(ImageVisage img : test.imagesBdd.get(p)) {
@@ -20,16 +31,16 @@ public class Exe{
             }
 		}
         System.out.println(test.rechercher(1).getNom());
-
-		/**Test ACP*/
-        BDD bdd = new BDD();
-        //ImageVisage im = new ImageVisage(97, "dataset/reference/Zendaya_Coleman_4.jpg"); 
+        
+        /**Test ACP*/
+        
+        /**Affichage du visage moyen*/
+        BDD bdd = new BDD(); 
         ACP acp = new ACP(bdd.createA());
+
+        Vecteur vecteur = acp.getVisageM();
         int largeur = 100;
         int hauteur = 100;
-
-        Vecteur vecteur = acp.visageM;
-        vecteur = im.process();
 
         BufferedImage img =
                 new BufferedImage(
@@ -62,7 +73,6 @@ public class Exe{
                         valeur);
             }
         }
-
         JFrame frame = new JFrame();
 
         frame.pack();
@@ -74,6 +84,15 @@ public class Exe{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setVisible(true);
+        
+        /**Affichage du graphe des valeurs propres*/	    
+	    GrapheValeursPropres graphe = new GrapheValeursPropres(acp);
+	    System.out.println(Arrays.toString(acp.valeursPropresTriees()));
+	    
+	    JFrame f = new JFrame("Graphique des valeurs propres"); //créer une fenêtre graphique appelée "Graphique des valeurs propres"
+	    f.add(graphe); //ajoute le graphe dans la fenêtre
+	    f.setSize(2000, 1000); //taille de la fenêtre
+	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
+	    f.setVisible(true); //affiche réellement la fenêtre
     }
-    
 }
