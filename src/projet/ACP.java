@@ -175,7 +175,7 @@ public class ACP {
 			for (int j=0; j<m; j++) {
 				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
-			eigenfaces[i]=prendreVecteur(0,v);
+			eigenfaces[i]=prendreVecteur(0,matriceEtude.times(v));
 		}
 		return eigenfaces;
 	}
