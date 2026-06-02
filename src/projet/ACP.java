@@ -7,7 +7,7 @@ import java.lang.Math;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 
-import facialRecognition.ImageVisage;
+import imgs.ImageVisage;
 
 
 /**
