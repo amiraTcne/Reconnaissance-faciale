@@ -133,6 +133,29 @@ public class ACP {
         }
 		return valeursTriees;
 	}
+
+		/**
+	 * 
+	 * @return
+	 */
+	public int nbCompoCumulee(double seuil) {
+		double s = 0;
+		double[] vap = valeursPropresTriees();
+		for (int i=0; i<vap.length;i++) {
+			s+=vap[i];
+		}
+		if (s == 0) {
+			return 0;
+		}
+		double sommePartielle = 0;
+		int nbComposantes = 0;
+		//double var = sommePartielle/s;
+		while (sommePartielle/s<seuil && nbComposantes<vap.length) {
+			sommePartielle+=vap[nbComposantes];
+			nbComposantes ++;
+		}
+		return nbComposantes;
+	}
 	
 	/** 
 	 * Calculates the eigenvectors of matriceReduite.
@@ -192,7 +215,7 @@ public class ACP {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
-		int nbComposantes = 20; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
+		int nbComposantes = nbCompoVarCumulee(0.9); //nombre de composantes principales que l'on garde
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
