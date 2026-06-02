@@ -23,12 +23,12 @@ public class Exe{
 
 		/**Test ACP*/
         BDD bdd = new BDD();
-        ImageVisage im = new ImageVisage(97, "dataset/reference/Zendaya_Coleman_4.jpg"); 
-        //ACP acp = new ACP(bdd.);
+        //ImageVisage im = new ImageVisage(97, "dataset/reference/Zendaya_Coleman_4.jpg"); 
+        ACP acp = new ACP(bdd.);
         int largeur = 100;
         int hauteur = 100;
 
-        //Vecteur vecteur = acp.visageM;
+        Vecteur vecteur = acp.visageM;
         vecteur = im.process();
 
         BufferedImage img =
