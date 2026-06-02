@@ -134,11 +134,11 @@ public class ACP {
 		return valeursTriees;
 	}
 
-		/**
+	/**
 	 * 
 	 * @return
 	 */
-	public int nbCompoCumulee(double seuil) {
+	public int nbCompoVarCumulee(double seuil) {
 		double s = 0;
 		double[] vap = valeursPropresTriees();
 		for (int i=0; i<vap.length;i++) {
@@ -149,7 +149,9 @@ public class ACP {
 		}
 		double sommePartielle = 0;
 		int nbComposantes = 0;
-		//double var = sommePartielle/s;
+		// var = sommePartielle/s : tant qu'elle est < 0.9 et qu'on a pas déjà additionné toutes les vap, on continue.
+		// Théoriquement, juste la premiere condition suffit car quand on aura additionné toutes les vap donc que 
+		// nbComposantes sera égal à vap.length, la variance sera égale à 1. On met la 2e conditions juste par prudence.
 		while (sommePartielle/s<seuil && nbComposantes<vap.length) {
 			sommePartielle+=vap[nbComposantes];
 			nbComposantes ++;
@@ -264,6 +266,23 @@ public class ACP {
 	    }
 	    return proj;
 	}
+
+	//METHODE projeter() D'AVANT
+	//	public Vecteur projeter(Vecteur V) {
+	//		int n = V.getTaille();
+	//		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+	//		for (int i=0; i<base.length; i++) {
+	//			double a=0;
+	//			for (int j=0; j<n; j++) {
+	//				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
+	//			}
+	//			for (int j=0; j<n; j++) {
+	//				double b = proj.getValue(j) + a*base[i].getValue(j);
+	//				proj.setValueP(j,  b);
+	//			}
+	//		}
+	//		return proj;
+	//	}
 	
 	/**
 	 * creates matriceProjection
@@ -304,6 +323,24 @@ public class ACP {
 	    }
 	    return (float) Math.sqrt(distance);
 	}
+
+	//METHODE comparer() D'AVANT
+	//	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
+	//		float pourcentage=0;
+	//		int nb = imDeReferenceProjetee.getTaille();
+	//		Vecteur vecteurIm = nouvelleIm.process(); //traite l'image que l'on veut comparer
+	//		vecteurIm = projeter(vecteurIm); //projete l'image que l'on veut comparer
+	//		Vecteur compare = new Vecteur(nb);
+	//		for (int i=0; i<nb; i++) {
+	//			double b= Math.abs(1-(imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i)/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
+	//			compare.setValueP(i, b);
+	//		}
+	//		for (int i=0; i<nb; i++){
+	//			pourcentage += compare.getValue(i);
+	//		}
+	//		pourcentage = pourcentage / nb; //pourcentage global en faisant la moyenne des pourcentages
+	//		return pourcentage;
+	//	}
 	
 	
 	private float pourcentage(float distance) {
