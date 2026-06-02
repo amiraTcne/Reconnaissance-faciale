@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.Color;
-import Jama.Matrix; 
+import Jama.Matrix;
 import projet.Vecteur;
 
 /**

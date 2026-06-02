@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import projet.Vecteur;
+import Jama.Matrix;
 
 /**
  * 
@@ -23,9 +25,6 @@ public class Bdd {
 		int id = 1;
 		File[] files = (new File(dir)).listFiles();
 		// browses through the directory that contains all the images, f being an image <code>File</code>
-		if (files != null) {
-        	java.util.Arrays.sort(files, (f1, f2) -> f1.getName().compareTo(f2.getName()));
-    	}
 		for(File f : files) {
 			// Creates a <code>Personne</code> for f
 			Personne p = new Personne(f.getName());
@@ -51,5 +50,33 @@ public class Bdd {
 			}
 		}
 		return laPersonne;
+	}
+
+	public ImageVisage getImg(int idimage) {
+		ImageVisage imgn = null;
+		for(Personne p : imagesBdd.keySet()) {
+			for(ImageVisage img : imagesBdd.get(p)) {
+				if(img.id==idimage) {
+					return img;
+				}
+			}
+		}
+		return imgn;
+	}
+
+	public Matrix createA(){
+		ImageVisage img;
+		Matrix imgMat;
+		Vecteur imgVect;
+		Matrix a = new Matrix(10000,100);
+		for(int i=0;i<100;i++){
+			img = this.getImg(i+1);
+			imgMat = img.processed();
+			imgVect = new Vecteur(imgMat);
+			for(int j=0;j<10000;j++){
+				a.set(j,i,imgVect.getValue(j));
+			}
+		}
+		return a;
 	}
 }
