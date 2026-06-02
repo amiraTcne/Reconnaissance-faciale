@@ -7,8 +7,6 @@ import java.lang.Math;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 
-import imgs.ImageVisage;
-
 
 /**
  * ACP class of the facial recognition project
@@ -25,7 +23,7 @@ public class ACP {
 	/** The number of images we have*/
 	private int m;
 	/**The matrix whose columns correspond to our original images and whose rows correspond to the pixels*/
-	private Matrix matriceInitiale = new Matrix(n,m);
+	private Matrix matriceInitiale;
 	/**The "average face" vector, calculated by averaging each pixel across all our images*/
 	private Vecteur visageM;
 	/**The original matrix from which the vector "VisageM" has been subtracted from each column*/
@@ -59,27 +57,34 @@ public class ACP {
 		this.seuil = (float) 0.8;
 	}
 	
+	public Vecteur getVisageM() {
+		return visageM;
+	}
 	
+	public void setVisageM(Vecteur visageM) {
+		this.visageM = visageM;
+	}
+
+	public Matrix getMatriceInitiale() {
+		return matriceInitiale;
+	}
+
+	public void setMatriceInitiale(Matrix matriceInitiale) {
+		this.matriceInitiale = matriceInitiale;
+	}
+
 	/** 
 	 * Calculates the average face using matriceInitial.
 	 * We don't divide by the number of images because a scalar does not change a vector.
 	 */
 	private void visageMoyen() {
 		for (int i=0; i<n; i++) {
-			int moyenne=0;
+			double moyenne=0;
 			for (int j=0; j<m; j++) {
-				moyenne =(int) (moyenne + matriceInitiale.get(i, j)); //moyenne de chaque pixel
+				moyenne = (moyenne + matriceInitiale.get(i, j)); //moyenne de chaque pixel
 			}
 			visageM.setValueP(i, moyenne/m); //ajoute la valeur dans le vecteur du visage moyen
 		}
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public Vecteur getVisageM() {
-		return visageM;
 	}
 	
 	/** 
@@ -121,14 +126,14 @@ public class ACP {
 		//trie dans l'ordre croissant les vap
 		Arrays.sort(valeurs);
 		//inverse le tableau pour les avoir dans l'ordre décroissant
-		int n = valeurs.length;
-		double[] valeursTriees = new double[n];
-		for (int i = 0; i < n; i++) {
-            valeursTriees[i] = valeurs[n - 1 - i];
+		int taille = valeurs.length;
+		double[] valeursTriees = new double[taille];
+		for (int i = 0; i < taille; i++) {
+            valeursTriees[i] = valeurs[taille - 1 - i];
         }
 		return valeursTriees;
 	}
-
+	
 	/** 
 	 * Calculates the eigenvectors of matriceReduite.
 	 * @return The eigenvectors of matriceReduite.
@@ -159,12 +164,12 @@ public class ACP {
 	    }
 	    return indicesTries;
 	}
-
+	
 	/**
 	 * 
 	 * @return
 	 */
-	private Vecteur[] eigenfaces() {
+	protected Vecteur[] eigenfaces() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV();
 		int m = matriceReduite.getRowDimension();
@@ -187,7 +192,7 @@ public class ACP {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
-		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
+		int nbComposantes = 20; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
@@ -209,10 +214,10 @@ public class ACP {
 	 * @param i The index of the column.
 	 * @param M The matrix from which we want to extract the vector.
 	 */
-	private Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
-		n= M.getRowDimension();
-		Vecteur V = new Vecteur(n);
-		for (int j=0; j<n; j++) {
+	protected Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
+		int taille= M.getRowDimension();
+		Vecteur V = new Vecteur(taille);
+		for (int j=0; j<taille; j++) {
 			V.setValueP(j, M.get(j, i));
 		}
 		return V;
@@ -225,14 +230,14 @@ public class ACP {
 	 * @return The projected vector
 	 */
 	private Vecteur projeter(Vecteur V) {
-		n = V.getTaille();
-		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+		int taille = V.getTaille();
+		Vecteur proj = new Vecteur(base[0].getTaille(), 1); //Créer un vecteur nul de taille n
 		for (int i=0; i<base.length; i++) {
 			double a=0;
-			for (int j=0; j<n; j++) {
+			for (int j=0; j<taille; j++) {
 				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
 			}
-			for (int j=0; j<n; j++) {
+			for (int j=0; j<taille; j++) {
 				double b = proj.getValue(j) + a*base[i].getValue(j);
 				proj.setValueP(j,  b);
 			}
@@ -266,10 +271,14 @@ public class ACP {
 		float pourcentage=0;
 		int nb = imDeReferenceProjetee.getTaille();
 		Vecteur vecteurIm = nouvelleIm.process(); //traite l'image que l'on veut comparer
+		for (int i=0; i<nb; i++) {
+			double red = vecteurIm.getValue(i)-visageM.getValue(i);
+			vecteurIm.setValueP(i, red);
+		}
 		vecteurIm = projeter(vecteurIm); //projete l'image que l'on veut comparer
 		Vecteur compare = new Vecteur(nb);
 		for (int i=0; i<nb; i++) {
-			double b= Math.abs(1-(imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i)/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
+			double b= Math.abs(1-((imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i))/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
 			compare.setValueP(i, b);
 		}
 		for (int i=0; i<nb; i++){
@@ -372,17 +381,17 @@ public class ACP {
 	
 	
 	//main function
-	public static void main(String[] args) {
-		Matrix M = new Matrix(new double[][] {
-			{4, 2, 6, 7}, 
-			{1, 3, 3, 1},
-			{2, 2, 4, 7},
-			{4, 7, 1, 1}
-		});
-		ACP acp=new ACP(M);
-		double[] vap = acp.valeursPropres();
-		//Vecteur[] vep = acp.creerBase();
-		System.out.println(Arrays.toString(vap));
+//	public static void main(String[] args) {
+//		Matrix M = new Matrix(new double[][] {
+//			{4, 2, 6, 7}, 
+//			{1, 3, 3, 1},
+//			{2, 2, 4, 7},
+//			{4, 7, 1, 1}
+//		});
+//		ACP acp=new ACP(M);
+//		double[] vap = acp.valeursPropres();
+//		//Vecteur[] vep = acp.creerBase();
+//		System.out.println(Arrays.toString(vap));
 		//System.out.println(Arrays.toString(creerBase()));
 		
 		
@@ -401,5 +410,5 @@ public class ACP {
 //        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
 //
 //        f.setVisible(true); //affiche réellement la fenêtre
-	}
+//	}
 }
