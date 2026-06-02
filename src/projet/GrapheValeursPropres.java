@@ -23,15 +23,18 @@ public class GrapheValeursPropres extends JPanel{
 	        //départ:(50, 250) arrivée: (350, 250), 50 pour ne pas coller 
 	        //au bord et 250 pour ne coller au sommet
 	        g.drawLine(50, 1100, 50, 50); //axe vertical (y)
-
 	        // points
+			for(int i=1;i<10;i++){
+				g.drawString(String.valueOf(i)+"E7",40,1100-105*i);
+			}
 	        for (int i = 0; i < valeurs.length; i++) {
 
-	            int x = 30 + i * 30;//points espacés de 50px
+	            int x = 50 + i * 30;//points espacés de 50px
 
 	            int y = 1150 - (int)(valeurs[i] /87000);//car java augmente les y vers le bas et on veut vers le haut
 
-	            g.fillOval(x - 3, y - 3, 6, 6); //dessine un point (X, Y, largeur, hauteur), 
+	            g.fillOval(x - 3, y - 3, 6, 6); //dessine un point (X, Y, largeur, hauteur),
+				g.drawString(String.valueOf(i+1),x,1110);
 	            //-3 car jave place à partir du coin en haut à gauche, on à un cercle de 6 de 
 	            //diamètre donc on enlève le rayon pour centré
 	        }

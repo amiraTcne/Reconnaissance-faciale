@@ -194,7 +194,7 @@ public class ACP {
 	 * 
 	 * @return
 	 */
-	protected Vecteur[] eigenfaces() {
+	public Vecteur[] eigenfaces() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV();
 		int m = matriceReduite.getRowDimension();
@@ -217,7 +217,7 @@ public class ACP {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
-		int nbComposantes = nbCompoVarCumulee(0.9); //nombre de composantes principales que l'on garde
+		int nbComposantes = nbCompoVarCumulee(0.8); //nombre de composantes principales que l'on garde
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
@@ -239,7 +239,7 @@ public class ACP {
 	 * @param i The index of the column.
 	 * @param M The matrix from which we want to extract the vector.
 	 */
-	protected Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
+	public Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
 		int taille= M.getRowDimension();
 		Vecteur V = new Vecteur(taille);
 		for (int j=0; j<taille; j++) {
@@ -254,7 +254,7 @@ public class ACP {
 	 * @param V The vector you want to project
 	 * @return The projected vector
 	 */
-	private Vecteur projeter(Vecteur V) {
+	public Vecteur projeter(Vecteur V) {
 	    int taille = V.getTaille();
 	    Vecteur proj = new Vecteur(base.length); //base.length, pas base[0].getTaille()
 	    for (int i = 0; i < base.length; i++) {
