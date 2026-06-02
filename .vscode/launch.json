@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch JavaFX App",
+            "request": "launch",
+            "mainClass": "projet.ReconnaissanceFacialeApp",
+            "vmArgs": "--module-path \"lib/openjfx-21.0.11_windows-x64_bin-sdk/javafx-sdk-21.0.11/lib\" --add-modules javafx.controls,javafx.graphics"
+        },
+        {
+            "type": "java",
+            "name": "Launch Exe (Bdd test)",
+            "request": "launch",
+            "mainClass": "Exe"
+        }
+    ]
+}
