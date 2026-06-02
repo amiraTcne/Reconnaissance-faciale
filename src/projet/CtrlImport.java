@@ -1,4 +1,4 @@
-package projet;
+package IHM;
 
 import java.io.File;
 import javafx.event.ActionEvent;

@@ -1,4 +1,4 @@
-package projet;
+package IHM;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
