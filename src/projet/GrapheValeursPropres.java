@@ -16,7 +16,7 @@ public class GrapheValeursPropres extends JPanel{
 
 	        super.paintComponent(g); //permet de partir d'un dessin vide
 	        
-	        double[] valeurs = acp.valeursProprestriees();
+	        double[] valeurs = acp.valeursPropresTriees();
 	        
 	        // axes
 	        g.drawLine(50, 560, 5000, 560); //axe horizontal (x), 
