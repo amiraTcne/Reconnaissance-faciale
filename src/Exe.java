@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class Exe{
     public static void main(String[] args){
-        Bdd test = new Bdd();
+        BDD test = new BDD();
         for(Personne p : test.imagesBdd.keySet()) {
             System.out.println(p.getPrenom());
 			for(ImageVisage img : test.imagesBdd.get(p)) {
@@ -38,7 +38,7 @@ public class Exe{
         /**Test ACP*/
         
         /**Affichage du visage moyen*/
-        Bdd bdd = new Bdd(); 
+        BDD bdd = new BDD(); 
         ACP acp = new ACP(bdd.createA());
         DisplayImg d = new DisplayImg();
 
@@ -63,7 +63,7 @@ public class Exe{
 	    vecteur = acp.eigenfaces()[5];
 	    d.affImg(vecteur);
         
-        /**Comparaison*/
+        /**Comparaison image dans BDD*/
         ImageVisage im = new ImageVisage(101, "dataset/reference/Zendaya_Coleman_3.jpg");
         d.affImg(im.process());
         Retour[] tab = acp.tableauComparaison(im);
@@ -74,6 +74,30 @@ public class Exe{
         vecteur = acp.prendreVecteur(tab[0].getIndice(), acp.getMatriceInitiale());
         d.affImg(vecteur);
         vecteur = acp.prendreVecteur(tab[99].getIndice(), acp.getMatriceInitiale());
+        d.affImg(vecteur);
+        
+        /**Comparaison image pas dans BDD mais personne dedans*/
+        ImageVisage imC = new ImageVisage(102, "dataset/test/connu/Emma_Watson_6.jpg");
+        d.affImg(imC.process());
+        Retour[] tabC = acp.tableauComparaison(imC);
+        System.out.println(tabC[0].getPourcentage());
+        System.out.println(tabC[99].getPourcentage());
+        
+        vecteur = acp.prendreVecteur(tabC[0].getIndice(), acp.getMatriceInitiale());
+        d.affImg(vecteur);
+        vecteur = acp.prendreVecteur(tabC[99].getIndice(), acp.getMatriceInitiale());
+        d.affImg(vecteur);
+        
+        /**Comparaison image pas dans BDD et personne non plus*/
+        ImageVisage imI = new ImageVisage(102, "dataset/test/inconnu/Tom_Holland_1.jpg");
+        d.affImg(imI.process());
+        Retour[] tabI = acp.tableauComparaison(imI);
+        System.out.println(tabI[0].getPourcentage());
+        System.out.println(tabI[99].getPourcentage());
+        
+        vecteur = acp.prendreVecteur(tabI[0].getIndice(), acp.getMatriceInitiale());
+        d.affImg(vecteur);
+        vecteur = acp.prendreVecteur(tabI[99].getIndice(), acp.getMatriceInitiale());
         d.affImg(vecteur);
     }
 }
