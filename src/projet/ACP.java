@@ -128,6 +128,15 @@ public class ACP {
         }
 		return valeursTriees;
 	}
+
+	/** 
+	 * Calculates the eigenvectors of matriceReduite.
+	 * @return The eigenvectors of matriceReduite.
+	 */
+	public Matrix vecteursPropres() {
+		EigenvalueDecomposition eig = matriceReduite.eig();
+		return eig.getV();
+	}
 	
 	/**
 	 * Sorts 
