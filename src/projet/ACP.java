@@ -159,6 +159,26 @@ public class ACP {
 	    }
 	    return indicesTries;
 	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private Vecteur[] eigenfaces() {
+		EigenvalueDecomposition eig = matriceReduite.eig();
+		Matrix vecteurPropre = eig.getV();
+		int m = matriceReduite.getRowDimension();
+		int[] ordre = indicesValeursPropresTriees();
+		Vecteur[] eigenfaces = new Vecteur[m];
+		for (int i=0; i<m; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
+			Matrix v = new Matrix(m,1);
+			for (int j=0; j<m; j++) {
+				v.set(j,0,vecteurPropre.get(j, ordre[i]));
+			}
+			eigenfaces[i]=prendreVecteur(0,v);
+		}
+		return eigenfaces;
+	}
 	
 	/** 
 	 * 
