@@ -49,10 +49,11 @@ public class Exe{
             for(int x=0;x<largeur;x++){
 
                 int indice =
-                        y * largeur + x;
+                        x * hauteur + y;
 
                 int valeur =
-                        (int)vecteur.getValue(indice);
+                        (int)vecteur.getValue(
+                                indice);
 
                 valeur =
                         Math.max(
