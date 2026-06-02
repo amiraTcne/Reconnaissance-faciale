@@ -24,7 +24,7 @@ public class Exe{
 		/**Test ACP*/
         BDD bdd = new BDD();
         //ImageVisage im = new ImageVisage(97, "dataset/reference/Zendaya_Coleman_4.jpg"); 
-        ACP acp = new ACP(bdd.);
+        ACP acp = new ACP(bdd.createA());
         int largeur = 100;
         int hauteur = 100;
 
