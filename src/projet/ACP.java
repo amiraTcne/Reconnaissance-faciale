@@ -153,9 +153,9 @@ public class ACP {
 		int nbComposantes = 2; //nombre de composantes principales que l'on garde, non défini précisément pour l'instant
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
-		//ATTENTION il faut aussi trier les vep en fonction du tri des vap associées
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
-			Matrix v = new Matrix(m,1);
+			Vecteur v = new Vecteur(m);
+			//Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
 				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
@@ -164,7 +164,8 @@ public class ACP {
 			//but : remonter à l'espace d'origine 
 			//normaliser pour rendre toutes les eigenfaces comparables, pour que la longueur des eigenfaces n'ait pas d'impact : 
 			//c'est la direction du vecteur qui compte.
-			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
+			base[i] = V;
+			//base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
 	}
 	
