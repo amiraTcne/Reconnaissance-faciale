@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class Exe{
     public static void main(String[] args){
-        BDD test = new BDD();
+        Bdd test = new Bdd();
         for(Personne p : test.imagesBdd.keySet()) {
             System.out.println(p.getPrenom());
 			for(ImageVisage img : test.imagesBdd.get(p)) {
@@ -38,7 +38,7 @@ public class Exe{
         /**Test ACP*/
         
         /**Affichage du visage moyen*/
-        BDD bdd = new BDD(); 
+        Bdd bdd = new Bdd(); 
         ACP acp = new ACP(bdd.createA());
         DisplayImg d = new DisplayImg();
 
