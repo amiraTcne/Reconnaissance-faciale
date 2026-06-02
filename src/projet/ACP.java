@@ -70,7 +70,7 @@ public class ACP {
 			for (int j=0; j<m; j++) {
 				moyenne =(int) (moyenne + matriceInitiale.get(i, j)); //moyenne de chaque pixel
 			}
-			visageM.setValueP(i, moyenne); //ajoute la valeur dans le vecteur du visage moyen
+			visageM.setValueP(i, moyenne/m); //ajoute la valeur dans le vecteur du visage moyen
 		}
 	}
 	
@@ -154,18 +154,16 @@ public class ACP {
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
-			Vecteur v = new Vecteur(m);
-			//Matrix v = new Matrix(m,1);
+			Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
-				v.setValueP(j,vecteurPropre.get(j, ordre[i]));
+				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
 			//pour avoir les eigenfaces, on prend un vecteur propre
 			//de matriceReduite et on le multiplie à gauche par matriceEtude
 			//but : remonter à l'espace d'origine 
 			//normaliser pour rendre toutes les eigenfaces comparables, pour que la longueur des eigenfaces n'ait pas d'impact : 
 			//c'est la direction du vecteur qui compte.
-			base[i] = v;
-			//base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
+			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
 	}
 	
