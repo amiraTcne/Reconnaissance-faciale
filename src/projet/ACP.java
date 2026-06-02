@@ -74,6 +74,14 @@ public class ACP {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public Vecteur getVisageM() {
+		return visageM;
+	}
+	
 	/** 
 	 * Subtracts the mean face from each column of matriceInitial.
 	 * This gives us the matrix we will be working with : matriceEtude.
