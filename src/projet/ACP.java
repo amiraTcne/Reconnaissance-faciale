@@ -307,15 +307,12 @@ public class ACP {
 	 */
 	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
 	    Vecteur vecteurIm = nouvelleIm.process();
-	    
-	    // Centrer AVANT de projeter
+	    // centrer
 	    for (int i = 0; i < n; i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
 	    }
-	    
 	    vecteurIm = projeter(vecteurIm); // maintenant taille base.length
-	    
-	    // Distance euclidienne (évite la division par zéro)
+	    // distance euclidienne
 	    double distance = 0;
 	    for (int i = 0; i < base.length; i++) {
 	        double diff = imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i);
@@ -343,7 +340,7 @@ public class ACP {
 	//	}
 	
 	
-	private float pourcentage(float distance) {
+	private float pourcentage(float distance) { //distance est la distance renvoyé par la methode comparer(...)
 		float max = 15000;
 		float p = 100 * (1-distance/max);
 		return p;
