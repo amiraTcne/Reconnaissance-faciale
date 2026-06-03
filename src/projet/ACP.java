@@ -54,7 +54,7 @@ public class ACP {
 		reduireDimension();
 		creerBase();
 		projeterMatrice();
-		this.seuil = (float) 0.8;
+		this.seuil = (float) 75;
 	}
 	
 	public Vecteur getVisageM() {
