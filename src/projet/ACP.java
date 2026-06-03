@@ -217,7 +217,7 @@ public class ACP {
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
 		int m = matriceReduite.getRowDimension();
-		int nbComposantes = nbCompoVarCumulee(0.8); //nombre de composantes principales que l'on garde
+		int nbComposantes = nbCompoVarCumulee(0.9); //nombre de composantes principales que l'on garde
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
 		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
