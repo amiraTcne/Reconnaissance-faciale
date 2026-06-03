@@ -263,22 +263,21 @@ public class ACP {
 	    return proj;
 	}
 
-	//METHODE projeter() D'AVANT
-	//	public Vecteur projeter(Vecteur V) {
-	//		int n = V.getTaille();
-	//		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
-	//		for (int i=0; i<base.length; i++) {
-	//			double a=0;
-	//			for (int j=0; j<n; j++) {
-	//				a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
-	//			}
-	//			for (int j=0; j<n; j++) {
-	//				double b = proj.getValue(j) + a*base[i].getValue(j);
-	//				proj.setValueP(j,  b);
-	//			}
-	//		}
-	//		return proj;
-	//	}
+		public Vecteur projeterImg(Vecteur V) {
+			int n = V.getTaille();
+			Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+			for (int i=0; i<base.length; i++) {
+				double a=0;
+				for (int j=0; j<n; j++) {
+					a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
+				}
+				for (int j=0; j<n; j++) {
+					double b = proj.getValue(j) + a*base[i].getValue(j);
+					proj.setValueP(j,  b);
+				}
+			}
+			return proj;
+		}
 	
 	/**
 	 * creates matriceProjection

@@ -68,9 +68,9 @@ public class Exe{
         DisplayImg.affImg(acp.prendreVecteur(tabI[0].getIndice(), acp.getMatriceInitiale()));// image la plus proche
         DisplayImg.affImg(acp.prendreVecteur(tabI[99].getIndice(), acp.getMatriceInitiale()));// image la plus éloignée
         */
-        ImageVisage imProj = bdd.getImg(1);
+        ImageVisage imProj = bdd.getImg(2);
         DisplayImg.affImgO(imProj);
         DisplayImg.affImgP(imProj);
-        DisplayImg.affImg(acp.projeter(new Vecteur(imProj.processed())));
+        DisplayImg.affImg(acp.projeterImg(new Vecteur(imProj.processed())));
     }
 }
