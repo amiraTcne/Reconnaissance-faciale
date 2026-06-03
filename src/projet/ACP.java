@@ -60,17 +60,13 @@ public class ACP {
 	public Vecteur getVisageM() {
 		return visageM;
 	}
-	
-	public void setVisageM(Vecteur visageM) {
-		this.visageM = visageM;
-	}
 
 	public Matrix getMatriceInitiale() {
 		return matriceInitiale;
 	}
 
-	public void setMatriceInitiale(Matrix matriceInitiale) {
-		this.matriceInitiale = matriceInitiale;
+	public Matrix getMatriceEtude() {
+		return matriceEtude;
 	}
 
 	/** 
