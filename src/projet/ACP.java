@@ -422,14 +422,14 @@ public class ACP {
 	}
 	
 	/**
-	 * 
-	 * @param tableau
-	 * @param m
-	 * @return
+	 * If there is a match, links the new image to the corresponding one.
+	 * @param nouvelleIm The new image we want to compare.
+	 * @return The vector associated to the corresponding image, or nothing if there is no match.
 	 */
-	public Vecteur identifier(Retour[] tableau, Matrix m) {
+	public Vecteur identifier(ImageVisage nouvelleIm) {
+		Retour[] tableau = tableauComparaison(nouvelleIm);
 		if (tableau[0].getPourcentage()>=seuil) {
-			Vecteur v = prendreVecteur(tableau[0].getIndice(), m);
+			Vecteur v = prendreVecteur(tableau[0].getIndice(), matriceInitiale);
 			return (v);
 		}
 		return null;
