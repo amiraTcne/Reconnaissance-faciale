@@ -235,13 +235,13 @@ public class ACP {
 	 * @param i The index of the column.
 	 * @param M The matrix from which we want to extract the vector.
 	 */
-	public Vecteur prendreVecteur(int i, Matrix M) { //prend un vecteur (une colonne) d'une matrice
-		int taille= M.getRowDimension();
-		Vecteur V = new Vecteur(taille);
+	public Vecteur prendreVecteur(int i, Matrix m) { //prend un vecteur (une colonne) d'une matrice
+		int taille= m.getRowDimension();
+		Vecteur v = new Vecteur(taille);
 		for (int j=0; j<taille; j++) {
-			V.setValueP(j, M.get(j, i));
+			v.setValueP(j, m.get(j, i));
 		}
-		return V;
+		return v;
 	}
 	
 	
@@ -250,26 +250,26 @@ public class ACP {
 	 * @param V The vector you want to project
 	 * @return The projected vector
 	 */
-	public Vecteur projeter(Vecteur V) {
-	    int taille = V.getTaille();
+	public Vecteur projeter(Vecteur v) {
+	    int taille = v.getTaille();
 	    Vecteur proj = new Vecteur(base.length); //base.length, pas base[0].getTaille()
 	    for (int i = 0; i < base.length; i++) {
 	        double a = 0;
 	        for (int j = 0; j < taille; j++) {
-	            a += base[i].getValue(j) * V.getValue(j);
+	            a += base[i].getValue(j) * v.getValue(j);
 	        }
 	        proj.setValueP(i, a); //coordonnée scalaire seulement
 	    }
 	    return proj;
 	}
 
-		public Vecteur projeterImg(Vecteur V) {
-			int n = V.getTaille();
+		public Vecteur projeterImg(Vecteur v) {
+			int n = v.getTaille();
 			Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
 			for (int i=0; i<base.length; i++) {
 				double a=0;
 				for (int j=0; j<n; j++) {
-					a+=base[i].getValue(j) * V.getValue(j); //Produit scalaire
+					a+=base[i].getValue(j) * v.getValue(j); //Produit scalaire
 				}
 				for (int j=0; j<n; j++) {
 					double b = proj.getValue(j) + a*base[i].getValue(j);
@@ -421,13 +421,13 @@ public class ACP {
 	/**
 	 * 
 	 * @param tableau
-	 * @param M
+	 * @param m
 	 * @return
 	 */
-	public Vecteur identifier(Retour[] tableau, Matrix M) {
+	public Vecteur identifier(Retour[] tableau, Matrix m) {
 		if (tableau[0].getPourcentage()>=seuil) {
-			Vecteur V = prendreVecteur(tableau[0].getIndice(), M);
-			return (V);
+			Vecteur v = prendreVecteur(tableau[0].getIndice(), m);
+			return (v);
 		}
 		return null;
 	}
