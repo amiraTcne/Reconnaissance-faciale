@@ -3,7 +3,8 @@ package projet;
 import java.util.Arrays;
 
 import java.lang.Math;
-
+import laBdd.Bdd;
+import laBdd.Personne;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
 import imgs.ImageVisage;
