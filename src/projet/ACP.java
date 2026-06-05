@@ -74,9 +74,9 @@ public class ACP {
 		for (int i=0; i<n; i++) {
 			double moyenne=0;
 			for (int j=0; j<m; j++) {
-				moyenne = (moyenne + matriceInitiale.get(i, j)); //moyenne de chaque pixel
+				moyenne = (moyenne + matriceInitiale.get(i, j)); //average of each pixel
 			}
-			visageM.setValueP(i, moyenne/m); //ajoute la valeur dans le vecteur du visage moyen
+			visageM.setValueP(i, moyenne/m); //adds the value in the average face vector
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class ACP {
 	private void centrer() {
 		for (int i=0; i<n; i++) {
 			for (int j=0; j<m; j++) {
-				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i)); //soustrait le visage moyen à chaque visage pour ne garder que les différences
+				matriceEtude.set(i, j, matriceInitiale.get(i, j) - visageM.getValue(i)); //substracts the average face from each face to keep only the differences.
 			}
 		}
 	}
@@ -97,15 +97,15 @@ public class ACP {
 	 * The goal is to reduce the dimension in order to find the eigenvalues of matriceEtude using as few calculations as possible.
 	 */
 	private void reduireDimension() { //AT * A
-		Matrix matriceTranspose = matriceEtude.transpose(); //Utilise la méthode transposé de Jama
-		matriceReduite = matriceTranspose.times(matriceEtude); //utilise la méthode times (multiplication) de Jama
+		Matrix matriceTranspose = matriceEtude.transpose(); //uses transpose() method from Jama.
+		matriceReduite = matriceTranspose.times(matriceEtude); //uses times() (multiplication) method from Jama.
 	}
 	
 	/** 
 	 * Calculates the eigenvalues of matriceReduite.
 	 * @return The eigenvalues of matriceReduite.
 	 */
-	private double[] valeursPropres() { //Utilise la méthode de Jama pour trouver les valeurs propres
+	private double[] valeursPropres() { //uses a method from Jama to find the eigenvalues.
 		EigenvalueDecomposition eig = matriceReduite.eig();
 		return eig.getRealEigenvalues();
 	}
@@ -116,9 +116,9 @@ public class ACP {
 	 */
 	public double[] valeursPropresTriees() {
 		double[] valeurs = valeursPropres();
-		//trie dans l'ordre croissant les vap
+		//sorts in ascending order
 		Arrays.sort(valeurs);
-		//inverse le tableau pour les avoir dans l'ordre décroissant
+		//reverse the array to sort it in descending order
 		int taille = valeurs.length;
 		double[] valeursTriees = new double[taille];
 		for (int i = 0; i < taille; i++) {
@@ -142,9 +142,9 @@ public class ACP {
 		}
 		double sommePartielle = 0;
 		int nbComposantes = 0;
-		// var = sommePartielle/s : tant qu'elle est < 0.9 et qu'on a pas déjà additionné toutes les vap, on continue.
-		// Théoriquement, juste la premiere condition suffit car quand on aura additionné toutes les vap donc que 
-		// nbComposantes sera égal à vap.length, la variance sera égale à 1. On met la 2e conditions juste par prudence.
+		// var = sommePartielle/s: as long as it is < 0.9 and we haven't already summed all the eigenvalues, we continue.
+		// Theoretically, just the first condition is sufficient because once we have added all the eigenvalues — that is, when 
+        // nbComponents equals vap.length — the variance will be equal to 1. We include the second condition just in case, to avoid errors.
 		while (sommePartielle/s<seuil && nbComposantes<vap.length) {
 			sommePartielle+=vap[nbComposantes];
 			nbComposantes ++;
@@ -168,7 +168,7 @@ public class ACP {
 	 */
 	public int[] indicesValeursPropresTriees() {
 		double[] valeurs = valeursPropres();
-		//indices contient les indices originaux, de 0 à m-1, avec m le nb de vap
+		//indices contains the original indexes, from 0 to m-1, with m representing the number of eigenvalues.
 		Integer[] indices = new Integer[valeurs.length];
 	    for (int i = 0; i < valeurs.length; i++) {
 	        indices[i] = i;
@@ -192,7 +192,7 @@ public class ACP {
 		int m = matriceReduite.getRowDimension();
 		int[] ordre = indicesValeursPropresTriees();
 		Vecteur[] eigenfaces = new Vecteur[m];
-		for (int i=0; i<m; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
+		for (int i=0; i<m; i++) { //converts the eigenvector matrix into an array of Vecteur.
 			Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
 				v.set(j,0,vecteurPropre.get(j, ordre[i]));
@@ -207,21 +207,21 @@ public class ACP {
 	 */
 	private void creerBase() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
-		Matrix vecteurPropre = eig.getV(); //prend les vecteurs propres avec la méthode de Jama
+		Matrix vecteurPropre = eig.getV(); //calculates the eigenvectors using the Jama method.
 		int m = matriceReduite.getRowDimension();
-		int nbComposantes = nbCompoVarCumulee(0.9); //nombre de composantes principales que l'on garde
+		int nbComposantes = nbCompoVarCumulee(0.9); //number of principal components to keep.
 		int[] ordre = indicesValeursPropresTriees();
 		base = new Vecteur[nbComposantes];
-		for (int i=0; i<nbComposantes; i++) { //transforme la matrice de vecteur propres en un tableau de Vecteur
+		for (int i=0; i<nbComposantes; i++) { //converts the eigenvector matrix into an array of Vecteur.
 			Matrix v = new Matrix(m,1);
 			for (int j=0; j<m; j++) {
 				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
-			//pour avoir les eigenfaces, on prend un vecteur propre
-			//de matriceReduite et on le multiplie à gauche par matriceEtude
-			//but : remonter à l'espace d'origine 
-			//normaliser pour rendre toutes les eigenfaces comparables, pour que la longueur des eigenfaces n'ait pas d'impact : 
-			//c'est la direction du vecteur qui compte.
+			//To obtain the eigenfaces, we take an eigenvector
+            //of matriceReduite and multiply it on the left by matriceEtude.
+			//goal : return to the original space.
+            //Normalizing to make all eigenfaces comparable, so that the length of the eigenfaces has no impact :
+            //it is the direction of the vector that matters.
 			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
 	}
@@ -231,7 +231,7 @@ public class ACP {
 	 * @param i The index of the column.
 	 * @param M The matrix from which we want to extract the vector.
 	 */
-	public Vecteur prendreVecteur(int i, Matrix m) { //prend un vecteur (une colonne) d'une matrice
+	public Vecteur prendreVecteur(int i, Matrix m) { //take a vector (a column) of a matrix.
 		int taille= m.getRowDimension();
 		Vecteur v = new Vecteur(taille);
 		for (int j=0; j<taille; j++) {
@@ -248,13 +248,13 @@ public class ACP {
 	 */
 	public Vecteur projeter(Vecteur v) {
 	    int taille = v.getTaille();
-	    Vecteur proj = new Vecteur(base.length); //base.length, pas base[0].getTaille()
+	    Vecteur proj = new Vecteur(base.length); //base.length, not base[0].getTaille()
 	    for (int i = 0; i < base.length; i++) {
 	        double a = 0;
 	        for (int j = 0; j < taille; j++) {
 	            a += base[i].getValue(j) * v.getValue(j);
 	        }
-	        proj.setValueP(i, a); //coordonnée scalaire seulement
+	        proj.setValueP(i, a); //scalar coordinate only
 	    }
 	    return proj;
 	}
@@ -266,11 +266,11 @@ public class ACP {
 	 */
 	public Vecteur projeterImg(Vecteur v) {
 		int n = v.getTaille();
-		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+		Vecteur proj = new Vecteur(n, 1); //create a zero vector of size n
 		for (int i=0; i<base.length; i++) {
 			double a=0;
 			for (int j=0; j<n; j++) {
-				a+=base[i].getValue(j) * v.getValue(j); //Produit scalaire
+				a+=base[i].getValue(j) * v.getValue(j); //Scalar product
 			}
 			for (int j=0; j<n; j++) {
 				double b = proj.getValue(j) + a*base[i].getValue(j);
@@ -303,12 +303,12 @@ public class ACP {
 	 */
 	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
 	    Vecteur vecteurIm = nouvelleIm.process();
-	    // centrer
+	    // center
 	    for (int i = 0; i < n; i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
 	    }
 	    vecteurIm = projeter(vecteurIm);
-	    // distance euclidienne
+	    // euclidean distance
 	    double distance = 0;
 	    for (int i = 0; i < base.length; i++) {
 	        double diff = imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i);
@@ -340,7 +340,7 @@ public class ACP {
 	 * @param distance The distance calculated with comparer().
 	 * @return The match percentage.
 	 */
-	private float pourcentage(float distance) { //distance est la distance renvoyé par la methode comparer(...)
+	private float pourcentage(float distance) { 
 		float max = 15000;
 		float p = 100 * (1-distance/max);
 		return p;
@@ -353,7 +353,7 @@ public class ACP {
 	 */
 	public Retour[] tableauComparaison(ImageVisage nouvelleIm) {
 		Retour[] tableau = new Retour[m];
-		//Création du tableau avec pour chque image l'indice et le pourcentage de ressemblance
+		//Create an array containing the index and similarity percentage for each image
 		for (int i=0; i<m; i++) {
 			Retour r = new Retour();
 			Vecteur V = prendreVecteur(i, matriceProjection);
@@ -363,7 +363,7 @@ public class ACP {
 			r.setIndice(i);
 			tableau[i]=r;
 		}
-		//tri fusion  du tableau par rapport au pourcentage
+		//merge sort of the array based on percentage
 		triFusion(tableau);
 		return tableau;
 	}
@@ -399,7 +399,7 @@ public class ACP {
 	    int j = 0;
 	    int k = 0;
 	    while (i < gauche.length && j < droite.length) {
-	        // ordre décroissant (plus grand pourcentage d'abord)
+	        //descending order (highest percentage first)
 	        if (gauche[i].getPourcentage() >= droite[j].getPourcentage()) {
 	            tab[k] = gauche[i];
 	            i++;
