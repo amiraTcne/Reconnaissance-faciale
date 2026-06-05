@@ -1,2 +1,5 @@
 /.metadata/
 out/
+lib/openjfx-21.0.10_linux-x64_bin-sdk/
+.idea/
+out/
