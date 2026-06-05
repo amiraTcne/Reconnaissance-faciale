@@ -10,15 +10,20 @@ import projet.Vecteur;
 import Jama.Matrix;
 
 /**
- * 
+ * This class and its methods handle everything needed to store the <code>ImageVisage</code> and <code>Personne</code> used by the rest of the program
+ * in such a way that we do not lose track of them.
  * @author Meddour Sylia
  * @version 1.0
  */
 public class Bdd {
+	/** This is the <code>Map</code> used to store the different <code>Personne</code> and the 5 <code>ImageVisage</code> linked to them */
 	public Map<Personne, ArrayList<ImageVisage>> imagesBdd = new HashMap<>();
 	 
 	/**
 	 * This is the constructor for Bdd.
+	 * The program will browse the dataset and create a <code>Personne</code> for each person present in the dataset and
+	 * link to each <code>Personne</code> the 5 images in the dataset that are of this person, creating an <code>ImageVisage</code> for each image.
+	 * A total of 100 <code>ImageVisage</code> will be crated, id 1 to 100.
 	 */
 	public Bdd() {
 		String dir = "dataset/reference";
@@ -40,6 +45,13 @@ public class Bdd {
 		}
 	}
 	
+	/**
+	 * This method's aim is to identify which <code>Personne</code> is linked to a certain <code>ImageVisage</code>.
+	 * This method takes an int (<code>idimage</code>) as input and searches <code>this</code> to find an <code>ImageVisage</code> whose id is <code>idimage</code>.
+	 * If a match is found, the method can return the <code>Personne</code> for which the match has been found.
+	 * @param idimage the id of the image for which we want to know the <code>Personne</code> it represents
+	 * @return the corresponding <code>Personne</code> or null if <code>idimage</code> is not the id of an <code>ImageVisage</code> present in <code>this</code>
+	 */
 	public Personne rechercher(int idimage) {
 		Personne laPersonne = null;
 		for(Personne p : imagesBdd.keySet()) {
@@ -52,6 +64,13 @@ public class Bdd {
 		return laPersonne;
 	}
 
+	/**
+	 * This method's aim is to get an <code>ImageVisage</code> from <code>this</code> by using its id.
+	 * This method takes an int (<code>idimage</code>) as input and searches <code>this</code> to find an <code>ImageVisage</code> whose id is <code>idimage</code>.
+	 * If a match is found, the method can return the <code>ImageVisage</code> for which the match has been found.
+	 * @param idimage the id of the <code>ImageVisage</code> we want to have
+	 * @return the <code>ImageVisage</code> or null if <code>idimage</code> is not the id of an <code>ImageVisage</code> present in <code>this</code>
+	 */
 	public ImageVisage getImg(int idimage) {
 		ImageVisage imgn = null;
 		for(Personne p : imagesBdd.keySet()) {
@@ -64,6 +83,10 @@ public class Bdd {
 		return imgn;
 	}
 
+	/**
+	 * This method creates the <code>Matrix</code> used by <code>ACP</code> from the <code>ImageVisage</code> stored in <code>this</code>.
+	 * @return the <code>Matrix</code>
+	 */
 	public Matrix createA(){
 		ImageVisage img;
 		Matrix imgMat;

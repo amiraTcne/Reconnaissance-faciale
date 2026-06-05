@@ -21,8 +21,10 @@ import projet.Vecteur;
  * @version 0.2
  */
 public class ImageVisage{
-    public int id; // this is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images
-    public String path; // this is the path, which allows us to retrieve the original image at any point
+    /** <code>id</code> is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images or 0 if the image is not in the <code>Matrix</code>. */
+    public int id;
+    /** <code>path</code> is the path, which allows us to retrieve the original image at any point */
+    public String path;
     /**
      * Constructor for ImageVisage.
      * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.

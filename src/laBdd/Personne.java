@@ -2,6 +2,11 @@ package laBdd;
 
 import imgs.ImageVisage;
 
+/**
+ * 
+ * @author Meddour Sylia
+ * @version 1.0
+ */
 public class Personne {
 	String nom;
 	String prenom;
