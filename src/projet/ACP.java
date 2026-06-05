@@ -32,11 +32,9 @@ public class ACP {
 	private Matrix matriceReduite;
 	/**"matriceReduite" whose columns have been projected in "base"*/
 	private Matrix matriceProjection;
-	/**Allows the method "comparer()" to return the image id and its percentage match with a new image*/
-	private Retour r = new Retour();
 	
 	
-	//constructors
+	//constructor
 	
 	/** 
 	 * Constructor creating an instance of ACP.
@@ -71,7 +69,6 @@ public class ACP {
 
 	/** 
 	 * Calculates the average face using matriceInitial.
-	 * We don't divide by the number of images because a scalar does not change a vector.
 	 */
 	private void visageMoyen() {
 		for (int i=0; i<n; i++) {
@@ -131,8 +128,8 @@ public class ACP {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Calculates the number of eigenfaces kept into the basis using cumulative variance.
+	 * @return The number of eigenfaces kept.
 	 */
 	public int nbCompoVarCumulee(double seuil) {
 		double s = 0;
@@ -165,11 +162,10 @@ public class ACP {
 	}
 	
 	/**
-	 * Sorts 
-	 * @return
+	 * Sorts the original indexes of the eigenvalues (the valeursPropres()' ones) according to the result of valeursPropresTriees() (descending order).
+	 * The goal is to know which are the first eigenfaces we keep for the basis (these are the ones with the highest associated eigenvalues).
+	 * @return The sorted indexes of the eigenvalues (the index of the highest one first and the index of the lower one last).
 	 */
-	//utile pour savoir quels sont les indices des vecteurs propres que nous devons garder
-	//trie les indices par ordre décroissant des valeurs propres
 	public int[] indicesValeursPropresTriees() {
 		double[] valeurs = valeursPropres();
 		//indices contient les indices originaux, de 0 à m-1, avec m le nb de vap
@@ -187,8 +183,8 @@ public class ACP {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Calculates all the eigenfaces based on the eigenvectors.
+	 * @return A table with all the eigenfaces.
 	 */
 	public Vecteur[] eigenfaces() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
@@ -207,7 +203,7 @@ public class ACP {
 	}
 	
 	/** 
-	 * 
+	 * Creates the basis of eigenfaces based on the number calculated before thanks to cumulative variance.
 	 */
 	private void creerBase() {
 		EigenvalueDecomposition eig = matriceReduite.eig();
@@ -263,24 +259,29 @@ public class ACP {
 	    return proj;
 	}
 
-		public Vecteur projeterImg(Vecteur v) {
-			int n = v.getTaille();
-			Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
-			for (int i=0; i<base.length; i++) {
-				double a=0;
-				for (int j=0; j<n; j++) {
-					a+=base[i].getValue(j) * v.getValue(j); //Produit scalaire
-				}
-				for (int j=0; j<n; j++) {
-					double b = proj.getValue(j) + a*base[i].getValue(j);
-					proj.setValueP(j,  b);
-				}
+	/**
+	 * Projects an image vector into base, the eigenfaces basis.
+	 * @param V The vector you want to project
+	 * @return The projected vector
+	 */
+	public Vecteur projeterImg(Vecteur v) {
+		int n = v.getTaille();
+		Vecteur proj = new Vecteur(n, 1); //Créer un vecteur nul de taille n
+		for (int i=0; i<base.length; i++) {
+			double a=0;
+			for (int j=0; j<n; j++) {
+				a+=base[i].getValue(j) * v.getValue(j); //Produit scalaire
 			}
-			return proj;
+			for (int j=0; j<n; j++) {
+				double b = proj.getValue(j) + a*base[i].getValue(j);
+				proj.setValueP(j,  b);
+			}
 		}
+		return proj;
+	}
 	
 	/**
-	 * creates matriceProjection
+	 * creates matriceProjection projecting all the centered images into the basis of eigenfaces.
 	 */
 	private void projeterMatrice() {
 		matriceProjection = new Matrix(this.base.length, m);
@@ -295,10 +296,10 @@ public class ACP {
 	
 	
 	/**
-	 * 
-	 * @param nouvelleIm
-	 * @param imDeReferenceProjetee
-	 * @return
+	 * Compares a new image to an image we have in our database.
+	 * @param nouvelleIm The new image we want to compare.
+	 * @param imDeReferenceProjetee The reference image we are going to compare nouvelleIm with.
+	 * @return The distance between both images calculated thanks to the Euclidean distance.
 	 */
 	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
 	    Vecteur vecteurIm = nouvelleIm.process();
@@ -306,7 +307,7 @@ public class ACP {
 	    for (int i = 0; i < n; i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
 	    }
-	    vecteurIm = projeter(vecteurIm); // maintenant taille base.length
+	    vecteurIm = projeter(vecteurIm);
 	    // distance euclidienne
 	    double distance = 0;
 	    for (int i = 0; i < base.length; i++) {
@@ -334,7 +335,11 @@ public class ACP {
 	//		return pourcentage;
 	//	}
 	
-	
+	/**
+	 * Calculates the match percentage between two images based on the distance calculated with comparer().
+	 * @param distance The distance calculated with comparer().
+	 * @return The match percentage.
+	 */
 	private float pourcentage(float distance) { //distance est la distance renvoyé par la methode comparer(...)
 		float max = 15000;
 		float p = 100 * (1-distance/max);
@@ -342,9 +347,9 @@ public class ACP {
 	}
 	
 	/**
-	 * 
-	 * @param nouvelleIm
-	 * @return
+	 * Compares a new images to all our reference images.
+	 * @param nouvelleIm The new images we want to compare.
+	 * @return A table of Retour in which the index of each image in our database is linked to its percentage match with the new image.
 	 */
 	public Retour[] tableauComparaison(ImageVisage nouvelleIm) {
 		Retour[] tableau = new Retour[m];
@@ -358,16 +363,14 @@ public class ACP {
 			r.setIndice(i);
 			tableau[i]=r;
 		}
-		
 		//tri fusion  du tableau par rapport au pourcentage
 		triFusion(tableau);
-		
 		return tableau;
 	}
 	
 	/**
-	 * 
-	 * @param tab
+	 * Sorts a table of Retour based on the percentages, using the merge sort.
+	 * @param tab The table we want to sort.
 	 */
 	private void triFusion(Retour[] tab) {
 	    if (tab.length <= 1) return;
@@ -386,10 +389,10 @@ public class ACP {
 	}
 	
 	/**
-	 * 
-	 * @param tab
-	 * @param gauche
-	 * @param droite
+	 * Merges two part of a table into one (this in a step of the merge sort).
+	 * @param tab The merged table.
+	 * @param gauche The left part of the table.
+	 * @param droite The right part of the table.
 	 */
 	private void fusion(Retour[] tab, Retour[] gauche, Retour[] droite) {
 	    int i = 0;
