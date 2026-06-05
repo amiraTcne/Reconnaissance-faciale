@@ -367,6 +367,33 @@ public class ACP {
 		triFusion(tableau);
 		return tableau;
 	}
+
+	/**
+	 * 
+	 * @param nouvelleIm
+	 * @return
+	 */
+	//pour chaque personne de la BDD, on veut l'indice de l'image la plus ressemblante associé au pourcentage de correspondance
+	public Retour[] uneImageParPersonne(ImageVisage nouvelleIm) {
+		Bdd bdd = new Bdd();
+		Retour[] tableau = new Retour[20];
+		int i =0;
+		for(Personne p : bdd.imagesBdd.keySet()) {
+			float maxPourcentage=0;
+			int id = 0;
+			for(ImageVisage img : bdd.imagesBdd.get(p)) {
+				float pourcentage  = pourcentage(comparer(nouvelleIm, prendreVecteur(img.id, matriceInitiale)));
+				if (pourcentage>maxPourcentage) {
+					maxPourcentage = pourcentage;
+					id=img.id;
+				}
+			}
+			tableau[i].setPourcentage(maxPourcentage);
+			tableau[i].setIndice(id);
+			i++;
+		}
+		return tableau;
+	}
 	
 	/**
 	 * Sorts a table of Retour based on the percentages, using the merge sort.
