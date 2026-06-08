@@ -124,7 +124,7 @@ public class ReconnaissanceFacialeApp extends Application {
         Label legende = new Label("Image sélectionnée");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
-        Button boutonDeselectionner = new Button("Désélectionner");
+        Button boutonDeselectionner = new Button("Modifier");
         boutonDeselectionner.setStyle(
                 "-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"
         );
