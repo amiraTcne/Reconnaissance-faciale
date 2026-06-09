@@ -11,6 +11,8 @@ public class Retour {
 	private float pourcentage;
 	/** the index in the Matrix */
 	private Integer indice;
+	/** the distance whith the face*/
+	private float distance;
 	
 	/**
 	 * Constructor for Retour. Does nothing.
@@ -48,5 +50,22 @@ public class Retour {
 	public void setIndice(Integer indice) {
 		this.indice = indice;
 	}
+
+	/**
+     * Returns the distance of this Retour
+     * @return the distance of this Retour
+     */
+	public float getDistance() {
+		return distance;
+	}
+
+	/**
+	 * Sets the value of the distance of this Retour to the value passed in parameter
+	 * @param pourcentage new value for this.indice
+	 */
+	public void setDistance(float distance) {
+		this.distance = distance;
+	}
+	
 	
 }
