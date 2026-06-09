@@ -1,5 +1,5 @@
 import laBdd.*;
-import projet.*;
+import calculs.*;
 import imgs.*;
 
 import java.awt.image.BufferedImage;
