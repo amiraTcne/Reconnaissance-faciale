@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -15,10 +16,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import laBdd.Bdd;
+import laBdd.Personne;
 import projet.ACP;
 import projet.Retour;
 import projet.Vecteur;
 import imgs.ImageVisage;
+
 
 /**
  * Main JavaFX application of the facial recognition project.
@@ -37,6 +40,8 @@ public class ReconnaissanceFacialeApp extends Application {
     private Stage primaryStage;
     /** The ACP, built once at startup to avoid recomputing the eigenfaces. */
     private ACP acp;
+    /** The database, kept to resolve image indices to their file paths. */
+    private Bdd bdd;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -44,7 +49,7 @@ public class ReconnaissanceFacialeApp extends Application {
         ctrlImport = new CtrlImport(primaryStage, this);
 
         // Builds the database and the ACP once (heavy computation done a single time).
-        Bdd bdd = new Bdd();
+        this.bdd = new Bdd();
         this.acp = new ACP(bdd.createA());
 
         root = new BorderPane();
@@ -154,35 +159,142 @@ public class ReconnaissanceFacialeApp extends Application {
     private void analyser(File file) {
         ImageVisage nouvelleIm = new ImageVisage(0, file.getPath());
         Vecteur resultat = acp.identifier(nouvelleIm);
+        Retour[] tableau = acp.tableauComparaison(nouvelleIm);
         if (resultat != null) {
-            Retour[] tableau = acp.tableauComparaison(nouvelleIm);
             root.setCenter(new VueCorrespondanceTrouvee(file, tableau));
         } else {
-            root.setCenter(creerVueAucuneCorrespondance(file));
+            root.setCenter(creerVueAucuneCorrespondance(file, tableau));
         }
     }
-
     /**
-     * Builds the no-match view, displaying the selected image and a message
-     * indicating no correspondence was found.
-     * @param file the image file selected by the user
+     * Builds the no-match view : the selected image and a red message on the left,
+     * a re-import zone in the center, and on the right a carousel browsing the base
+     * images that were compared, ordered from the closest match to the farthest.
+     * @param file    the image file selected by the user
+     * @param tableau the sorted comparison results (closest match first)
+     * @return the assembled no-match view
      */
-    private VBox creerVueAucuneCorrespondance(File file) {
+    private HBox creerVueAucuneCorrespondance(File file, Retour[] tableau) {
+        // Left : selected image + "no match" message
         ImageView preview = new ImageView(new Image(file.toURI().toString()));
         preview.setFitWidth(220);
         preview.setFitHeight(220);
         preview.setPreserveRatio(true);
 
+        Label legende = new Label("Image sélectionnée");
+        legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
+
         Label message = new Label("Aucune correspondance trouvée");
         message.setStyle("-fx-font-style: italic; -fx-text-fill: #E53935;");
 
-        Button boutonRetour = new Button("Importer une nouvelle photo");
-        boutonRetour.setStyle(
-                "-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"
-        );
-        boutonRetour.setOnAction(e -> root.setCenter(creerVueAccueil()));
+        VBox gauche = new VBox(15, preview, legende, message);
+        gauche.setAlignment(Pos.CENTER);
 
-        VBox vue = new VBox(15, preview, message, boutonRetour);
+        // Center : re-import zone
+        Label labelImport = new Label("📁  Importer une nouvelle photo");
+        labelImport.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Label placeholder = new Label("Sélectionnez la photo que vous souhaitez analyser");
+        placeholder.setStyle("-fx-text-fill: gray;");
+
+        Button boutonImporter = new Button("+");
+        boutonImporter.setStyle(
+                "-fx-background-color: #43A047; -fx-text-fill: white; " +
+                        "-fx-font-size: 18px; -fx-min-width: 40; -fx-min-height: 40; -fx-background-radius: 4;"
+        );
+        boutonImporter.setOnAction(ctrlImport);
+
+        VBox zoneImport = new VBox(10, labelImport, placeholder, boutonImporter);
+        zoneImport.setAlignment(Pos.CENTER);
+        zoneImport.setPadding(new Insets(30));
+        zoneImport.setStyle("-fx-border-color: #ddd; -fx-border-radius: 8; -fx-background-color: white;");
+
+        VBox centre = new VBox(zoneImport);
+        centre.setAlignment(Pos.CENTER);
+
+        // --- Right : nav buttons + large display + thumbnail strip (15 closest) ---
+        ImageView imageComparee = new ImageView();
+        imageComparee.setFitWidth(180);
+        imageComparee.setFitHeight(180);
+        imageComparee.setPreserveRatio(true);
+
+        Label nomPersonne = new Label();
+        nomPersonne.setStyle("-fx-font-weight: bold; -fx-text-fill: #2e7d32;");
+
+        Label pourcentage = new Label();
+        pourcentage.setStyle("-fx-text-fill: gray;");
+
+        Button precedent = new Button("Précédent");
+        Button suivant = new Button("Suivant");
+        HBox navigation = new HBox(10, precedent, suivant);
+        navigation.setAlignment(Pos.CENTER);
+
+        VBox grandAffichage = new VBox(8, navigation, imageComparee, nomPersonne, pourcentage);
+        grandAffichage.setAlignment(Pos.CENTER);
+
+        // Number of thumbnails shown (capped at 15, or fewer if the table is smaller).
+        int nbVignettes = Math.min(15, tableau.length);
+
+        // Column of thumbnails; the selected one gets a green border.
+        VBox colonneVignettes = new VBox(8);
+        colonneVignettes.setAlignment(Pos.TOP_CENTER);
+        colonneVignettes.setPadding(new Insets(5));
+
+        Button[] vignettes = new Button[nbVignettes];
+        // Index of the currently displayed image (mutable via a 1-cell array).
+        int[] courant = {0};
+
+        // Updates the large display, the percentage, the green border and the nav buttons.
+        Runnable maj = () -> {
+            Retour r = tableau[courant[0]];
+            ImageVisage img = bdd.getImg(r.getIndice() + 1);
+            Personne p = bdd.rechercher(r.getIndice() + 1);
+            imageComparee.setImage(new Image(new File(img.getPath()).toURI().toString()));
+            nomPersonne.setText(p.getPrenom() + " " + p.getNom());
+            pourcentage.setText(String.format("Correspondance de %.0f%%", r.getPourcentage()));
+            for (int k = 0; k < vignettes.length; k++) {
+                vignettes[k].setStyle("-fx-background-color: transparent; -fx-padding: 2;");
+            }
+            vignettes[courant[0]].setStyle(
+                    "-fx-background-color: transparent; -fx-padding: 2; " +
+                            "-fx-border-color: #43A047; -fx-border-width: 3;"
+            );
+            precedent.setDisable(courant[0] == 0);
+            suivant.setDisable(courant[0] == nbVignettes - 1);
+        };
+
+        precedent.setOnAction(e -> { if (courant[0] > 0) { courant[0]--; maj.run(); } });
+        suivant.setOnAction(e -> { if (courant[0] < nbVignettes - 1) { courant[0]++; maj.run(); } });
+
+        for (int i = 0; i < nbVignettes; i++) {
+            Retour r = tableau[i];
+            ImageVisage img = bdd.getImg(r.getIndice() + 1);
+            ImageView icone = new ImageView(new Image(new File(img.getPath()).toURI().toString()));
+            icone.setFitWidth(60);
+            icone.setFitHeight(60);
+            icone.setPreserveRatio(true);
+
+            Button bouton = new Button();
+            bouton.setGraphic(icone);
+            bouton.setStyle("-fx-background-color: transparent; -fx-padding: 2;");
+            final int indice = i;
+            bouton.setOnAction(e -> { courant[0] = indice; maj.run(); });
+            vignettes[i] = bouton;
+            colonneVignettes.getChildren().add(bouton);
+        }
+
+        ScrollPane scrollVignettes = new ScrollPane(colonneVignettes);
+        scrollVignettes.setFitToWidth(true);
+        scrollVignettes.setPrefWidth(90);
+        scrollVignettes.setPrefViewportHeight(300);
+
+        maj.run(); // select the closest match by default
+
+        HBox droite = new HBox(15, grandAffichage, scrollVignettes);
+        droite.setAlignment(Pos.CENTER);
+
+        // Assembly
+        HBox vue = new HBox(40, gauche, centre, droite);
         vue.setAlignment(Pos.CENTER);
         vue.setPadding(new Insets(30));
         return vue;
