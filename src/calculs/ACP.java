@@ -472,6 +472,82 @@ public class ACP {
 	    }
 	}
 
+	/**
+	 * 
+	 * @param tableau
+	 * @param M
+	 * @return
+	 */
+	private int seuilDistanceMin(Matrix validation, float dmin) {
+		int a=validation.getRowDimension();
+		int b=validation.getColumnDimension();
+		Matrix validationCentre = new Matrix(a, b);
+		for (int i=0; i<n; i++) {
+			for (int j=0; j<m; j++) {
+				validationCentre.set(i, j, validation.get(i, j) - visageM.getValue(i)); //soustrait le visage moyen à chaque visage pour ne garder que les différences
+			}
+		}
+		
+		Matrix validationProjection = new Matrix(this.base.length, m);
+		for (int j=0;j<m;j++) {
+			Vecteur V = new Vecteur(base.length);
+			V=projeter(prendreVecteur(j, validationCentre));
+			for (int i=0;i<base.length;i++) {
+				validationProjection.set(i,j,V.getValue(i));
+			}
+		}
+		
+		float maxConnu = 0;
+		for (int j=0; j<20; j++) {
+			Retour[] tableau = new Retour[m];
+			float[] distances = new float[m];
+			for (int i=0; i<m; i++) {
+				Retour r = new Retour();
+				Vecteur V = prendreVecteur(i, matriceProjection);
+				float distance = comparer(prendreVecteur(j, validationProjection), V);
+				System.out.println(distance);
+				float p = pourcentage(distance);
+				r.setPourcentage(p);
+				r.setIndice(i);
+				tableau[i]=r;
+				distances[i]=distance;
+			}
+			triFusion(tableau);
+			if (distances[tableau[0].getIndice()]>maxConnu) {
+				maxConnu = distances[tableau[0].getIndice()];
+			}
+		}
+		
+		float minInconnu = 50000;
+		for (int j=20; j<40; j++) {
+			Retour[] tableau = new Retour[m];
+			float[] distances = new float[m];
+			for (int i=0; i<m; i++) {
+				Retour r = new Retour();
+				Vecteur V = prendreVecteur(i, matriceProjection);
+				float distance = comparer(prendreVecteur(j, validationProjection), V);
+				System.out.println(distance);
+				float p = pourcentage(distance);
+				r.setPourcentage(p);
+				r.setIndice(i);
+				tableau[i]=r;
+				distances[i]=distance;
+			}
+			triFusion(tableau);
+			if (distances[tableau[0].getIndice()]<minInconnu) {
+				minInconnu = distances[tableau[0].getIndice()];
+			}
+		}
+		
+		float theta = (maxConnu + minInconnu)/2;
+		
+		if (dmin < theta) {
+			return 1;
+		}
+		
+		return 0;
+	}
+
 	
 	/**
 	 * 
