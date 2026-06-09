@@ -1,4 +1,4 @@
-package projet;
+package calculs;
 
 import javax.swing.*;
 import java.awt.*;
