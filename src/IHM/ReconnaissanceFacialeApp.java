@@ -159,7 +159,7 @@ public class ReconnaissanceFacialeApp extends Application {
     private void analyser(File file) {
         ImageVisage nouvelleIm = new ImageVisage(0, file.getPath());
         Vecteur resultat = acp.identifier(nouvelleIm);
-        Retour[] tableau = acp.tableauComparaison(nouvelleIm);
+        Retour[] tableau = acp.uneImageParPersonne(nouvelleIm);
         if (resultat != null) {
             root.setCenter(new VueCorrespondanceTrouvee(file, tableau));
         } else {
@@ -177,6 +177,7 @@ public class ReconnaissanceFacialeApp extends Application {
     private HBox creerVueAucuneCorrespondance(File file, Retour[] tableau) {
         // Left : selected image + "no match" message
         ImageView preview = new ImageView(new Image(file.toURI().toString()));
+        ImageVisage nouvelleIm = new ImageVisage(0, file.getPath());
         preview.setFitWidth(220);
         preview.setFitHeight(220);
         preview.setPreserveRatio(true);
@@ -223,17 +224,21 @@ public class ReconnaissanceFacialeApp extends Application {
 
         Label pourcentage = new Label();
         pourcentage.setStyle("-fx-text-fill: gray;");
+        
+        HBox bandeAutresImages = new HBox(15);
+        bandeAutresImages.setAlignment(Pos.CENTER);
 
         Button precedent = new Button("Précédent");
         Button suivant = new Button("Suivant");
         HBox navigation = new HBox(10, precedent, suivant);
         navigation.setAlignment(Pos.CENTER);
 
-        VBox grandAffichage = new VBox(8, navigation, imageComparee, nomPersonne, pourcentage);
+        VBox grandAffichage = new VBox(12, navigation, imageComparee, nomPersonne, pourcentage, bandeAutresImages);
         grandAffichage.setAlignment(Pos.CENTER);
 
         // Number of thumbnails shown (capped at 15, or fewer if the table is smaller).
-        int nbVignettes = Math.min(15, tableau.length);
+        //int nbVignettes = Math.min(15, tableau.length);
+        int nbVignettes = tableau.length;
 
         // Column of thumbnails; the selected one gets a green border.
         VBox colonneVignettes = new VBox(8);
@@ -247,11 +252,31 @@ public class ReconnaissanceFacialeApp extends Application {
         // Updates the large display, the percentage, the green border and the nav buttons.
         Runnable maj = () -> {
             Retour r = tableau[courant[0]];
-            ImageVisage img = bdd.getImg(r.getIndice() + 1);
-            Personne p = bdd.rechercher(r.getIndice() + 1);
+            ImageVisage img = bdd.getImg(r.getIndice());
+            Personne p = bdd.rechercher(r.getIndice());
             imageComparee.setImage(new Image(new File(img.getPath()).toURI().toString()));
             nomPersonne.setText(p.getPrenom() + " " + p.getNom());
             pourcentage.setText(String.format("Correspondance de %.0f%%", r.getPourcentage()));
+            //for the 4 other images
+            bandeAutresImages.getChildren().clear();
+            for (ImageVisage autreImg : bdd.imagesBdd.get(p)) {
+                if (autreImg.id != img.id) {
+                    ImageView mini = new ImageView(new Image(new File(autreImg.getPath()).toURI().toString()));
+                    mini.setFitWidth(65);
+                    mini.setFitHeight(65);
+                    mini.setPreserveRatio(true);
+
+                    float pMini = acp.pourcentageImage(nouvelleIm, autreImg.id);
+
+                    Label labelMini = new Label(String.format("%.0f %%", pMini));
+                    labelMini.setStyle("-fx-text-fill: gray; -fx-font-size: 12px;");
+
+                    VBox blocMini = new VBox(5, mini, labelMini);
+                    blocMini.setAlignment(Pos.CENTER);
+
+                    bandeAutresImages.getChildren().add(blocMini);
+                }
+            }
             for (int k = 0; k < vignettes.length; k++) {
                 vignettes[k].setStyle("-fx-background-color: transparent; -fx-padding: 2;");
             }
@@ -268,7 +293,7 @@ public class ReconnaissanceFacialeApp extends Application {
 
         for (int i = 0; i < nbVignettes; i++) {
             Retour r = tableau[i];
-            ImageVisage img = bdd.getImg(r.getIndice() + 1);
+            ImageVisage img = bdd.getImg(r.getIndice());
             ImageView icone = new ImageView(new Image(new File(img.getPath()).toURI().toString()));
             icone.setFitWidth(60);
             icone.setFitHeight(60);
