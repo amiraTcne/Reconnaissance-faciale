@@ -13,8 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import laBdd.Bdd;
 import laBdd.Personne;
-import projet.ACP;
-import projet.Retour;
+import calculs.ACP;
+import calculs.Retour;
 import imgs.ImageVisage;
 public class VueCorrespondanceTrouvee extends VBox{
     Bdd bdd = new Bdd(); 
