@@ -29,7 +29,6 @@ public class VueCorrespondanceTrouvee extends VBox{
 		
 	}
 	private HBox creerLaVue(File imageSelectionnee, Retour[] tableauPourcentage) {
-		// TODO Auto-generated method stub
 		float meilleurPourcentage = tableauPourcentage[0].getPourcentage();
 		int idimg= tableauPourcentage[0].getIndice();
 		String imgtrouvee = bdd.getImg(idimg).path;
