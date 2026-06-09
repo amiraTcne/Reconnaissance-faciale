@@ -215,7 +215,7 @@ public class ReconnaissanceFacialeApp extends Application {
         VBox centre = new VBox(zoneImport);
         centre.setAlignment(Pos.CENTER);
 
-        // --- Right : nav buttons + large display + thumbnail strip (15 closest) ---
+        // Right : nav buttons + large display + thumbnail strip
         ImageView imageComparee = new ImageView();
         imageComparee.setFitWidth(180);
         imageComparee.setFitHeight(180);
