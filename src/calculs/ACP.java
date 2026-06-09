@@ -33,6 +33,9 @@ public class ACP {
 	private Matrix matriceReduite;
 	/**"matriceReduite" whose columns have been projected in "base"*/
 	private Matrix matriceProjection;
+	private float seuilD;
+	private float seuilR;
+	private double seuilS;
 	
 	
 	//constructor
@@ -55,6 +58,8 @@ public class ACP {
 		projeterMatrice();
 		this.seuil = (float) 75;
 	}
+
+	
 
 	//getters
 	
@@ -295,7 +300,6 @@ public class ACP {
 			}
 		}
 	}
-
 	/**
 	 * Compares a new image to an image we have in our database.
 	 * @param nouvelleIm The new image we want to compare.
@@ -479,7 +483,71 @@ public class ACP {
 	 * @param M
 	 * @return
 	 */
-	private int seuilDistanceMin(Matrix validation, float dmin) {
+	private boolean seuilDistanceMin(float dmin) {
+		if (dmin < this.getSeuilD()) {
+			return true;
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 
+	 * @param tableau
+	 * @param M
+	 * @return
+	 */
+	private boolean seuilStat(Vecteur im) {
+		double [] lambda = valeursPropresTriees();
+		double Tnew = 0;
+		double p = im.getTaille();
+		for (int i=0; i<p; i++) {
+			Tnew += (im.getValue(i)*im.getValue(i))/lambda[i];
+		}
+		if (Tnew < this.getSeuilS()) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean seuilReconstruction(float d) {
+		if(d>this.getSeuilR()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	 * If there is a match, links the new image to the corresponding one.
+	 * @param nouvelleIm The new image we want to compare.
+	 * @return The vector associated to the corresponding image, or nothing if there is no match.
+	 */
+	public Vecteur identifier(ImageVisage nouvelleIm) {		
+		Retour[] tableau = tableauComparaison(nouvelleIm);
+		if (seuilReconstruction(tableau[0].getDistance())) {
+			if (seuilStat(nouvelleIm.process())) {
+				float dmin = tableau[0].getDistance();
+				if (seuilDistanceMin(dmin)) {
+					return (prendreVecteur(tableau[0].getIndice(), matriceInitiale));
+				}
+			}
+		}
+		return null;
+	}
+
+	public float getSeuilD(){
+		return this.seuilD;
+	}
+	public float getSeuilR(){
+		return this.seuilR;
+	}
+	public double getSeuilS(){
+		return this.seuilS;
+	}
+
+	private void deterSeuils(){
+		Matrix validation;
 		int a=validation.getRowDimension();
 		int b=validation.getColumnDimension();
 		Matrix validationCentre = new Matrix(a, b);
@@ -541,55 +609,39 @@ public class ACP {
 		}
 		
 		float theta = (maxConnu + minInconnu)/2;
-		
-		if (dmin < theta) {
-			return 1;
-		}
-		
-		return 0;
-	}
+		this.seuilD = theta;
 
-	
-	/**
-	 * 
-	 * @param tableau
-	 * @param M
-	 * @return
-	 */
-	private int seuilStat(Vecteur im) {
 		double [] lambda = valeursPropresTriees();
-		double Tnew = 0;
 		double Talpha;
-		double p = im.getTaille();
+		double p = 10000;
 		int n = 100; //nombre d'images d'apprentissage
 		double F = 1.86; //car n=100, K=43 et alpha=0.99
-		for (int i=0; i<p; i++) {
-			Tnew += (im.getValue(i)*im.getValue(i))/lambda[i];
-		}
 		Talpha =(p*(n-1))/(n-p) * F;
-		if (Tnew < Talpha) {
-			return 1;
-		}
-		return 0;
-	}
+		this.seuilS = Talpha;
 
-	
-	/**
-	 * If there is a match, links the new image to the corresponding one.
-	 * @param nouvelleIm The new image we want to compare.
-	 * @return The vector associated to the corresponding image, or nothing if there is no match.
-	 */
-	public Vecteur identifier(ImageVisage nouvelleIm) {		
-		Retour[] tableau = tableauComparaison(nouvelleIm);
-		if (seuilReconstruction()==1) {
-			if (seuilStat(nouvelleIm.process())==1) {
-				float dmin = tableau[0].getDistance();
-				if (seuilDistanceMin(matriceValidation, dmin)==1) {
-					return (prendreVecteur(tableau[0].getIndice(), matriceInitiale));
-				}
+		Bdd validC = new Bdd("dataset/test/validation/connu");
+        Bdd validI = new Bdd("dataset/test/validation/inconnu");
+		int i = 0;
+        float p1 = 0;
+        float p2 = 0;
+		float s;
+        float t = 0;
+        for(Personne per : validC.imagesBdd.keySet()) {
+			for(ImageVisage img : validC.imagesBdd.get(per)) {
+                t = this.comparer(new Vecteur(img.processed()),this.projeterImg(new Vecteur(img.processed())));
+                p1 += t;
+				i+=1;
 			}
 		}
-		return null;
+        for(Personne per : validI.imagesBdd.keySet()) {
+			for(ImageVisage img : validI.imagesBdd.get(per)) {
+				t = this.comparer(new Vecteur(img.processed()),this.projeterImg(new Vecteur(img.processed())));
+                p2 += t;
+				i+=1;
+			}
+		}
+		s = ((p1+p2)/i);
+		this.seuilR = (float)0.95*s;
 	}
 	
 	
