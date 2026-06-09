@@ -21,12 +21,12 @@ import projet.Vecteur;
  * @version 0.2
  */
 public class ImageVisage{
-    /** <code>id</code> is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images or 0 if the image is not in the <code>Matrix</code>. */
+    /** id is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images or 0 if the image is not in the <code>Matrix</code>. */
     public int id;
-    /** <code>path</code> is the path, which allows us to retrieve the original image at any point */
+    /** path is the path, which allows us to retrieve the original image at any point */
     public String path;
     /**
-     * Constructor for ImageVisage.
+     * Constructs a new ImageVisage.
      * @param id the id for the new ImageVisage. Will be 0 if the image is the one chosen by the user.
      * @param path the path of the file containing the image.
      */
@@ -35,22 +35,22 @@ public class ImageVisage{
         this.path = path;
     }
     /**
-     * Proper way to obtain the value of this.id
-     * @return value of id attribute
+     * Returns the id of this ImageVisage
+     * @return the id of this ImageVisage
      */
     public int getId(){
         return this.id;
     }
     /**
-     * Proper way to obtain the value of this.path
-     * @return value of path attribute
+     * Returns the path of this ImageVisage
+     * @return the path of this ImageVisage
      */
     public String getPath(){
         return this.path;
     }
     /**
-     * This is the method equals for the ImageVisage object
-     * @return true if o is an instance of ImageVisage and o.path == this.path, false in all other cases
+     * Compares this ImageVisage to the specified object. The result is true if and only if the argument is not null and is an ImageVisage object whose path leads to the same image file as this object.
+     * @return true if the given object represents an ImageVisage equivalent to this ImageVisage, false in all other cases
      */
     public boolean equals(Object o){
         if(o instanceof ImageVisage){

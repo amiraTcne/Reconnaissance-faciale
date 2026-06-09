@@ -37,10 +37,10 @@ public class Exe{
 	    /*
         //Affichage du visage moyen
         DisplayImg.affImg(acp.getVisageM());
-        
+        */
 	    //Affichage valeur propre (image)
-	    DisplayImg.affImg(acp.eigenfaces()[5]);
-        
+	    DisplayImg.affImg(acp.eigenfaces()[0]);
+        /*
         
         // Projection d'image
         ImageVisage imProj = bdd.getImg(2);
@@ -65,7 +65,7 @@ public class Exe{
         System.out.println(tabC[99].getPourcentage());// taux de ressemblance de la plus éloignée
         DisplayImg.affImg(acp.prendreVecteur(tabC[0].getIndice(), acp.getMatriceInitiale()));// image la plus proche
         DisplayImg.affImg(acp.prendreVecteur(tabC[99].getIndice(), acp.getMatriceInitiale()));// image la plus éloignée
-        */
+        
         //Comparaison image pas dans Bdd et personne non plus
         ImageVisage imI = new ImageVisage(103, "dataset/test/inconnu/Tom_Holland_1.jpg");
         DisplayImg.affImg(imI.process());
@@ -74,6 +74,6 @@ public class Exe{
         System.out.println(tabI[99].getPourcentage());// taux de ressemblance de la plus éloignée
         DisplayImg.affImg(acp.prendreVecteur(tabI[0].getIndice(), acp.getMatriceInitiale()));// image la plus proche
         DisplayImg.affImg(acp.prendreVecteur(tabI[99].getIndice(), acp.getMatriceInitiale()));// image la plus éloignée
-        
+        */
     }
 }
