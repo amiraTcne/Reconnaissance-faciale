@@ -20,6 +20,7 @@ public class Bdd {
 	public Map<Personne, ArrayList<ImageVisage>> imagesBdd = new HashMap<>();
 	/** This is how many images are in this Bdd */
 	private int nbimgs;
+
 	/**
 	 * Construcs a new Bdd.
 	 * The program will browse the dataset and create a Personne for each person present in the dataset and link to each Personne the 5 images in the dataset that are of this person, creating an ImageVisage for each image.
@@ -27,6 +28,31 @@ public class Bdd {
 	 */
 	public Bdd() {
 		String dir = "dataset/reference";
+		int id = 1;
+		File[] files = (new File(dir)).listFiles();
+		// browses through the directory that contains all the images, f being an image File
+		for(File f : files) {
+			// Creates a Personne for f
+			Personne p = new Personne(f.getName());
+			// Verifies if this Personne is already present in imagesBdd
+			if((imagesBdd.containsKey(p))==false) {
+				// and if not, an empty List of ImageVisage is created and linked to the Personne.
+				ArrayList<ImageVisage> listeImages = new ArrayList<ImageVisage>(); 
+				imagesBdd.put(p, listeImages);
+			}
+			ImageVisage im = new ImageVisage(id, f.getPath()); // an ImageVisage for f is created.
+			imagesBdd.get(p).add(im); // the ImageVisage im is added to the List of ImageVisage of the corresponding Personne of imagesBdd.
+			id++; // id is incremented for the creation of the next ImageVisage that will be added to the Bdd.
+		}
+		this.nbimgs = id-1;
+	}
+
+	/**
+	 * Construcs a new Bdd, taking the images in dir instead of dataset/reference.
+	 * The program will browse the dataset and create a Personne for each person present in the dataset and link to each Personne the 5 images in the dataset that are of this person, creating an ImageVisage for each image.
+	 * @param dir the folder in which the images are located.
+	 */
+	public Bdd(String dir) {
 		int id = 1;
 		File[] files = (new File(dir)).listFiles();
 		// browses through the directory that contains all the images, f being an image File
