@@ -1,4 +1,4 @@
-package IHM;
+package facialRecognition;
 
 import java.io.File;
 import javafx.application.Application;
@@ -15,19 +15,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import laBdd.Bdd;
-import laBdd.Personne;
-import projet.ACP;
-import projet.Retour;
-import projet.Vecteur;
-import imgs.ImageVisage;
+//import laBdd.Bdd;
+//import laBdd.Personne;
+//import projet.ACP;
+//import projet.Retour;
+//import projet.Vecteur;
+//import imgs.ImageVisage;
 
 
 /**
  * Main JavaFX application of the facial recognition project.
  * Builds the interface and navigates between the home/import view, the
  * selected-image view, and the result views (match found or no match).
- * @author Ouerghi Hedy, Meddour Sylia, Amira
+ * @author Ouerghi Hedy
  * @version 0.2
  */
 public class ReconnaissanceFacialeApp extends Application {
@@ -80,12 +80,11 @@ public class ReconnaissanceFacialeApp extends Application {
         Label description = new Label(
                 "Notre outil est un outil de reconnaissance faciale. " +
                         "Vous pouvez choisir une image et elle sera analysée.\n" +
-                        "Le but est de trouver à quelle personne correspond cette image.\n" +
-                        "Si une correspondance est trouvée, l'image la plus proche de celle fournie " +
-                        "sera affichée à côté avec le pourcentage de correspondance associé."
+                        "Le but est de trouver à quelle personne correspond cette image.\n"
         );
         description.setWrapText(true);
         description.setTextAlignment(TextAlignment.CENTER);
+        description.setAlignment(Pos.CENTER);
         description.setMaxWidth(Double.MAX_VALUE);
         description.setStyle(
                 "-fx-background-color: #C8E6C9; -fx-padding: 20; " +
@@ -186,8 +185,11 @@ public class ReconnaissanceFacialeApp extends Application {
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
         Label message = new Label("Aucune correspondance trouvée");
-        message.setStyle("-fx-font-style: italic; -fx-text-fill: #E53935;");
-
+        message.setStyle("-fx-font-style: italic; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #E53935;");
+        message.setWrapText(true);
+        message.setTextAlignment(TextAlignment.CENTER);
+        message.setMaxWidth(220);
+        
         VBox gauche = new VBox(15, preview, legende, message);
         gauche.setAlignment(Pos.CENTER);
 
@@ -256,8 +258,8 @@ public class ReconnaissanceFacialeApp extends Application {
             imageComparee.setImage(new Image(new File(img.getPath()).toURI().toString()));
             nomPersonne.setText(p.getPrenom() + " " + p.getNom());
             pourcentage.setText(String.format("Correspondance de %.0f%%", r.getPourcentage()));
-            //for the 4 other images
             bandeAutresImages.getChildren().clear();
+
             for (ImageVisage autreImg : bdd.imagesBdd.get(p)) {
                 if (autreImg.id != img.id) {
                     ImageView mini = new ImageView(new Image(new File(autreImg.getPath()).toURI().toString()));
