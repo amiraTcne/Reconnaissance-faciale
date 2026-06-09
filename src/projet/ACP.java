@@ -55,6 +55,8 @@ public class ACP {
 		projeterMatrice();
 		this.seuil = (float) 75;
 	}
+
+	//getters
 	
 	public Vecteur getVisageM() {
 		return visageM;
@@ -218,11 +220,10 @@ public class ACP {
 			for (int j=0; j<m; j++) {
 				v.set(j,0,vecteurPropre.get(j, ordre[i]));
 			}
-			//To obtain the eigenfaces, we take an eigenvector
-            //of matriceReduite and multiply it on the left by matriceEtude.
-			//goal : return to the original space.
-            //Normalizing to make all eigenfaces comparable, so that the length of the eigenfaces has no impact :
-            //it is the direction of the vector that matters.
+			/*To obtain the eigenfaces, we take an eigenvector of matriceReduite and multiply it on the left by matriceEtude.
+			goal : return to the original space.
+            Normalizing to make all eigenfaces comparable, so that the length of the eigenfaces has no impact :
+            it is the direction of the vector that matters.*/
 			base[i] = (new Vecteur(matriceEtude.times(v))).normaliser();		
 		}
 	}
@@ -271,7 +272,7 @@ public class ACP {
 		for (int i=0; i<base.length; i++) {
 			double a=0;
 			for (int j=0; j<n; j++) {
-				a+=base[i].getValue(j) * v.getValue(j); //Scalar product
+				a+=base[i].getValue(j) * v.getValue(j); //scalar product
 			}
 			for (int j=0; j<n; j++) {
 				double b = proj.getValue(j) + a*base[i].getValue(j);
@@ -295,7 +296,7 @@ public class ACP {
 		}
 	}
 
-		/**
+	/**
 	 * Compares a new image to an image we have in our database.
 	 * @param nouvelleIm The new image we want to compare.
 	 * @param imDeReferenceProjetee The vector of the reference image we are going to compare nouvelleIm with.
@@ -337,24 +338,6 @@ public class ACP {
 	    }
 	    return (float) Math.sqrt(distance);
 	}
-
-	//METHODE comparer() D'AVANT
-	//	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
-	//		float pourcentage=0;
-	//		int nb = imDeReferenceProjetee.getTaille();
-	//		Vecteur vecteurIm = nouvelleIm.process(); //traite l'image que l'on veut comparer
-	//		vecteurIm = projeter(vecteurIm); //projete l'image que l'on veut comparer
-	//		Vecteur compare = new Vecteur(nb);
-	//		for (int i=0; i<nb; i++) {
-	//			double b= Math.abs(1-(imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i)/imDeReferenceProjetee.getValue(i))); //compare chaque pixel pour avoir la ressemblance en pourcentage
-	//			compare.setValueP(i, b);
-	//		}
-	//		for (int i=0; i<nb; i++){
-	//			pourcentage += compare.getValue(i);
-	//		}
-	//		pourcentage = pourcentage / nb; //pourcentage global en faisant la moyenne des pourcentages
-	//		return pourcentage;
-	//	}
 	
 	/**
 	 * Calculates the match percentage between two images based on the distance calculated with comparer().
@@ -367,7 +350,13 @@ public class ACP {
 		return p;
 	}
 
-	//have to be commented
+	/**
+	 * Combine "comparer()" and "pourcentage()". 
+	 * Calculates the match percentage between a new image and a reference image of our database, based on its id.
+	 * @param nouvelleIm The new images we want to compare.
+	 * @param idImage The id of the image of the database.
+	 * @return The match percentage
+	 */
 	public float pourcentageImage(ImageVisage nouvelleIm, int idImage) {
 	    Vecteur ref = prendreVecteur(idImage - 1, matriceProjection);
 	    float distance = comparer(nouvelleIm, ref);
@@ -377,7 +366,7 @@ public class ACP {
 	/**
 	 * Compares a new images to all our reference images.
 	 * @param nouvelleIm The new images we want to compare.
-	 * @return A table of Retour in which the index of each image in our database is linked to its percentage match with the new image.
+	 * @return A sorted table of Retour in which the index of each image in our database is linked to its percentage match with the new image.
 	 */
 	public Retour[] tableauComparaison(ImageVisage nouvelleIm) {
 		Retour[] tableau = new Retour[m];
@@ -398,11 +387,10 @@ public class ACP {
 	}
 
 	/**
-	 * 
-	 * @param nouvelleIm
-	 * @return
+	 * For each person in the database, search through the 5 images to find the id of the image that most closely resembles the new image.
+	 * @param nouvelleIm The new images we want to compare.
+	 * @return A sorted table of 20 Retour (one for each person) in which the index of each image in our database is linked to its percentage match with the new image.
 	 */
-	//pour chaque personne de la BDD, on veut l'indice de l'image la plus ressemblante associé au pourcentage de correspondance
 	public Retour[] uneImageParPersonne(ImageVisage nouvelleIm) {
 	    Bdd bdd = new Bdd();
 	    Retour[] tableau = new Retour[bdd.imagesBdd.size()];
