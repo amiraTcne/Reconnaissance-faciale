@@ -6,7 +6,7 @@ import Jama.Matrix;
 
 
 /**
- * Tis class is used to display a graph allowing us to visualize the importance of the different eigenvalues 
+ * This class is used to display a graph allowing us to visualize the importance of the different eigenvalues 
  * @author Pernet Gabriel
  * @author Riche Liah
  * @author Tarchoune Amira
