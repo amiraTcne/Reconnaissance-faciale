@@ -12,16 +12,12 @@ import projet.Vecteur;
 
 /**
  * This object is used to store a path leading to an image and the position of the image in the matrix used for recognition.
- * The path is the path to the original image and not the processed one, as we want to be able to access the original image
- * quickly when we need to display it during the comparisons. We have no need to store the path of the modified images since,
- * for the ones present in the dataset, we just need to access them once to do all the necessary calculations and they are then
- * stored in their vectorial form, and, for the ones the user provides, we don't need to keep the processed version
- * (so it is never saved, just used).
+ * The path is the path to the original image and not the processed one, as we want to be able to access the original image quickly when we need to display it during the comparisons. We have no need to store the path of the modified images since, for the ones present in the dataset, we just need to access them once to do all the necessary calculations and they are then stored in their vectorial form, and, for the ones the user provides, we don't need to keep the processed version (so it is never saved, just used).
  * @author Pernet Gabriel
  * @version 0.2
  */
 public class ImageVisage{
-    /** id is the index of the vector representing the image in all the <code>Matrix</code> objects that will contain all images or 0 if the image is not in the <code>Matrix</code>. */
+    /** id is the index of the vector representing the image in all the Matrix objects that will contain all images or 0 if the image is not in the Matrix. */
     public int id;
     /** path is the path, which allows us to retrieve the original image at any point */
     public String path;
@@ -62,10 +58,8 @@ public class ImageVisage{
     }
     /**
      * This function returns a vectorial representaion of a 100x100 grayscale version of the image it is used on.
-     * This is used on images that are not already in the dataset and that we wish to compare to the ones
-     * present in the dataset.
-     * @return a <code>Vecteur</code> with 10000 values in its p attribute representing the image
-     * linked to <code>this</code> in 100x100 grayscale format, 
+     * This is used on images that are not already in the dataset and that we wish to compare to the ones present in the dataset.
+     * @return a Vecteur with 10000 values in its p attribute representing the image linked to this ImageVisage in 100x100 grayscale format, 
      */
     public Vecteur process(){
         File imgFile = new File(this.getPath());
@@ -83,7 +77,7 @@ public class ImageVisage{
             g.dispose();
             int w = procImg.getWidth(); // width
             int h = procImg.getHeight(); // height
-            // set the values of the <code>Matrix</code> to the grayscale values of the corresponding pixels
+            // set the values of the Matrix to the grayscale values of the corresponding pixels
             for(int i=0;i<w;i++){
                 for(int j=0;j<h;j++){
                     Color c = new Color(procImg.getRGB(j,i));
@@ -98,14 +92,12 @@ public class ImageVisage{
         return imgVect;
     }
     /**
-     * This function's purpose is to fetch a processed version of the image it is used on without changing
-     * the path attribute, as we still need to be able to acces the original image to display it.
+     * This function's purpose is to fetch a processed version of the image it is used on without changing the path attribute, as we still need to be able to acces the original image to display it.
      * This is used on images already present in the dataset.
-     * @return a 100x100 <code>Matrix</code> representing an image, that image being the
-     * 100x100 grayscale version of <code>this</code>.
+     * @return a 100x100 Matrix representing an image, that image being the 100x100 grayscale version of this ImageVisage.
      */
     public Matrix processed(){
-        // takes the path of <code>this</code> and replaces dataset by dataReady (the image fetched will be the processed version)
+        // takes the path of this ImageVisage and replaces dataset by dataReady (the image fetched will be the processed version)
         String pathPro = "dataReady"+this.getPath().substring(this.getPath().indexOf("/"));
         Matrix imgMat = new Matrix(100,100);
         File imgFile = new File(pathPro);
@@ -114,7 +106,7 @@ public class ImageVisage{
             img = ImageIO.read(imgFile);
             int w = img.getWidth(); // width
             int h = img.getHeight(); // height
-            // set the values of the <code>Matrix</code> to the values of the pixels of the image
+            // set the values of the Matrix to the values of the pixels of the image
             for(int i=0;i<w;i++){
                 for(int j=0;j<h;j++){
                     Color c = new Color(img.getRGB(j,i));

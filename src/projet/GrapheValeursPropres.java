@@ -11,7 +11,11 @@ public class GrapheValeursPropres extends JPanel{
 	public GrapheValeursPropres(ACP acp) {
 		this.acp=acp;
 	}
-	@Override //redefini une méthode de la classe parent 
+	/**
+	 * This method uses swing and awt to create and display the graph.
+	 * @param g 
+	 */
+	@Override
 	protected void paintComponent(Graphics g) { //utilise swing et awt pour créer et affiche le graphique
 
 	        super.paintComponent(g); //permet de partir d'un dessin vide
@@ -39,22 +43,4 @@ public class GrapheValeursPropres extends JPanel{
 	            //diamètre donc on enlève le rayon pour centré
 	        }
 	}
-	public static void main(String[] args) {
-		Matrix M = new Matrix(new double[][] {
-			{4, 2, 6, 7}, 
-			{1, 3, 3, 1},
-			{2, 2, 4, 7},
-			{4, 7, 1, 1}
-		});
-	    ACP test = new ACP(M);
-	    
-	    GrapheValeursPropres graphe = new GrapheValeursPropres(test);
-	    
-	    JFrame f = new JFrame("Graphique des valeurs propres"); //créer une fenêtre graphique appelée "Graphique des valeurs propres"
-	    f.add(graphe); //ajoute le graphe dans la fenêtre
-	    f.setSize(1000, 700); //taille de la fenêtre
-	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
-	    f.setVisible(true); //affiche réellement la fenêtre
-	}
-	
 }

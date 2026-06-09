@@ -9,14 +9,14 @@ import imgs.ImageVisage;
  * @version 1.0
  */
 public class Personne {
-	/** The surname of the <code>Personne</code> */
+	/** The surname of the Personne */
 	String nom;
-	/** The name of the <code>Personne</code> */
+	/** The name of the Personne */
 	String prenom;
 	
 	/**
 	 * Constructs a new Personne.
-	 * The program will use the name of a file to create a <code>Personne</code>, extracting its <code>nom</code> and <code>prenom</code> from the name of the file.
+	 * The program will use the name of a file to create a Personne, extracting its nom and prenom from the name of the file.
 	 * @param chemin the name of the file. Follows of format of "prenom_nom_X" (where X is a number)
 	 */
 	public Personne(String chemin) {
