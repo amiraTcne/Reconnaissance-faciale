@@ -27,7 +27,7 @@ import imgs.ImageVisage;
  * Main JavaFX application of the facial recognition project.
  * Builds the interface and navigates between the home/import view, the
  * selected-image view, and the result views (match found or no match).
- * @author Ouerghi Hedy
+ * @author Ouerghi Hedy, Meddour Sylia, Amira
  * @version 0.2
  */
 public class ReconnaissanceFacialeApp extends Application {
