@@ -302,8 +302,7 @@ public class ACP {
 	 * @param imDeReferenceProjetee The reference image we are going to compare nouvelleIm with.
 	 * @return The distance between both images calculated thanks to the Euclidean distance.
 	 */
-	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
-	    Vecteur vecteurIm = nouvelleIm.process();
+	private float comparer(Vecteur VecteurIm, Vecteur imDeReferenceProjetee) {
 	    // center
 	    for (int i = 0; i < n; i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
@@ -358,7 +357,8 @@ public class ACP {
 		for (int i=0; i<m; i++) {
 			Retour r = new Retour();
 			Vecteur V = prendreVecteur(i, matriceProjection);
-			float distance = comparer(nouvelleIm, V);
+			Vecteur vecteurIm = nouvelleIm.process();
+			float distance = comparer(vecteurIm, V);
 			float p = pourcentage(distance);
 			r.setPourcentage(p);
 			r.setIndice(i);
@@ -448,6 +448,31 @@ public class ACP {
 	        k++;
 	    }
 	}
+
+	
+	/**
+	 * 
+	 * @param tableau
+	 * @param M
+	 * @return
+	 */
+	private int seuilStat(Vecteur im) {
+		double [] lambda = valeursPropresTriees();
+		double Tnew = 0;
+		double Talpha;
+		double p = im.getTaille();
+		int n = 100; //nombre d'images d'apprentissage
+		double F = 1.86; //car n=100, K=43 et alpha=0.99
+		for (int i=0; i<p; i++) {
+			Tnew += (im.getValue(i)*im.getValue(i))/lambda[i];
+		}
+		Talpha =(p*(n-1))/(n-p) * F;
+		if (Tnew < Talpha) {
+			return 1;
+		}
+		return 0;
+	}
+
 	
 	/**
 	 * If there is a match, links the new image to the corresponding one.
