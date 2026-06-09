@@ -294,16 +294,37 @@ public class ACP {
 			}
 		}
 	}
-	
-	
-	/**
+
+		/**
 	 * Compares a new image to an image we have in our database.
 	 * @param nouvelleIm The new image we want to compare.
-	 * @param imDeReferenceProjetee The reference image we are going to compare nouvelleIm with.
+	 * @param imDeReferenceProjetee The vector of the reference image we are going to compare nouvelleIm with.
 	 * @return The distance between both images calculated thanks to the Euclidean distance.
 	 */
-	private float comparer(Vecteur VecteurIm, Vecteur imDeReferenceProjetee) {
-	    // center
+	private float comparer(ImageVisage nouvelleIm, Vecteur imDeReferenceProjetee) {
+	    Vecteur vecteurIm = nouvelleIm.process();
+	    // centrer
+	    for (int i = 0; i < n; i++) {
+	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
+	    }
+	    vecteurIm = projeter(vecteurIm);
+	    // distance euclidienne
+	    double distance = 0;
+	    for (int i = 0; i < base.length; i++) {
+	        double diff = imDeReferenceProjetee.getValue(i) - vecteurIm.getValue(i);
+	        distance += diff * diff;
+	    }
+	    return (float) Math.sqrt(distance);
+	}
+	
+	/**
+	 * Compares the vector of a new image to an image we have in our database.
+	 * @param vecteurIm The vector of the new image we want to compare.
+	 * @param imDeReferenceProjetee The reference image we are going to compare nouvelleIm with.
+	 * @return The distance between the 2 images associated to the 2 vectors, calculated thanks to the Euclidean distance.
+	 */
+	private float comparer(Vecteur vecteurIm, Vecteur imDeReferenceProjetee) {
+	    // centrer
 	    for (int i = 0; i < n; i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
 	    }
@@ -345,6 +366,13 @@ public class ACP {
 		float p = 100 * (1-distance/max);
 		return p;
 	}
+
+	//have to be commented
+	public float pourcentageImage(ImageVisage nouvelleIm, int idImage) {
+	    Vecteur ref = prendreVecteur(idImage - 1, matriceProjection);
+	    float distance = comparer(nouvelleIm, ref);
+	    return pourcentage(distance);
+	}
 	
 	/**
 	 * Compares a new images to all our reference images.
@@ -376,24 +404,31 @@ public class ACP {
 	 */
 	//pour chaque personne de la BDD, on veut l'indice de l'image la plus ressemblante associé au pourcentage de correspondance
 	public Retour[] uneImageParPersonne(ImageVisage nouvelleIm) {
-		Bdd bdd = new Bdd();
-		Retour[] tableau = new Retour[20];
-		int i =0;
-		for(Personne p : bdd.imagesBdd.keySet()) {
-			float maxPourcentage=0;
-			int id = 0;
-			for(ImageVisage img : bdd.imagesBdd.get(p)) {
-				float pourcentage  = pourcentage(comparer(nouvelleIm, prendreVecteur(img.id, matriceInitiale)));
-				if (pourcentage>maxPourcentage) {
-					maxPourcentage = pourcentage;
-					id=img.id;
-				}
-			}
-			tableau[i].setPourcentage(maxPourcentage);
-			tableau[i].setIndice(id);
-			i++;
-		}
-		return tableau;
+	    Bdd bdd = new Bdd();
+	    Retour[] tableau = new Retour[bdd.imagesBdd.size()];
+	    int i = 0;
+
+	    for (Personne p : bdd.imagesBdd.keySet()) {
+	        float maxPourcentage = -1;
+	        int idMeilleureImage = -1;
+
+	        for (ImageVisage img : bdd.imagesBdd.get(p)) {
+	            float pourcentage = pourcentage(comparer(nouvelleIm, prendreVecteur(img.id-1, matriceProjection)));
+	            if (pourcentage > maxPourcentage) {
+	                maxPourcentage = pourcentage;
+	                idMeilleureImage = img.id;
+	            }
+	        }
+
+	        Retour r = new Retour();
+	        r.setPourcentage(maxPourcentage);
+	        r.setIndice(idMeilleureImage);
+	        tableau[i] = r;
+	        i++;
+	    }
+
+	    triFusion(tableau);
+	    return tableau;
 	}
 	
 	/**
