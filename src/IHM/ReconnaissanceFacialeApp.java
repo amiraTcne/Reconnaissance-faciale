@@ -1,4 +1,4 @@
-package facialRecognition;
+package IHM;
 
 import java.io.File;
 import javafx.application.Application;
