@@ -1,4 +1,4 @@
-package projet;
+package calculs;
 
 /**
  * Retour is used to return a % of likeness between faces and the index in the Matrix used in ACP for the face that is from this Matrix.
