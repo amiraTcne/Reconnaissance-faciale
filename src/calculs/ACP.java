@@ -1,4 +1,4 @@
-package projet;
+package calculs;
 
 import java.util.Arrays;
 
