@@ -24,6 +24,8 @@ public class VueCorrespondanceTrouvee extends VBox{
         this.setAlignment(Pos.CENTER);
         HBox troisColonnes = creerLaVue(imageSelectionnee, tableauPourcentage);
         this.getChildren().add(troisColonnes);
+		 //Force le HBox à occuper tout l'espace vertical disponible dans la VBox
+        VBox.setVgrow(troisColonnes, javafx.scene.layout.Priority.ALWAYS);
 		
 	}
 	private HBox creerLaVue(File imageSelectionnee, Retour[] tableauPourcentage) {
