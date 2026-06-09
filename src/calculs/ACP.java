@@ -379,6 +379,7 @@ public class ACP {
 			float p = pourcentage(distance);
 			r.setPourcentage(p);
 			r.setIndice(i);
+			r.setDistance(distance);
 			tableau[i]=r;
 		}
 		//merge sort of the array based on percentage
