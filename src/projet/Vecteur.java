@@ -43,7 +43,10 @@ public class Vecteur {
         this.p = new double[n];
     }
 
-    /** Returns the Vecteur as a comma-separated list of values enclosed in brackets. */
+    /**
+     * Returns a string representation of the Vecteur, a comma-separated list of values enclosed in brackets.
+     * @return a string representation of the Vecteur
+     */
     @Override
     public String toString() {
         String s = new String();
@@ -56,9 +59,9 @@ public class Vecteur {
 
     /**
      * Reshapes this Vecteur back into a 2D JAMA matrix (row by row).
-     * Used to convert a flattened vector back into its image matrix form.
-     * @param nbLignes   number of rows in the resulting matrix
-     * @param nbColonnes number of columns in the resulting matrix
+     * Used to convert a flattened vector back into its image Matrix form.
+     * @param nbLignes   number of rows in the resulting Matrix
+     * @param nbColonnes number of columns in the resulting Matrix
      * @return a Matrix of size nbLignes x nbColonnes containing the values of this Vecteur
      */
     public Matrix cheminInverse(int nbLignes, int nbColonnes) {
@@ -72,8 +75,8 @@ public class Vecteur {
     }
     
     /**
-     * Normalizes a vector.
-     * @return The normalized vector.
+     * Normalizes a Vecteur.
+     * @return The normalized Vecteur.
      */
     public Vecteur normaliser() {
     	double s =0;
@@ -88,13 +91,22 @@ public class Vecteur {
     	return vn;
     }
 
-    /** Getter for the internal array of values. */
+    /**
+     * Returns p, the array of values forming this Vecteur
+     * @return an array containing all the values in this Vecteur
+     */
     public double[] getP() { return p; }
 
-    /** Setter for the internal array of values. */
+    /**
+     * Sets the array of values of the Vecteur as the one passed in parameter
+     * @param p the new array of values for this Vecteur
+     */
     public void setP(double[] p) { this.p = p; }
 
-    /** Returns the size (length) of this Vecteur. */
+    /**
+     * Returns the size of this Vecteur (number of values)
+     * @return the size of this Vecteur
+     */
     public int getTaille() { return p.length; }
 
     /**
