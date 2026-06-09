@@ -7,8 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import laBdd.Bdd;
-import projet.ACP;
-import projet.Retour;
+import calculs.ACP;
+import calculs.Retour;
 public class VueCorrespondanceTrouvee extends VBox{
     Bdd bdd = new Bdd();
     ACP acp = new ACP(bdd.createA());

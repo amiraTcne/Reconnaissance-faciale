@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import Jama.Matrix;
-import projet.Vecteur;
+import calculs.Vecteur;
 
 /**
  * This object is used to store a path leading to an image and the position of the image in the matrix used for recognition.

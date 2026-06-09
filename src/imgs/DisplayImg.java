@@ -1,6 +1,6 @@
 package imgs;
 
-import projet.Vecteur;
+import calculs.Vecteur;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
