@@ -236,8 +236,7 @@ public class ReconnaissanceFacialeApp extends Application {
         VBox grandAffichage = new VBox(12, navigation, imageComparee, nomPersonne, pourcentage, bandeAutresImages);
         grandAffichage.setAlignment(Pos.CENTER);
 
-        // Number of thumbnails shown (capped at 15, or fewer if the table is smaller).
-        //int nbVignettes = Math.min(15, tableau.length);
+        // Number of thumbnails shown
         int nbVignettes = tableau.length;
 
         // Column of thumbnails; the selected one gets a green border.
@@ -313,7 +312,8 @@ public class ReconnaissanceFacialeApp extends Application {
         scrollVignettes.setPrefWidth(90);
         scrollVignettes.setPrefViewportHeight(300);
 
-        maj.run(); // select the closest match by default
+        // select the closest match by default
+        maj.run();
 
         HBox droite = new HBox(15, grandAffichage, scrollVignettes);
         droite.setAlignment(Pos.CENTER);
