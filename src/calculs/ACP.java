@@ -579,11 +579,15 @@ public class ACP {
 	 * @param nouvelleIm The new image we want to compare.
 	 * @return The vector associated to the corresponding image, or nothing if there is no match.
 	 */
-	public Vecteur identifier(ImageVisage nouvelleIm) {
+	public Vecteur identifier(ImageVisage nouvelleIm) {		
 		Retour[] tableau = tableauComparaison(nouvelleIm);
-		if (tableau[0].getPourcentage()>=seuil) {
-			Vecteur v = prendreVecteur(tableau[0].getIndice(), matriceInitiale);
-			return (v);
+		if (seuilReconstruction()==1) {
+			if (seuilStat(nouvelleIm.process())==1) {
+				float dmin = tableau[0].getDistance();
+				if (seuilDistanceMin(matriceValidation, dmin)==1) {
+					return (prendreVecteur(tableau[0].getIndice(), matriceInitiale));
+				}
+			}
 		}
 		return null;
 	}
