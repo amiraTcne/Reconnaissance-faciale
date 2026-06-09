@@ -20,7 +20,7 @@ public class Bdd {
 	public Map<Personne, ArrayList<ImageVisage>> imagesBdd = new HashMap<>();
 	 
 	/**
-	 * This is the constructor for Bdd.
+	 * Construcs a new Bdd.
 	 * The program will browse the dataset and create a <code>Personne</code> for each person present in the dataset and
 	 * link to each <code>Personne</code> the 5 images in the dataset that are of this person, creating an <code>ImageVisage</code> for each image.
 	 * A total of 100 <code>ImageVisage</code> will be crated, id 1 to 100.
