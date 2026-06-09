@@ -28,7 +28,7 @@ public class GrapheValeursPropres extends JPanel{
 	 * @param g the Graphics object to protect
 	 */
 	@Override
-	protected void paintComponent(Graphics g) 
+	protected void paintComponent(Graphics g) {
 
 	        super.paintComponent(g); // we start from an empty drawing
 	        
