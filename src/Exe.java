@@ -23,8 +23,10 @@ public class Exe{
         
         Bdd bdd = new Bdd(); 
         ACP acp = new ACP(bdd.createA());
-        
-        
+        System.out.println(acp.getSeuilD());
+        System.out.println(acp.getSeuilS());
+        System.out.println(acp.getSeuilR());
+        /*
         //Affichage du graphe des valeurs propres
 	    GrapheValeursPropres graphe = new GrapheValeursPropres(acp);
 	    System.out.println(Arrays.toString(acp.valeursPropresTriees()));
@@ -74,6 +76,6 @@ public class Exe{
         System.out.println(tabI[99].getPourcentage());// taux de ressemblance de la plus éloignée
         DisplayImg.affImg(acp.prendreVecteur(tabI[0].getIndice(), acp.getMatriceInitiale()));// image la plus proche
         DisplayImg.affImg(acp.prendreVecteur(tabI[99].getIndice(), acp.getMatriceInitiale()));// image la plus éloignée
-        
+        */
     }
 }

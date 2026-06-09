@@ -57,6 +57,7 @@ public class ACP {
 		creerBase();
 		projeterMatrice();
 		this.seuil = (float) 75;
+		deterSeuils();
 	}
 
 	
@@ -330,7 +331,7 @@ public class ACP {
 	 */
 	private float comparer(Vecteur vecteurIm, Vecteur imDeReferenceProjetee) {
 	    // centrer
-	    for (int i = 0; i < n; i++) {
+	    for (int i = 0; i < vecteurIm.getTaille(); i++) {
 	        vecteurIm.setValueP(i, vecteurIm.getValue(i) - visageM.getValue(i));
 	    }
 	    vecteurIm = projeter(vecteurIm);
@@ -547,18 +548,19 @@ public class ACP {
 	}
 
 	private void deterSeuils(){
-		Matrix validation;
+		Bdd baseval = new Bdd("dataset/test/validation/connu","dataset/test/validation/inconnu");
+		Matrix validation = baseval.createA();
 		int a=validation.getRowDimension();
 		int b=validation.getColumnDimension();
 		Matrix validationCentre = new Matrix(a, b);
 		for (int i=0; i<n; i++) {
-			for (int j=0; j<m; j++) {
+			for (int j=0; j<40; j++) {
 				validationCentre.set(i, j, validation.get(i, j) - visageM.getValue(i)); //soustrait le visage moyen à chaque visage pour ne garder que les différences
 			}
 		}
 		
 		Matrix validationProjection = new Matrix(this.base.length, m);
-		for (int j=0;j<m;j++) {
+		for (int j=0;j<40;j++) {
 			Vecteur V = new Vecteur(base.length);
 			V=projeter(prendreVecteur(j, validationCentre));
 			for (int i=0;i<base.length;i++) {
@@ -570,7 +572,7 @@ public class ACP {
 		for (int j=0; j<20; j++) {
 			Retour[] tableau = new Retour[m];
 			float[] distances = new float[m];
-			for (int i=0; i<m; i++) {
+			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
 				Vecteur V = prendreVecteur(i, matriceProjection);
 				float distance = comparer(prendreVecteur(j, validationProjection), V);
@@ -591,7 +593,7 @@ public class ACP {
 		for (int j=20; j<40; j++) {
 			Retour[] tableau = new Retour[m];
 			float[] distances = new float[m];
-			for (int i=0; i<m; i++) {
+			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
 				Vecteur V = prendreVecteur(i, matriceProjection);
 				float distance = comparer(prendreVecteur(j, validationProjection), V);
