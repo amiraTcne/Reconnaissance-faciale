@@ -6,18 +6,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import projet.Vecteur;
+import calculs.Vecteur;
 import Jama.Matrix;
 
 /**
  * This class and its methods handle everything needed to store the ImageVisage and Personne used by the rest of the program in such a way that we do not lose track of them.
  * @author Meddour Sylia
+ * @author Pernet Gabriel
  * @version 1.0
  */
 public class Bdd {
 	/** This is the Map used to store the different Personne and the 5 ImageVisage linked to them */
 	public Map<Personne, ArrayList<ImageVisage>> imagesBdd = new HashMap<>();
-	 
+	/** This is how many images are in this Bdd */
+	private int nbimgs;
 	/**
 	 * Construcs a new Bdd.
 	 * The program will browse the dataset and create a Personne for each person present in the dataset and link to each Personne the 5 images in the dataset that are of this person, creating an ImageVisage for each image.
@@ -41,8 +43,17 @@ public class Bdd {
 			imagesBdd.get(p).add(im); // the ImageVisage im is added to the List of ImageVisage of the corresponding Personne of imagesBdd.
 			id++; // id is incremented for the creation of the next ImageVisage that will be added to the Bdd.
 		}
+		this.nbimgs = id-1;
 	}
 	
+    /**
+     * Returns the nbimgs of this Bdd
+     * @return the nbimgs of this Bdd
+     */
+	public int getNbimgs(){
+		return this.nbimgs;
+	}
+
 	/**
 	 * This method's aim is to identify which Personne is linked to a certain ImageVisage.
 	 * This method takes an int (idimage) as input and searches this to find an ImageVisage whose id is idimage.
@@ -89,8 +100,8 @@ public class Bdd {
 		ImageVisage img;
 		Matrix imgMat;
 		Vecteur imgVect;
-		Matrix a = new Matrix(10000,100);
-		for(int i=0;i<100;i++){
+		Matrix a = new Matrix(10000,this.getNbimgs());
+		for(int i=0;i<this.getNbimgs();i++){
 			img = this.getImg(i+1);
 			imgMat = img.processed();
 			imgVect = new Vecteur(imgMat);
