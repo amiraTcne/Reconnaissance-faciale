@@ -34,13 +34,13 @@ public class Exe{
 	    f.setSize(2000, 1200); //taille de la fenêtre
 	    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
 	    f.setVisible(true); //affiche réellement la fenêtre
-	    /*
+	    
         //Affichage du visage moyen
         DisplayImg.affImg(acp.getVisageM());
-        */
+        
 	    //Affichage valeur propre (image)
 	    DisplayImg.affImg(acp.eigenfaces()[0]);
-        /*
+        
         
         // Projection d'image
         ImageVisage imProj = bdd.getImg(2);
@@ -74,6 +74,6 @@ public class Exe{
         System.out.println(tabI[99].getPourcentage());// taux de ressemblance de la plus éloignée
         DisplayImg.affImg(acp.prendreVecteur(tabI[0].getIndice(), acp.getMatriceInitiale()));// image la plus proche
         DisplayImg.affImg(acp.prendreVecteur(tabI[99].getIndice(), acp.getMatriceInitiale()));// image la plus éloignée
-        */
+        
     }
 }

@@ -267,7 +267,7 @@ public class ACP {
 	 */
 	public Vecteur projeterImg(Vecteur v) {
 		int n = v.getTaille();
-		Vecteur proj = new Vecteur(n, 1); //create a zero vector of size n
+		Vecteur proj = new Vecteur(n); //create a zero vector of size n
 		for (int i=0; i<base.length; i++) {
 			double a=0;
 			for (int j=0; j<n; j++) {

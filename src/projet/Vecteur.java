@@ -13,8 +13,8 @@ public class Vecteur {
     private double[] p;
 
     /**
-     * Constructor that flattens a JAMA matrix into a Vecteur (row by row).
-     * @param m the matrix to flatten
+     * Constructs a new Vecteur by flattening a Jama Matrix (row by row)
+     * @param m the Matrix to flatten
      */
     public Vecteur(Matrix m) {
         int nbLignes = m.getRowDimension();
@@ -27,26 +27,20 @@ public class Vecteur {
         }
     }
 
-    /** Constructor that creates a Vecteur from a given array of values. */
+    /**
+     * Constructs a new Vecteur from a given array of values.
+     * @param p the array of values
+    */
     public Vecteur(double[] p) {
         this.p = p;
     }
 
-    /** Constructor that creates an empty Vecteur of size n (all zeros by default). */
+    /**
+     * Constructs a new empty Vecteur of size n (all zeros by default).
+     * @param n the size for the new Vecteur
+     */
     public Vecteur(int n) {
         this.p = new double[n];
-    }
-
-    /**
-     * Constructor that creates a Vecteur of size n filled with zeros.
-     * Note: equivalent to Vecteur(int n) since Java initializes double[] to 0 by default.
-     * The second parameter is currently unused.
-     */
-    public Vecteur(int n, int a) {
-        this.p = new double[n];
-        for (int i = 0; i < n; i++) {
-            p[i] = 0;
-        }
     }
 
     /** Returns the Vecteur as a comma-separated list of values enclosed in brackets. */
