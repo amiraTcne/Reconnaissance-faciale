@@ -522,8 +522,6 @@ public class ACP {
 	 */
 	public Vecteur identifier(ImageVisage nouvelleIm) {		
 		Retour[] tableau = tableauComparaison(nouvelleIm);
-		System.out.println("distance[0]=" + tableau[0].getDistance() + " seuilR=" + getSeuilR() + " seuilD=" + getSeuilD() + " seuilS=" + getSeuilS());
-		System.out.println("reconstruction=" + seuilReconstruction(tableau[0].getDistance()));
 		if (seuilReconstruction(tableau[0].getDistance())) {
 			if (seuilStat(projeter(nouvelleIm.process()))) {
 				float dmin = tableau[0].getDistance();
