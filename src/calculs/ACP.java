@@ -503,7 +503,7 @@ public class ACP {
 		double Tnew = 0;
 		double p = im.getTaille();
 		for (int i=0; i<p; i++) {
-			Tnew += (im.getValue(i)*im.getValue(i))/lambda[i];
+			Tnew += (im.getValue(i)*im.getValue(i))/lambda[0];
 		}
 		if (Tnew < this.getSeuilS()) {
 			return true;
@@ -527,7 +527,7 @@ public class ACP {
 	public Vecteur identifier(ImageVisage nouvelleIm) {		
 		Retour[] tableau = tableauComparaison(nouvelleIm);
 		if (seuilReconstruction(tableau[0].getDistance())) {
-			if (seuilStat(nouvelleIm.process())) {
+			if (seuilStat(projeter(nouvelleIm.process()))) {
 				float dmin = tableau[0].getDistance();
 				if (seuilDistanceMin(dmin)) {
 					return (prendreVecteur(tableau[0].getIndice(), matriceInitiale));
