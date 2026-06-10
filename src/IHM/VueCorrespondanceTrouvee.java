@@ -139,8 +139,13 @@ public class VueCorrespondanceTrouvee extends VBox{
 
                     VBox blocMini = new VBox(5, mini, labelMini);
                     blocMini.setAlignment(Pos.CENTER);
-
-                    bandeAutresImages.getChildren().add(blocMini);
+                    Button boutonMini = new Button();
+                    boutonMini.setGraphic(blocMini);
+                    boutonMini.setOnAction(e -> {
+                        imageComparee.setImage(mini.getImage());
+                        pourcentage.setText(String.format("Correspondance de %.0f%%", pMini));
+                    });
+                    bandeAutresImages.getChildren().add(boutonMini);
                 }
             }
             for (int k = 0; k < vignettes.length; k++) {
