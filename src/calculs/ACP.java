@@ -11,7 +11,8 @@ import imgs.ImageVisage;
 
 /**
  * ACP class of the facial recognition project
- * @author Liah, Amira
+ * @author Riche Liah
+ * @author Tarchoune Amira
  * @version 1.2
  */
 public class ACP {
@@ -33,8 +34,11 @@ public class ACP {
 	private Matrix matriceReduite;
 	/**"matriceReduite" whose columns have been projected in "base"*/
 	private Matrix matriceProjection;
+	/** Seuil sur la distance minimale */
 	private float seuilD;
+	/** Erreur de reconstruction */
 	private float seuilR;
+	/** Seuil statistique avec la variance ACP */
 	private double seuilS;
 	
 	
@@ -59,19 +63,27 @@ public class ACP {
 		this.seuil = (float) 75;
 		deterSeuils();
 	}
-
 	
-
-	//getters
-	
+	/**
+     * Returns the visageM of this ACP
+     * @return the visageM of this ACP
+     */
 	public Vecteur getVisageM() {
 		return visageM;
 	}
 
+	/**
+     * Returns the matriceInitiale of this ACP
+     * @return the matriceInitiale of this ACP
+     */
 	public Matrix getMatriceInitiale() {
 		return matriceInitiale;
 	}
 
+	/**
+     * Returns the matriceEtude of this ACP
+     * @return the matriceEtude of this ACP
+     */
 	public Matrix getMatriceEtude() {
 		return matriceEtude;
 	}
@@ -533,16 +545,33 @@ public class ACP {
 		return null;
 	}
 
+	/**
+     * Returns the seuilD of this ACP
+     * @return the seuilD of this ACP
+     */
 	public float getSeuilD(){
 		return this.seuilD;
 	}
+
+	/**
+     * Returns the seuilR of this ACP
+     * @return the seuilR of this ACP
+     */
 	public float getSeuilR(){
 		return this.seuilR;
 	}
+
+	/**
+     * Returns the seuilS of this ACP
+     * @return the seuilS of this ACP
+     */
 	public double getSeuilS(){
 		return this.seuilS;
 	}
 
+	/**
+     * Calculates and initializes seuilD, seuilR and seuilS for this ACP using the images contained in the validation dataset. (dataset/test/validation)
+     */
 	private void deterSeuils(){
 		Bdd baseval = new Bdd("dataset/test/validation/connu","dataset/test/validation/inconnu");
 		Matrix validation = baseval.createA();
@@ -620,7 +649,7 @@ public class ACP {
 		int i = 0;
         float p1 = 0;
         float p2 = 0;
-		float s;
+		float thetaR;
         float t = 0;
         for(Personne per : validC.imagesBdd.keySet()) {
 			for(ImageVisage img : validC.imagesBdd.get(per)) {
@@ -636,7 +665,7 @@ public class ACP {
 				i+=1;
 			}
 		}
-		s = ((p1+p2)/i);
-		this.seuilR = (float)0.95*s;
+		thetaR = ((p1+p2)/i);
+		this.seuilR = (float)0.95*thetaR;
 	}
 }
