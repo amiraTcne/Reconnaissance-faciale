@@ -27,8 +27,6 @@ java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.f
 
 ### Structure
 
-## Structure
-
 ```text
 mon-dossier/
 ├── reconnaissance_faciale_exec.jar
