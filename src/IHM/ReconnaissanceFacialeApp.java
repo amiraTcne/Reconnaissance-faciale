@@ -17,9 +17,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import laBdd.Bdd;
 import laBdd.Personne;
-import calculs.ACP;
-import calculs.Retour;
-import calculs.Vecteur;
+import projet.ACP;
+import projet.Retour;
+import projet.Vecteur;
 import imgs.ImageVisage;
 
 
@@ -160,7 +160,7 @@ public class ReconnaissanceFacialeApp extends Application {
         Vecteur resultat = acp.identifier(nouvelleIm);
         Retour[] tableau = acp.uneImageParPersonne(nouvelleIm);
         if (resultat != null) {
-            root.setCenter(new VueCorrespondanceTrouvee(file, tableau));
+            root.setCenter(new VueCorrespondanceTrouvee(file, tableau,ctrlImport));
         } else {
             root.setCenter(creerVueAucuneCorrespondance(file, tableau));
         }
@@ -177,10 +177,10 @@ public class ReconnaissanceFacialeApp extends Application {
         // Left : selected image + "no match" message
         ImageView preview = new ImageView(new Image(file.toURI().toString()));
         ImageVisage nouvelleIm = new ImageVisage(0, file.getPath());
-        preview.setFitWidth(220);
-        preview.setFitHeight(220);
+        preview.setFitWidth(250);
+        preview.setFitHeight(250);
         preview.setPreserveRatio(true);
-
+        
         Label legende = new Label("Image sélectionnée");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
@@ -188,11 +188,12 @@ public class ReconnaissanceFacialeApp extends Application {
         message.setStyle("-fx-font-style: italic; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #E53935;");
         message.setWrapText(true);
         message.setTextAlignment(TextAlignment.CENTER);
-        message.setMaxWidth(220);
+        message.setMaxWidth(250);
         
         VBox gauche = new VBox(15, preview, legende, message);
         gauche.setAlignment(Pos.CENTER);
-
+        gauche.setPadding(new Insets(0, 0, 80, 0));
+        
         // Center : re-import zone
         Label labelImport = new Label("📁  Importer une nouvelle photo");
         labelImport.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
@@ -214,11 +215,11 @@ public class ReconnaissanceFacialeApp extends Application {
 
         VBox centre = new VBox(zoneImport);
         centre.setAlignment(Pos.CENTER);
-
+        centre.setPadding(new Insets(0, 0, 60, 110));
         // Right : nav buttons + large display + thumbnail strip
         ImageView imageComparee = new ImageView();
-        imageComparee.setFitWidth(180);
-        imageComparee.setFitHeight(180);
+        imageComparee.setFitWidth(250);
+        imageComparee.setFitHeight(250);
         imageComparee.setPreserveRatio(true);
 
         Label nomPersonne = new Label();
@@ -227,7 +228,7 @@ public class ReconnaissanceFacialeApp extends Application {
         Label pourcentage = new Label();
         pourcentage.setStyle("-fx-text-fill: gray;");
         
-        HBox bandeAutresImages = new HBox(15);
+        HBox bandeAutresImages = new HBox(50);
         bandeAutresImages.setAlignment(Pos.CENTER);
 
         Button precedent = new Button("Précédent");
@@ -263,8 +264,8 @@ public class ReconnaissanceFacialeApp extends Application {
             for (ImageVisage autreImg : bdd.imagesBdd.get(p)) {
                 if (autreImg.id != img.id) {
                     ImageView mini = new ImageView(new Image(new File(autreImg.getPath()).toURI().toString()));
-                    mini.setFitWidth(65);
-                    mini.setFitHeight(65);
+                    mini.setFitWidth(100);
+                    mini.setFitHeight(100);
                     mini.setPreserveRatio(true);
 
                     float pMini = acp.pourcentageImage(nouvelleIm, autreImg.id);
@@ -296,8 +297,8 @@ public class ReconnaissanceFacialeApp extends Application {
             Retour r = tableau[i];
             ImageVisage img = bdd.getImg(r.getIndice());
             ImageView icone = new ImageView(new Image(new File(img.getPath()).toURI().toString()));
-            icone.setFitWidth(60);
-            icone.setFitHeight(60);
+            icone.setFitWidth(150);
+            icone.setFitHeight(150);
             icone.setPreserveRatio(true);
 
             Button bouton = new Button();
@@ -311,18 +312,18 @@ public class ReconnaissanceFacialeApp extends Application {
 
         ScrollPane scrollVignettes = new ScrollPane(colonneVignettes);
         scrollVignettes.setFitToWidth(true);
-        scrollVignettes.setPrefWidth(90);
+        scrollVignettes.setPrefWidth(300);
         scrollVignettes.setPrefViewportHeight(300);
 
         // select the closest match by default
         maj.run();
 
-        HBox droite = new HBox(15, grandAffichage, scrollVignettes);
+        HBox droite = new HBox(100, grandAffichage, scrollVignettes);
         droite.setAlignment(Pos.CENTER);
 
         // Assembly
         HBox vue = new HBox(40, gauche, centre, droite);
-        vue.setAlignment(Pos.CENTER);
+        vue.setAlignment(Pos.TOP_CENTER);
         vue.setPadding(new Insets(30));
         return vue;
     }
