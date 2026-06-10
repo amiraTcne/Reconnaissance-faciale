@@ -570,13 +570,12 @@ public class ACP {
 		
 		float maxConnu = 0;
 		for (int j=0; j<20; j++) {
-			Retour[] tableau = new Retour[m];
-			float[] distances = new float[m];
+			Retour[] tableau = new Retour[40];
+			float[] distances = new float[40];
 			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
 				Vecteur V = prendreVecteur(i, matriceProjection);
 				float distance = comparer(prendreVecteur(j, validationProjection), V);
-				System.out.println(distance);
 				float p = pourcentage(distance);
 				r.setPourcentage(p);
 				r.setIndice(i);
@@ -591,13 +590,12 @@ public class ACP {
 		
 		float minInconnu = 50000;
 		for (int j=20; j<40; j++) {
-			Retour[] tableau = new Retour[m];
-			float[] distances = new float[m];
+			Retour[] tableau = new Retour[40];
+			float[] distances = new float[40];
 			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
 				Vecteur V = prendreVecteur(i, matriceProjection);
 				float distance = comparer(prendreVecteur(j, validationProjection), V);
-				System.out.println(distance);
 				float p = pourcentage(distance);
 				r.setPourcentage(p);
 				r.setIndice(i);
