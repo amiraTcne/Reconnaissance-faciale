@@ -237,7 +237,7 @@ public class ACP {
 	/** 
 	 * Returns a column vector of a matrix.
 	 * @param i The index of the column.
-	 * @param M The matrix from which we want to extract the vector.
+	 * @param m The matrix from which we want to extract the vector.
 	 */
 	public Vecteur prendreVecteur(int i, Matrix m) { //take a vector (a column) of a matrix.
 		int taille= m.getRowDimension();
@@ -251,7 +251,7 @@ public class ACP {
 	
 	/**
 	 * Projects a vector into base, the eigenfaces basis.
-	 * @param V The vector you want to project
+	 * @param v The vector you want to project
 	 * @return The projected vector
 	 */
 	public Vecteur projeter(Vecteur v) {
@@ -269,7 +269,7 @@ public class ACP {
 
 	/**
 	 * Projects an image vector into base, the eigenfaces basis.
-	 * @param V The vector you want to project
+	 * @param v The vector you want to project
 	 * @return The projected vector
 	 */
 	public Vecteur projeterImg(Vecteur v) {
@@ -294,10 +294,10 @@ public class ACP {
 	private void projeterMatrice() {
 		matriceProjection = new Matrix(this.base.length, m);
 		for (int j=0;j<m;j++) {
-			Vecteur V = new Vecteur(base.length);
-			V=projeter(prendreVecteur(j, matriceEtude));
+			Vecteur v = new Vecteur(base.length);
+			v=projeter(prendreVecteur(j, matriceEtude));
 			for (int i=0;i<base.length;i++) {
-				matriceProjection.set(i,j,V.getValue(i));
+				matriceProjection.set(i,j,v.getValue(i));
 			}
 		}
 	}
@@ -378,9 +378,9 @@ public class ACP {
 		//Create an array containing the index and similarity percentage for each image
 		for (int i=0; i<m; i++) {
 			Retour r = new Retour();
-			Vecteur V = prendreVecteur(i, matriceProjection);
+			Vecteur v = prendreVecteur(i, matriceProjection);
 			Vecteur vecteurIm = nouvelleIm.process();
-			float distance = comparer(vecteurIm, V);
+			float distance = comparer(vecteurIm, v);
 			float p = pourcentage(distance);
 			r.setPourcentage(p);
 			r.setIndice(i);
@@ -481,7 +481,7 @@ public class ACP {
 	/**
 	 * 
 	 * @param tableau
-	 * @param M
+	 * @param m
 	 * @return
 	 */
 	private boolean seuilDistanceMin(float dmin) {
@@ -495,7 +495,7 @@ public class ACP {
 	/**
 	 * 
 	 * @param tableau
-	 * @param M
+	 * @param m
 	 * @return
 	 */
 	private boolean seuilStat(Vecteur im) {
@@ -557,10 +557,10 @@ public class ACP {
 		
 		Matrix validationProjection = new Matrix(this.base.length, m);
 		for (int j=0;j<40;j++) {
-			Vecteur V = new Vecteur(base.length);
-			V=projeter(prendreVecteur(j, validationCentre));
+			Vecteur v = new Vecteur(base.length);
+			v=projeter(prendreVecteur(j, validationCentre));
 			for (int i=0;i<base.length;i++) {
-				validationProjection.set(i,j,V.getValue(i));
+				validationProjection.set(i,j,v.getValue(i));
 			}
 		}
 		
@@ -570,8 +570,8 @@ public class ACP {
 			float[] distances = new float[40];
 			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
-				Vecteur V = prendreVecteur(i, matriceProjection);
-				float distance = comparer(prendreVecteur(j, validationProjection), V);
+				Vecteur v = prendreVecteur(i, matriceProjection);
+				float distance = comparer(prendreVecteur(j, validationProjection), v);
 				float p = pourcentage(distance);
 				r.setPourcentage(p);
 				r.setIndice(i);
@@ -590,8 +590,8 @@ public class ACP {
 			float[] distances = new float[40];
 			for (int i=0; i<40; i++) {
 				Retour r = new Retour();
-				Vecteur V = prendreVecteur(i, matriceProjection);
-				float distance = comparer(prendreVecteur(j, validationProjection), V);
+				Vecteur v = prendreVecteur(i, matriceProjection);
+				float distance = comparer(prendreVecteur(j, validationProjection), v);
 				float p = pourcentage(distance);
 				r.setPourcentage(p);
 				r.setIndice(i);
