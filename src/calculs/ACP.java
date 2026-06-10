@@ -643,37 +643,4 @@ public class ACP {
 		s = ((p1+p2)/i);
 		this.seuilR = (float)0.95*s;
 	}
-	
-	
-	//main function
-//	public static void main(String[] args) {
-//		Matrix M = new Matrix(new double[][] {
-//			{4, 2, 6, 7}, 
-//			{1, 3, 3, 1},
-//			{2, 2, 4, 7},
-//			{4, 7, 1, 1}
-//		});
-//		ACP acp=new ACP(M);
-//		double[] vap = acp.valeursPropres();
-//		//Vecteur[] vep = acp.creerBase();
-//		System.out.println(Arrays.toString(vap));
-		//System.out.println(Arrays.toString(creerBase()));
-		
-		
-
-        //System.out.println(Arrays.toString(vp));
-
-        
-//        JFrame f = new JFrame("Valeurs propres"); //créer une fenêtre graphique appelée "Valeurs Propres"
-//
-//        ACP panneau = new ACP(vp); //Créer un panneau de dessin
-//
-//        f.add(panneau); //ajoute le panneau dans la fenêtre
-//
-//        f.setSize(1000,700); //taille de la fenêtre
-//
-//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //arrête le programme quand on ferme la fenêtre
-//
-//        f.setVisible(true); //affiche réellement la fenêtre
-//	}
 }
