@@ -71,9 +71,4 @@ public class Personne {
 		}
 		return false;
 	}
-	public static void deposerImage(String chemin) {
-		ImageVisage im1 = null;
-		im1.path=chemin; 
-		im1.id=0;
-	}
 }
