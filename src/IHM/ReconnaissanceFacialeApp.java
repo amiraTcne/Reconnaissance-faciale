@@ -17,9 +17,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import laBdd.Bdd;
 import laBdd.Personne;
-import projet.ACP;
-import projet.Retour;
-import projet.Vecteur;
+import calculs.ACP;
+import calculs.Retour;
+import calculs.Vecteur;
 import imgs.ImageVisage;
 
 
