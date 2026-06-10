@@ -499,20 +499,16 @@ public class ACP {
 	 * @return
 	 */
 	private boolean seuilStat(Vecteur im) {
-		double [] lambda = valeursPropresTriees();
+		double[] lambda = valeursPropresTriees();
 		double Tnew = 0;
-		double p = im.getTaille();
-		for (int i=0; i<p; i++) {
-			Tnew += (im.getValue(i)*im.getValue(i))/lambda[0];
+		for (int i = 0; i < base.length; i++) {
+			Tnew += (im.getValue(i) * im.getValue(i)) / lambda[i];
 		}
-		if (Tnew < this.getSeuilS()) {
-			return true;
-		}
-		return false;
+		return Tnew < this.getSeuilS();
 	}
 
 	private boolean seuilReconstruction(float d) {
-		if(d>this.getSeuilR()){
+		if(d<this.getSeuilR()){
 			return true;
 		}else{
 			return false;
@@ -526,6 +522,8 @@ public class ACP {
 	 */
 	public Vecteur identifier(ImageVisage nouvelleIm) {		
 		Retour[] tableau = tableauComparaison(nouvelleIm);
+		System.out.println("distance[0]=" + tableau[0].getDistance() + " seuilR=" + getSeuilR() + " seuilD=" + getSeuilD() + " seuilS=" + getSeuilS());
+		System.out.println("reconstruction=" + seuilReconstruction(tableau[0].getDistance()));
 		if (seuilReconstruction(tableau[0].getDistance())) {
 			if (seuilStat(projeter(nouvelleIm.process()))) {
 				float dmin = tableau[0].getDistance();
@@ -611,12 +609,12 @@ public class ACP {
 		float theta = (maxConnu + minInconnu)/2;
 		this.seuilD = theta;
 
-		double [] lambda = valeursPropresTriees();
+		double[] lambda = valeursPropresTriees();
 		double Talpha;
-		double p = 10000;
+		double K = base.length; //nombre de composantes retenues
 		int n = 100; //nombre d'images d'apprentissage
 		double F = 1.86; //car n=100, K=43 et alpha=0.99
-		Talpha =(p*(n-1))/(n-p) * F;
+		Talpha = (K*(n-1))/(n-K) * F;
 		this.seuilS = Talpha;
 
 		Bdd validC = new Bdd("dataset/test/validation/connu");
