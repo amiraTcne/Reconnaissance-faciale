@@ -27,17 +27,15 @@ java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.f
 
 ### Structure
 
-```text
-reconnaissance_faciale_exec.jar
-dataset/
-dataReady/
-```
+## Structure
 
+```text
 mon-dossier/
 ├── reconnaissance_faciale_exec.jar
 ├── dataset/
-│   └── reference/
-|   └── test/
+│   ├── reference/
+│   └── test/
 └── dataReady/
-    └── reference/
+    ├── reference/
     └── test/
+```
