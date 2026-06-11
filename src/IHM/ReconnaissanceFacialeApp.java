@@ -258,7 +258,7 @@ public class ReconnaissanceFacialeApp extends Application {
             Personne p = bdd.rechercher(r.getIndice());
             imageComparee.setImage(new Image(new File(img.getPath()).toURI().toString()));
             nomPersonne.setText(p.getPrenom() + " " + p.getNom());
-            pourcentage.setText(String.format("Correspondance de %.0f%%", r.getPourcentage()));
+            pourcentage.setText(String.format("Match score : %.0f%%", r.getPourcentage()));
             bandeAutresImages.getChildren().clear();
 
             for (ImageVisage autreImg : bdd.imagesBdd.get(p)) {
@@ -279,7 +279,7 @@ public class ReconnaissanceFacialeApp extends Application {
                     boutonMini.setGraphic(blocMini);
                     boutonMini.setOnAction(e -> {
                         imageComparee.setImage(mini.getImage());
-                        pourcentage.setText(String.format("Correspondance de %.0f%%", pMini));
+                        pourcentage.setText(String.format("Match score : %.0f%%", pMini));
                     });
                     bandeAutresImages.getChildren().add(boutonMini);
                 }
