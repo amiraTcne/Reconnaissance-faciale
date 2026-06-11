@@ -80,7 +80,7 @@ public class ReconnaissanceFacialeApp extends Application {
         Label description = new Label(
                 "This interface is a facial recognition tool. " +
                         "You can select an image, and it will be analyzed.\n" +
-                        "The goal is to figure out who this picture is of.\n"
+                        "The goal is to determine who is in this photo.\n"
         );
         description.setWrapText(true);
         description.setTextAlignment(TextAlignment.CENTER);
