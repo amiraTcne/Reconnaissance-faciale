@@ -46,9 +46,9 @@ public class VueCorrespondanceTrouvee extends VBox{
         preview.setFitHeight(250);
         preview.setPreserveRatio(true);
         //bloc gauche sous-titres
-        Label legende = new Label("Image sélectionnée");
+        Label legende = new Label("Selected image");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
-        Label message = new Label("✅ Correspondance trouvée !");
+        Label message = new Label("✅ Match found !");
         message.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
         message.setWrapText(true);
         message.setTextAlignment(TextAlignment.CENTER);
@@ -59,10 +59,10 @@ public class VueCorrespondanceTrouvee extends VBox{
         gauche.setPadding(new Insets(0, 0, 80, 0));
         
         // Center : re-import zone
-        Label labelImport = new Label("📁  Importer une nouvelle photo");
+        Label labelImport = new Label("📁  Import a new image");
         labelImport.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        Label placeholder = new Label("Sélectionnez la photo que vous souhaitez analyser");
+        Label placeholder = new Label("Select the photo you want to analyze");
         placeholder.setStyle("-fx-text-fill: gray;");
 
         Button boutonImporter = new Button("+");
@@ -95,8 +95,8 @@ public class VueCorrespondanceTrouvee extends VBox{
         HBox bandeAutresImages = new HBox(50);
         bandeAutresImages.setAlignment(Pos.CENTER);
 
-        Button precedent = new Button("Précédent");
-        Button suivant = new Button("Suivant");
+        Button precedent = new Button("Previous");
+        Button suivant = new Button("Next");
         HBox navigation = new HBox(10, precedent, suivant);
         navigation.setAlignment(Pos.CENTER);
 
@@ -122,7 +122,7 @@ public class VueCorrespondanceTrouvee extends VBox{
             Personne p = bdd.rechercher(r.getIndice());
             imageComparee.setImage(new Image(new File(img.getPath()).toURI().toString()));
             nomPersonne.setText(p.getPrenom() + " " + p.getNom());
-            pourcentage.setText(String.format("Correspondance de %.0f%%", r.getPourcentage()));
+            pourcentage.setText(String.format("Match score : %.0f%%", r.getPourcentage()));
             bandeAutresImages.getChildren().clear();
 
             for (ImageVisage autreImg : bdd.imagesBdd.get(p)) {
@@ -143,7 +143,7 @@ public class VueCorrespondanceTrouvee extends VBox{
                     boutonMini.setGraphic(blocMini);
                     boutonMini.setOnAction(e -> {
                         imageComparee.setImage(mini.getImage());
-                        pourcentage.setText(String.format("Correspondance de %.0f%%", pMini));
+                        pourcentage.setText(String.format("Match score : %.0f%%", pMini));
                     });
                     bandeAutresImages.getChildren().add(boutonMini);
                 }
