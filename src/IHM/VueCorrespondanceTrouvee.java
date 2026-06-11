@@ -48,14 +48,17 @@ public class VueCorrespondanceTrouvee extends VBox{
         //bloc gauche sous-titres
         Label legende = new Label("Selected image");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
+        
         Label message = new Label("✅ Match found !");
-        message.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+        message.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
         message.setWrapText(true);
         message.setTextAlignment(TextAlignment.CENTER);
-        message.setMaxWidth(250);
+        message.setPrefWidth(250);
+        message.setAlignment(Pos.CENTER);
         
         VBox gauche = new VBox(15, preview, legende, message);
         gauche.setAlignment(Pos.CENTER);
+        gauche.setPrefWidth(250);
         gauche.setPadding(new Insets(0, 0, 80, 0));
         
         // Center : re-import zone
