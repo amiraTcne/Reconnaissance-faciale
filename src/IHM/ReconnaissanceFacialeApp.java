@@ -57,7 +57,7 @@ public class ReconnaissanceFacialeApp extends Application {
         root.setCenter(creerVueAccueil());
 
         Scene scene = new Scene(root, 900, 500);
-        primaryStage.setTitle("Reconnaissance Faciale");
+        primaryStage.setTitle("Facial Recognition");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(400);
@@ -66,7 +66,7 @@ public class ReconnaissanceFacialeApp extends Application {
 
     /** Builds the green banner at the top of the window. */
     private HBox creerHeader() {
-        Label titre = new Label("👥  Reconnaissance Faciale");
+        Label titre = new Label("👥  Facial Recognition");
         titre.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;");
         HBox header = new HBox(titre);
         header.setAlignment(Pos.CENTER);
@@ -78,9 +78,9 @@ public class ReconnaissanceFacialeApp extends Application {
     /** Builds the home view : tool description and import zone. */
     private VBox creerVueAccueil() {
         Label description = new Label(
-                "Notre outil est un outil de reconnaissance faciale. " +
-                        "Vous pouvez choisir une image et elle sera analysée.\n" +
-                        "Le but est de trouver à quelle personne correspond cette image.\n"
+                "This interface is a facial recognition tool. " +
+                        "You can select an image, and it will be analyzed.\n" +
+                        "The goal is to figure out who this picture is of.\n"
         );
         description.setWrapText(true);
         description.setTextAlignment(TextAlignment.CENTER);
@@ -91,10 +91,10 @@ public class ReconnaissanceFacialeApp extends Application {
                         "-fx-text-fill: #2e7d32; -fx-font-size: 13px;"
         );
 
-        Label labelImport = new Label("📁  Importer une photo");
+        Label labelImport = new Label("📁  Import an image");
         labelImport.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        Label placeholder = new Label("Sélectionnez la photo que vous souhaitez analyser");
+        Label placeholder = new Label("Select the photo you want to analyze");
         placeholder.setStyle("-fx-text-fill: gray;");
 
         Button boutonImporter = new Button("+");
@@ -125,16 +125,16 @@ public class ReconnaissanceFacialeApp extends Application {
         preview.setFitHeight(220);
         preview.setPreserveRatio(true);
 
-        Label legende = new Label("Image sélectionnée");
+        Label legende = new Label("Selected image");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
-        Button boutonDeselectionner = new Button("Modifier");
+        Button boutonDeselectionner = new Button("Modify");
         boutonDeselectionner.setStyle(
                 "-fx-background-color: #E53935; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"
         );
         boutonDeselectionner.setOnAction(e -> root.setCenter(creerVueAccueil()));
 
-        Button boutonAnalyser = new Button("Analyser");
+        Button boutonAnalyser = new Button("Analyze");
         boutonAnalyser.setStyle(
                 "-fx-background-color: #43A047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4;"
         );
@@ -181,10 +181,10 @@ public class ReconnaissanceFacialeApp extends Application {
         preview.setFitHeight(250);
         preview.setPreserveRatio(true);
         
-        Label legende = new Label("Image sélectionnée");
+        Label legende = new Label("Selected image");
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
-        Label message = new Label("Aucune correspondance trouvée");
+        Label message = new Label("No matches found");
         message.setStyle("-fx-font-style: italic; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #E53935;");
         message.setWrapText(true);
         message.setTextAlignment(TextAlignment.CENTER);
@@ -195,10 +195,10 @@ public class ReconnaissanceFacialeApp extends Application {
         gauche.setPadding(new Insets(0, 0, 80, 0));
         
         // Center : re-import zone
-        Label labelImport = new Label("📁  Importer une nouvelle photo");
+        Label labelImport = new Label("📁  Import a new image");
         labelImport.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        Label placeholder = new Label("Sélectionnez la photo que vous souhaitez analyser");
+        Label placeholder = new Label("Select the photo you want to analyze");
         placeholder.setStyle("-fx-text-fill: gray;");
 
         Button boutonImporter = new Button("+");
@@ -231,8 +231,8 @@ public class ReconnaissanceFacialeApp extends Application {
         HBox bandeAutresImages = new HBox(50);
         bandeAutresImages.setAlignment(Pos.CENTER);
 
-        Button precedent = new Button("Précédent");
-        Button suivant = new Button("Suivant");
+        Button precedent = new Button("Previous");
+        Button suivant = new Button("Next");
         HBox navigation = new HBox(10, precedent, suivant);
         navigation.setAlignment(Pos.CENTER);
 
