@@ -41,7 +41,7 @@ public class CtrlImport implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choisir une image");
+        chooser.setTitle("Select an image");
         chooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png", "*.bmp")
         );
