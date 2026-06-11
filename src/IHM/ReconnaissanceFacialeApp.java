@@ -185,10 +185,11 @@ public class ReconnaissanceFacialeApp extends Application {
         legende.setStyle("-fx-font-style: italic; -fx-text-fill: gray;");
 
         Label message = new Label("No matches found");
-        message.setStyle("-fx-font-style: italic; -fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #E53935;");
+        message.setStyle("-fx-font-style: italic; -fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #E53935;");
         message.setWrapText(true);
         message.setTextAlignment(TextAlignment.CENTER);
         message.setMaxWidth(250);
+        message.setAlignment(Pos.CENTER);
         
         VBox gauche = new VBox(15, preview, legende, message);
         gauche.setAlignment(Pos.CENTER);
