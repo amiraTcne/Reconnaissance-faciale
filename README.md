@@ -6,6 +6,7 @@ Application Java/JavaFX de reconnaissance faciale fondée sur l’Analyse en Com
 
 - Java
 - JavaFX
+- Librairie Jama (disponible dans le dossier lib)
 - Ubuntu/Linux conseillé
 
 ## Méthode pour faire fonctionner le fichier .jar exécutable 
